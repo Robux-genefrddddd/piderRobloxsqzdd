@@ -199,20 +199,21 @@ export async function isUserBanned(userId: string): Promise<boolean> {
 // Check if user has active suspension
 export async function isUserSuspended(userId: string): Promise<boolean> {
   try {
+    // Only filter by userId, then filter other conditions client-side
     const q = query(
       collection(db, WARNINGS_COLLECTION),
       where("userId", "==", userId),
-      where("type", "==", "suspension"),
-      where("isActive", "==", true),
     );
     const querySnapshot = await getDocs(q);
 
-    const warnings = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-      createdAt: doc.data().createdAt?.toDate?.() || new Date(),
-      expiresAt: doc.data().expiresAt?.toDate?.() || undefined,
-    })) as Warning[];
+    const warnings = querySnapshot.docs
+      .map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+        createdAt: doc.data().createdAt?.toDate?.() || new Date(),
+        expiresAt: doc.data().expiresAt?.toDate?.() || undefined,
+      }))
+      .filter((w) => w.type === "suspension" && w.isActive) as Warning[];
 
     // Check if any suspension is still active (not expired)
     const now = new Date();
