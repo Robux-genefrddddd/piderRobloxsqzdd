@@ -314,74 +314,74 @@ export default function Upload() {
 
             {/* Step 4: Review */}
             {currentStep === 3 && (
-              <div className="space-y-6">
+              <div className="space-y-4">
                 <div>
-                  <h2 className="text-xl font-semibold text-foreground mb-1">
+                  <h2 className="text-lg font-semibold text-foreground mb-0.5">
                     Review your asset
                   </h2>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-xs text-muted-foreground/70">
                     Make sure everything looks good before publishing
                   </p>
                 </div>
 
                 {/* Banner Preview */}
                 {bannerUrl && (
-                  <div className="space-y-2">
-                    <p className="text-sm font-medium text-foreground">
+                  <div className="space-y-1.5">
+                    <p className="text-xs font-medium text-foreground">
                       Banner
                     </p>
                     <img
                       src={bannerUrl}
                       alt="Banner preview"
-                      className="w-full h-48 object-cover rounded-lg"
+                      className="w-full h-32 object-cover rounded-lg"
                     />
                   </div>
                 )}
 
                 {/* Summary */}
-                <div className="space-y-4">
-                  <div className="p-4 bg-secondary/20 border border-border/30 rounded-lg space-y-3">
+                <div className="space-y-2.5">
+                  <div className="p-3.5 bg-secondary/10 border border-border/20 rounded-lg space-y-2">
                     <div>
-                      <p className="text-xs text-muted-foreground">Name</p>
-                      <p className="text-sm font-medium text-foreground">
+                      <p className="text-xs text-muted-foreground/70">Name</p>
+                      <p className="text-xs font-medium text-foreground">
                         {formData.name}
                       </p>
                     </div>
                     <div>
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-xs text-muted-foreground/70">
                         Description
                       </p>
-                      <p className="text-sm text-foreground whitespace-pre-wrap">
+                      <p className="text-xs text-foreground/80 whitespace-pre-wrap">
                         {formData.description}
                       </p>
                     </div>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-3">
                       <div>
-                        <p className="text-xs text-muted-foreground">
+                        <p className="text-xs text-muted-foreground/70">
                           Category
                         </p>
-                        <p className="text-sm font-medium text-foreground">
+                        <p className="text-xs font-medium text-foreground">
                           {formData.category}
                         </p>
                       </div>
                       <div>
-                        <p className="text-xs text-muted-foreground">Price</p>
-                        <p className="text-sm font-medium text-foreground">
+                        <p className="text-xs text-muted-foreground/70">Price</p>
+                        <p className="text-xs font-medium text-foreground">
                           ${formData.price || "0.00"}
                         </p>
                       </div>
                     </div>
                     {formData.tags && (
                       <div>
-                        <p className="text-xs text-muted-foreground">Tags</p>
-                        <div className="flex flex-wrap gap-2 mt-2">
+                        <p className="text-xs text-muted-foreground/70">Tags</p>
+                        <div className="flex flex-wrap gap-1.5 mt-1.5">
                           {formData.tags
                             .split(",")
                             .filter((t) => t.trim())
                             .map((tag, index) => (
                               <span
                                 key={index}
-                                className="px-2 py-1 bg-primary/20 text-primary text-xs rounded-lg"
+                                className="px-2 py-0.5 bg-primary/15 text-primary/70 text-xs rounded-md"
                               >
                                 {tag.trim()}
                               </span>
@@ -390,8 +390,8 @@ export default function Upload() {
                       </div>
                     )}
                     <div>
-                      <p className="text-xs text-muted-foreground">Files</p>
-                      <p className="text-sm font-medium text-foreground">
+                      <p className="text-xs text-muted-foreground/70">Files</p>
+                      <p className="text-xs font-medium text-foreground">
                         {files.length} file(s) uploaded
                       </p>
                     </div>
@@ -402,10 +402,10 @@ export default function Upload() {
                 <label className="flex items-start gap-2 cursor-pointer">
                   <input
                     type="checkbox"
-                    className="w-4 h-4 bg-background border border-border/30 rounded cursor-pointer mt-0.5 flex-shrink-0"
+                    className="w-3.5 h-3.5 bg-background border border-border/30 rounded cursor-pointer mt-0.5 flex-shrink-0"
                     required
                   />
-                  <span className="text-xs text-muted-foreground leading-relaxed">
+                  <span className="text-xs text-muted-foreground/70 leading-snug">
                     I confirm that this asset is original, doesn't violate any
                     copyright, and meets our quality standards.
                   </span>
