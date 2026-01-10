@@ -62,7 +62,7 @@ export default function GroupDetail() {
             <div className="flex items-center gap-3 min-w-0">
               <button
                 onClick={() => navigate("/groups")}
-                className="p-1.5 hover:bg-secondary/50 rounded-lg transition-colors flex-shrink-0"
+                className="p-1.5 hover:bg-secondary/50 rounded-lg flex-shrink-0"
               >
                 <ArrowLeft size={16} />
               </button>
