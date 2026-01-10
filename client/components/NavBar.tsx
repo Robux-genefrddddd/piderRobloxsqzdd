@@ -145,6 +145,21 @@ export function NavBar() {
                         Upload Asset
                       </Link>
                     </DropdownMenuItem>
+                    {(userProfile.role === "founder" ||
+                      userProfile.role === "admin") && (
+                      <>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem asChild>
+                          <Link
+                            to="/admin"
+                            className="cursor-pointer text-amber-400"
+                          >
+                            <Shield size={16} className="mr-2" />
+                            Admin Panel
+                          </Link>
+                        </DropdownMenuItem>
+                      </>
+                    )}
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
                       onClick={handleLogout}
@@ -241,6 +256,15 @@ export function NavBar() {
                 >
                   Upload Asset
                 </Link>
+                {(userProfile.role === "founder" ||
+                  userProfile.role === "admin") && (
+                  <Link
+                    to="/admin"
+                    className="block px-4 py-2 hover:bg-secondary/40 transition-colors font-medium text-sm text-amber-400"
+                  >
+                    Admin Panel
+                  </Link>
+                )}
                 <button
                   onClick={handleLogout}
                   className="w-full text-left px-4 py-2 text-red-400 hover:bg-red-500/20 transition-colors font-medium text-sm mt-2 border-t border-border/20"

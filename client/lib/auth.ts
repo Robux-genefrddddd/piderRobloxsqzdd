@@ -38,10 +38,13 @@ export async function registerUser(
   role: "member" | "partner" | "admin" | "founder" | "support" = "member",
 ): Promise<UserProfile> {
   try {
+    // Trim email to prevent whitespace issues
+    const trimmedEmail = email.trim();
+
     // Create auth user
     const userCredential = await createUserWithEmailAndPassword(
       auth,
-      email,
+      trimmedEmail,
       password,
     );
     const user = userCredential.user;
@@ -56,7 +59,7 @@ export async function registerUser(
     const userProfile: UserProfile = {
       uid: user.uid,
       username,
-      email,
+      email: trimmedEmail,
       displayName,
       profileImage: DEFAULT_PROFILE_IMAGE,
       createdAt: new Date(),
@@ -71,8 +74,24 @@ export async function registerUser(
     await setDoc(doc(db, "users", user.uid), userProfile);
 
     return userProfile;
-  } catch (error) {
+  } catch (error: any) {
     console.error("Registration error:", error);
+
+    // Provide better error messages
+    if (error.code === "auth/email-already-in-use") {
+      throw new Error(
+        "An account with this email already exists. Please sign in instead.",
+      );
+    } else if (error.code === "auth/weak-password") {
+      throw new Error(
+        "Password is too weak. Please use at least 8 characters.",
+      );
+    } else if (error.code === "auth/invalid-email") {
+      throw new Error("Invalid email address. Please check and try again.");
+    } else if (error.message?.includes("displayName")) {
+      throw new Error("Error updating profile. Please try again.");
+    }
+
     throw error;
   }
 }
@@ -82,14 +101,37 @@ export async function loginUser(
   password: string,
 ): Promise<User> {
   try {
+    // Trim email to handle whitespace (common when copy/pasting)
+    const trimmedEmail = email.trim();
+
     const userCredential = await signInWithEmailAndPassword(
       auth,
-      email,
+      trimmedEmail,
       password,
     );
     return userCredential.user;
-  } catch (error) {
+  } catch (error: any) {
     console.error("Login error:", error);
+
+    // Provide better error messages
+    if (error.code === "auth/invalid-credential") {
+      throw new Error(
+        "Invalid email or password. Please check your credentials and try again.",
+      );
+    } else if (error.code === "auth/user-not-found") {
+      throw new Error(
+        "No account found with this email. Please create an account first.",
+      );
+    } else if (error.code === "auth/wrong-password") {
+      throw new Error("Incorrect password. Please try again.");
+    } else if (error.code === "auth/invalid-email") {
+      throw new Error("Invalid email address.");
+    } else if (error.code === "auth/too-many-requests") {
+      throw new Error(
+        "Too many failed login attempts. Please try again later.",
+      );
+    }
+
     throw error;
   }
 }

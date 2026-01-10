@@ -47,6 +47,27 @@ export default function Login() {
 
         {/* Form Card */}
         <div className="bg-secondary/15 border border-border/15 rounded-lg p-6 space-y-5">
+          {/* Error Message */}
+          {error && (
+            <div className="flex items-start gap-3 p-4 bg-destructive/15 border border-destructive/30 rounded-lg">
+              <AlertCircle
+                size={18}
+                className="text-destructive flex-shrink-0 mt-0.5"
+              />
+              <div className="flex-1">
+                <p className="text-sm text-destructive font-medium">{error}</p>
+                {error.includes("No account") && (
+                  <Link
+                    to="/register"
+                    className="text-xs text-accent hover:text-accent/80 font-medium transition-colors mt-2 inline-block"
+                  >
+                    Create an account →
+                  </Link>
+                )}
+              </div>
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Email */}
             <div className="space-y-2">
