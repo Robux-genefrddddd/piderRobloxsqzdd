@@ -108,3 +108,95 @@ export async function uploadImageToStorage(
     throw error;
   }
 }
+
+// List all files in an asset folder
+export async function listAssetFiles(assetId: string): Promise<AssetFile[]> {
+  try {
+    const folderRef = ref(storage, `${ASSETS_BUCKET}/${assetId}`);
+    const result = await listAll(folderRef);
+
+    const files: AssetFile[] = [];
+
+    for (const fileRef of result.items) {
+      try {
+        const metadata = await getMetadata(fileRef);
+        const fileName = fileRef.name;
+        const fullPath = `${ASSETS_BUCKET}/${assetId}/${fileName}`;
+        const fileType = getFileType(fileName);
+
+        files.push({
+          name: fileName,
+          path: fullPath,
+          size: metadata.size || 0,
+          type: fileType,
+        });
+      } catch (err) {
+        console.error(`Error getting metadata for ${fileRef.name}:`, err);
+      }
+    }
+
+    return files;
+  } catch (error) {
+    console.error("Error listing asset files:", error);
+    return [];
+  }
+}
+
+// Helper function to determine file type from extension
+function getFileType(filename: string): string {
+  const ext = filename.split(".").pop()?.toLowerCase() || "unknown";
+
+  const typeMap: Record<string, string> = {
+    // Images
+    jpg: "image",
+    jpeg: "image",
+    png: "image",
+    gif: "image",
+    webp: "image",
+    svg: "image",
+    // Documents
+    pdf: "document",
+    doc: "document",
+    docx: "document",
+    txt: "text",
+    // Archives
+    zip: "archive",
+    rar: "archive",
+    "7z": "archive",
+    // Code
+    js: "code",
+    ts: "code",
+    tsx: "code",
+    jsx: "code",
+    json: "code",
+    html: "code",
+    css: "code",
+    // Models
+    obj: "model",
+    fbx: "model",
+    gltf: "model",
+    glb: "model",
+    blend: "model",
+    // Video
+    mp4: "video",
+    webm: "video",
+    mov: "video",
+    // Audio
+    mp3: "audio",
+    wav: "audio",
+    ogg: "audio",
+  };
+
+  return typeMap[ext] || "file";
+}
+
+// Format file size for display
+export function formatFileSize(bytes: number): string {
+  if (bytes === 0) return "0 Bytes";
+
+  const k = 1024;
+  const sizes = ["Bytes", "KB", "MB", "GB"];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+  return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + " " + sizes[i];
+}
