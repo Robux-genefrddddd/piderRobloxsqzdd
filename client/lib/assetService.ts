@@ -216,21 +216,21 @@ export async function getFeaturedAssets(limitCount: number = 6) {
     const q = query(
       collection(db, ASSETS_COLLECTION),
       where("status", "==", "published"),
-      where("featured", "==", true),
     );
     const querySnapshot = await getDocs(q);
 
-    const assets = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-      createdAt: doc.data().createdAt?.toDate?.() || new Date(),
-      updatedAt: doc.data().updatedAt?.toDate?.() || new Date(),
-    })) as Asset[];
-
-    // Sort by downloads descending and limit results on the client side
-    return assets
+    const assets = querySnapshot.docs
+      .map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+        createdAt: doc.data().createdAt?.toDate?.() || new Date(),
+        updatedAt: doc.data().updatedAt?.toDate?.() || new Date(),
+      }))
+      .filter((a) => a.featured === true) // Filter on client side
       .sort((a, b) => b.downloads - a.downloads)
-      .slice(0, limitCount);
+      .slice(0, limitCount) as Asset[];
+
+    return assets;
   } catch (error) {
     console.error("Error fetching featured assets:", error);
     return [];
