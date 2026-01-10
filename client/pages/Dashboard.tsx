@@ -91,12 +91,12 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-4 md:py-5">
+      <div className="container mx-auto px-6 py-10 md:py-12">
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 mb-5">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10">
           <div>
-            <h1 className="text-xl md:text-2xl font-bold mb-0.5">Dashboard</h1>
-            <p className="text-xs text-muted-foreground">
+            <h1 className="text-3xl font-bold mb-2">Dashboard</h1>
+            <p className="text-sm text-muted-foreground/80">
               Welcome back, {userProfile?.displayName || "Creator"}! Manage your
               assets and track your success.
             </p>
@@ -110,7 +110,7 @@ export default function Dashboard() {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-3 mb-5 border-b border-border overflow-x-auto">
+        <div className="flex gap-4 mb-8 border-b border-white/5 overflow-x-auto">
           {[
             { id: "overview", label: "Overview" },
             { id: "assets", label: "My Assets" },
@@ -119,13 +119,13 @@ export default function Dashboard() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as typeof activeTab)}
-              className={`pb-3 px-2 text-sm font-medium transition-colors flex items-center gap-2 whitespace-nowrap ${
+              className={`pb-4 px-1 text-sm font-medium transition-all duration-200 flex items-center gap-2 whitespace-nowrap ${
                 activeTab === tab.id
                   ? "border-b-2 border-primary text-foreground"
-                  : "text-muted-foreground hover:text-foreground"
+                  : "text-muted-foreground/80 hover:text-foreground"
               }`}
             >
-              {tab.icon && <tab.icon size={14} />}
+              {tab.icon && <tab.icon size={16} />}
               {tab.label}
             </button>
           ))}
@@ -133,10 +133,10 @@ export default function Dashboard() {
 
         {/* Overview Tab */}
         {activeTab === "overview" && (
-          <div className="space-y-5">
+          <div className="space-y-8">
             {/* Stats Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
-              <div className="bg-secondary/50 border border-border rounded-lg p-3 space-y-1">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="border border-white/5 rounded-lg p-4 space-y-2 bg-white/2 hover:border-white/10 transition-all duration-200">
                 <div className="flex items-center justify-between">
                   <h3 className="text-xs font-medium text-muted-foreground">
                     Total Earnings
