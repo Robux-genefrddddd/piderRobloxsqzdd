@@ -3,7 +3,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useGroupMessages, useSendMessage } from "@/hooks/useGroups";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Loader, Send, Image as ImageIcon, X } from "lucide-react";
+import { Loader, Send, Image as ImageIcon, X, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
 import { Message } from "@shared/api";
 import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
@@ -146,32 +146,42 @@ export default function GroupChat({ groupId }: GroupChatProps) {
   };
 
   return (
-    <div className="flex flex-col h-full bg-card rounded-lg border border-border/30 overflow-hidden">
+    <div className="flex flex-col h-full bg-card rounded-lg border border-border/30 overflow-hidden flex flex-col">
       {/* Messages Container */}
       <div
         ref={messagesContainerRef}
         onScroll={handleScroll}
-        className="flex-1 overflow-y-auto px-4 py-3"
+        className="flex-1 overflow-y-auto px-3 py-2 flex flex-col"
       >
         {loading ? (
-          <div className="flex items-center justify-center h-full">
+          <div className="flex items-center justify-center flex-1 min-h-20">
             <Loader size={20} className="animate-spin text-muted-foreground" />
           </div>
         ) : messages.length === 0 ? (
-          <div className="flex items-center justify-center h-full">
+          <div className="flex items-center justify-center flex-1 min-h-40">
             <div className="text-center">
-              <p className="text-sm text-muted-foreground">No messages yet</p>
-              <p className="text-xs text-muted-foreground/70">Start the conversation</p>
+              <div className="flex justify-center mb-2">
+                <MessageCircle 
+                  size={32} 
+                  className="text-muted-foreground/30" 
+                />
+              </div>
+              <p className="text-sm font-medium text-muted-foreground mb-0.5">
+                No messages yet
+              </p>
+              <p className="text-xs text-muted-foreground/60">
+                Start the conversation
+              </p>
             </div>
           </div>
         ) : (
-          <div className="space-y-1">
+          <div className="space-y-0.5">
             {messages.map((message) => {
               const isOwnMessage = message.senderId === userProfile?.uid;
               return (
                 <div
                   key={message.id}
-                  className={`flex gap-1.5 group ${
+                  className={`flex gap-1 group ${
                     isOwnMessage ? "flex-row-reverse" : ""
                   }`}
                   onMouseEnter={() => setHoveredMessageId(message.id)}
@@ -184,7 +194,7 @@ export default function GroupChat({ groupId }: GroupChatProps) {
                       "https://tr.rbxcdn.com/180DAY-bd2c1a5fc86fd014cbbbaaafdd777643/420/420/Hat/Webp/noFilter"
                     }
                     alt={message.senderName}
-                    className="w-5 h-5 rounded-full flex-shrink-0 mt-0.5"
+                    className="w-5 h-5 rounded-full flex-shrink-0 mt-0"
                     title={message.senderName}
                   />
 
@@ -196,7 +206,7 @@ export default function GroupChat({ groupId }: GroupChatProps) {
                   >
                     {/* Sender Name - Show on hover */}
                     {hoveredMessageId === message.id && (
-                      <span className="text-xs font-medium text-foreground/70 px-2 leading-tight">
+                      <span className="text-xs font-medium text-foreground/60 px-2 leading-none mb-0.5">
                         {message.senderName}
                       </span>
                     )}
@@ -224,7 +234,7 @@ export default function GroupChat({ groupId }: GroupChatProps) {
 
                     {/* Timestamp - Show on hover */}
                     {hoveredMessageId === message.id && (
-                      <span className="text-xs text-muted-foreground/60 px-2 mt-0.5">
+                      <span className="text-xs text-muted-foreground/50 px-2 mt-0.5 leading-none">
                         {formatTime(message.timestamp)}
                       </span>
                     )}
@@ -238,9 +248,9 @@ export default function GroupChat({ groupId }: GroupChatProps) {
       </div>
 
       {/* Message Input - Fixed Footer */}
-      <div className="border-t border-border/20 bg-card">
+      <div className="border-t border-border/20 bg-card flex-shrink-0">
         {previewUrl && (
-          <div className="px-4 pt-2 pb-1">
+          <div className="px-3 pt-1.5 pb-1">
             <div className="relative inline-block">
               <img
                 src={previewUrl}
@@ -258,8 +268,8 @@ export default function GroupChat({ groupId }: GroupChatProps) {
           </div>
         )}
 
-        <form onSubmit={handleSendMessage} className="p-3 space-y-1.5">
-          <div className="flex gap-1.5">
+        <form onSubmit={handleSendMessage} className="p-2.5 space-y-1">
+          <div className="flex gap-1.5 items-stretch">
             <Input
               type="text"
               placeholder="Message..."
@@ -273,7 +283,7 @@ export default function GroupChat({ groupId }: GroupChatProps) {
               type="submit"
               disabled={!content.trim() || sendingMessage || uploading}
               size="sm"
-              className="px-2.5 h-8"
+              className="px-2.5 h-8 flex-shrink-0"
               title="Send (Enter to send)"
               variant="ghost"
             >
