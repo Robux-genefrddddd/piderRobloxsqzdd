@@ -642,6 +642,16 @@ export default function AssetDetail() {
           </Link>
         </div>
       </div>
+
+      {/* File Preview Modal */}
+      <FilePreviewModal
+        assetId={id || ""}
+        assetName={asset.name}
+        isOpen={showFilePreview}
+        onClose={() => setShowFilePreview(false)}
+        onDownload={handleDownloadSelectedFiles}
+        isDownloading={downloading}
+      />
     </div>
   );
 }
