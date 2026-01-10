@@ -174,11 +174,14 @@ export function subscribeToUnreadCount(
     const q = query(
       collection(db, NOTIFICATIONS_COLLECTION),
       where("userId", "==", userId),
-      where("read", "==", false),
     );
 
     return onSnapshot(q, (snapshot) => {
-      onCountUpdate(snapshot.size);
+      // Filter unread on client side to avoid composite index
+      const unreadCount = snapshot.docs.filter(
+        (doc) => !doc.data().read,
+      ).length;
+      onCountUpdate(unreadCount);
     });
   } catch (error) {
     console.error("Error subscribing to unread count:", error);
