@@ -23,7 +23,9 @@ import { logoutUser } from "@/lib/auth";
 import { WarningsSection } from "@/components/WarningsSection";
 
 export default function Dashboard() {
-  const [activeTab, setActiveTab] = useState<"overview" | "assets">("overview");
+  const [activeTab, setActiveTab] = useState<"overview" | "assets" | "warnings">(
+    "overview",
+  );
   const [assets, setAssets] = useState<Asset[]>([]);
   const [loading, setLoading] = useState(true);
   const { userProfile, isAuthenticated, user } = useAuth();
