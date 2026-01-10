@@ -231,7 +231,7 @@ export function NavBar() {
             onClick={() => setMenuOpen(false)}
           />
           {/* Menu Panel */}
-          <div className="fixed left-0 top-14 bottom-0 w-72 bg-secondary border-r border-border overflow-y-auto z-50 shadow-2xl">
+          <div className="fixed left-0 top-14 bottom-0 w-72 bg-secondary border-r border-border overflow-y-auto z-[9999] shadow-2xl">
             <div className="flex flex-col h-full">
               {/* Menu Header */}
               <div className="px-6 py-6 border-b border-border/50">
