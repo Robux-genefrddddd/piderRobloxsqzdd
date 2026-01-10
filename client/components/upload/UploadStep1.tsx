@@ -87,12 +87,12 @@ export function UploadStep1({
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-5">
       <div>
-        <h2 className="text-xl font-semibold text-foreground mb-1">
+        <h2 className="text-lg font-semibold text-foreground mb-0.5">
           Add banner & files
         </h2>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-xs text-muted-foreground/70">
           Upload a banner image and your asset files
         </p>
       </div>
