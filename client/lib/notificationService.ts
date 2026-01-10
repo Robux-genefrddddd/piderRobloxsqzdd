@@ -53,24 +53,23 @@ export async function getUserNotifications(
   unreadOnly: boolean = false,
 ): Promise<Notification[]> {
   try {
-    const constraints = [where("userId", "==", userId)];
-
-    if (unreadOnly) {
-      constraints.push(where("read", "==", false));
-    }
-
     const q = query(
       collection(db, NOTIFICATIONS_COLLECTION),
-      ...constraints,
+      where("userId", "==", userId),
       orderBy("createdAt", "desc"),
     );
     const querySnapshot = await getDocs(q);
 
-    const notifications = querySnapshot.docs.map((doc) => ({
+    let notifications = querySnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
       createdAt: doc.data().createdAt?.toDate?.() || new Date(),
     })) as Notification[];
+
+    // Filter unread on client side to avoid needing composite index
+    if (unreadOnly) {
+      notifications = notifications.filter((n) => !n.read);
+    }
 
     return notifications;
   } catch (error) {
