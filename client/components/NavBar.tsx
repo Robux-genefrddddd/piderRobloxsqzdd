@@ -127,6 +127,15 @@ export function NavBar() {
     setMenuOpen(false);
   };
 
+  // Disable body scroll when menu is open
+  if (typeof window !== "undefined") {
+    if (menuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+  }
+
   return (
     <>
       <nav className="sticky top-0 z-40 bg-background/98 backdrop-blur-sm border-b border-white/5">
