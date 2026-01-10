@@ -45,7 +45,7 @@ function RoleBadge({ role }: { role?: string }) {
           <img
             src="https://cdn3.emoji.gg/emojis/42747-roblox-verified.png"
             alt="Partner"
-            className="w-5 h-5 hover:scale-110 transition-transform cursor-help"
+            className="w-3.5 h-3.5 hover:scale-110 transition-transform cursor-help"
           />
         </TooltipTrigger>
         <TooltipContent side="bottom" className="text-xs">
