@@ -560,18 +560,18 @@ export function NavBar() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.45 }}
-                    className="border-t border-blue-500/10 px-4 py-4 flex justify-center"
+                    className="border-t border-border/20 px-4 py-4 flex justify-center"
                   >
                     <a
                       href="https://roblox.com"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="opacity-60 hover:opacity-100 transition-opacity"
+                      className="opacity-50 hover:opacity-100 transition-opacity"
                     >
                       <img
-                        src="https://i.ibb.co/B531Dsh6/roblox-logo-roblox-symbol-meaning-history-and-evolution-3-removebg-preview.png"
+                        src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Roblox_Logo.svg/2048px-Roblox_Logo.svg.png"
                         alt="Roblox"
-                        className="h-5 object-contain"
+                        className="h-4 object-contain"
                       />
                     </a>
                   </motion.div>
