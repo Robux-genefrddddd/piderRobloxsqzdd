@@ -410,10 +410,13 @@ export function UserDetailModal({
         </div>
 
         {/* Footer Actions */}
-        <div className="border-t border-border/20 p-6 bg-secondary/10 space-y-3">
+        <div className="border-t border-border/20 p-6 bg-card space-y-3">
           {!user.isBanned &&
-            user.role !== "founder" &&
-            user.role !== "admin" && (
+            (user.role !== "founder" ||
+              currentUserRole === "founder") &&
+            (user.role !== "admin" ||
+              currentUserRole === "founder" ||
+              currentUserRole === "admin") && (
               <Button
                 onClick={handleBanUser}
                 disabled={loading}
@@ -425,17 +428,21 @@ export function UserDetailModal({
               </Button>
             )}
 
-          {user.role !== "founder" && user.role !== "admin" && (
-            <Button
-              onClick={handleDeleteAccount}
-              disabled={loading}
-              variant="destructive"
-              className="w-full"
-            >
-              <Trash2 size={16} className="mr-2" />
-              Delete Account
-            </Button>
-          )}
+          {(user.role !== "founder" ||
+            currentUserRole === "founder") &&
+            (user.role !== "admin" ||
+              currentUserRole === "founder" ||
+              currentUserRole === "admin") && (
+              <Button
+                onClick={handleDeleteAccount}
+                disabled={loading}
+                variant="destructive"
+                className="w-full"
+              >
+                <Trash2 size={16} className="mr-2" />
+                Delete Account
+              </Button>
+            )}
 
           <Button onClick={onClose} variant="outline" className="w-full">
             Close
