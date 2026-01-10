@@ -366,17 +366,23 @@ export async function sendGroupInvite(
   message?: string,
 ): Promise<string> {
   try {
-    const docRef = await addDoc(collection(db, GROUP_INVITES_COLLECTION), {
+    const inviteData: any = {
       groupId,
       groupName,
       inviterId,
       inviterName,
-      inviterAvatar,
+      inviterAvatar: inviterAvatar || null,
       inviteeId,
       invitationDate: Timestamp.now(),
       status: "pending",
-      message,
-    });
+    };
+
+    // Only add message if it's provided
+    if (message) {
+      inviteData.message = message;
+    }
+
+    const docRef = await addDoc(collection(db, GROUP_INVITES_COLLECTION), inviteData);
 
     return docRef.id;
   } catch (error) {
