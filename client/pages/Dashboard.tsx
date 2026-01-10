@@ -412,6 +412,28 @@ export default function Dashboard() {
           </div>
         )}
 
+        {/* Warnings Tab */}
+        {activeTab === "warnings" && (
+          <div className="space-y-4">
+            <div className="bg-secondary/30 border border-border rounded-lg p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <AlertTriangle size={24} className="text-yellow-400" />
+                <div>
+                  <h3 className="font-semibold text-foreground">
+                    Your Warnings & Bans
+                  </h3>
+                  <p className="text-xs text-muted-foreground">
+                    View your account status and any active warnings
+                  </p>
+                </div>
+              </div>
+              {user && (
+                <WarningsSection userId={user.uid} canDelete={false} />
+              )}
+            </div>
+          </div>
+        )}
+
         {/* Logout Button */}
         <div className="mt-8 pt-6 border-t border-border">
           <button
