@@ -104,22 +104,22 @@ export default function About() {
       </section>
 
       {/* Mission Section */}
-      <section className="py-12 md:py-16 border-b border-border/50">
+      <section className="py-8 md:py-10 border-b border-border/50">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl">
+          <div className="grid md:grid-cols-2 gap-6 max-w-4xl">
             <div>
-              <h2 className="text-2xl font-bold mb-4">Our Mission</h2>
-              <p className="text-sm text-muted-foreground mb-3 leading-relaxed">
+              <h2 className="text-xl font-bold mb-3">Our Mission</h2>
+              <p className="text-xs text-muted-foreground mb-2 leading-relaxed">
                 RbxAssets is a marketplace built by creators, for creators. We
                 believe high-quality digital assets should be accessible to
                 everyone.
               </p>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+              <p className="text-xs text-muted-foreground leading-relaxed">
                 Our commitment: quality curation, fair pricing, and zero
                 compromises on security.
               </p>
             </div>
-            <div className="rounded-lg overflow-hidden border border-border/50">
+            <div className="rounded-lg overflow-hidden border border-border/50 h-64">
               <img
                 src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=500&h=400&fit=crop"
                 alt="Team collaboration"
