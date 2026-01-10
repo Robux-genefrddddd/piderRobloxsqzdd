@@ -86,19 +86,13 @@ export default function Support() {
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
           <div>
-            <h1 className="text-3xl font-bold flex items-center gap-2">
-              <MessageSquare className="text-primary" />
-              Support Center
-            </h1>
+            <h1 className="text-3xl font-bold">Support Center</h1>
             <p className="text-sm text-muted-foreground mt-1">
-              Get help with any issues or report problems
+              Need help? Create a ticket
             </p>
           </div>
           <Link to="/support/new">
-            <Button className="gap-2">
-              <Plus size={18} />
-              Create Ticket
-            </Button>
+            <Button>Create Ticket</Button>
           </Link>
         </div>
 
