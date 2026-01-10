@@ -161,6 +161,66 @@ export default function AssetDetail() {
     }
   };
 
+  const handleToggleFavorite = async () => {
+    if (!user || !asset) {
+      toast.error("Please sign in to save assets");
+      return;
+    }
+
+    try {
+      if (isFav) {
+        await removeFavorite(user.uid, asset.id);
+        setIsFav(false);
+        toast.success("Removed from favorites");
+      } else {
+        await addFavorite(
+          user.uid,
+          asset.id,
+          asset.name,
+          asset.imageUrl,
+        );
+        setIsFav(true);
+        toast.success("Added to favorites");
+      }
+    } catch (error) {
+      console.error("Error toggling favorite:", error);
+      toast.error("Failed to save asset");
+    }
+  };
+
+  const handleDeleteAsset = async () => {
+    if (!user || !asset) return;
+
+    if (user.uid !== asset.authorId) {
+      toast.error("You can only delete your own assets");
+      return;
+    }
+
+    if (
+      !confirm(
+        "Are you sure you want to delete this asset? This action cannot be undone.",
+      )
+    ) {
+      return;
+    }
+
+    setDeletingAsset(true);
+
+    try {
+      await deleteAsset(asset.id);
+      toast.success("Asset deleted successfully");
+
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 1500);
+    } catch (error) {
+      console.error("Error deleting asset:", error);
+      toast.error("Failed to delete asset");
+    } finally {
+      setDeletingAsset(false);
+    }
+  };
+
   const handleDownloadAsset = async () => {
     if (!asset || !asset.filePaths || asset.filePaths.length === 0) {
       toast.error("No files available for download");
