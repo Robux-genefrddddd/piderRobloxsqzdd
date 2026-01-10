@@ -146,14 +146,12 @@ export async function getAllTickets(): Promise<Ticket[]> {
 export async function getTicket(ticketId: string): Promise<Ticket | null> {
   try {
     const docRef = doc(db, TICKETS_COLLECTION, ticketId);
-    const docSnap = await getDocs(
-      query(collection(db, TICKETS_COLLECTION), where("__name__", "==", ticketId)),
-    );
+    const docSnap = await getDoc(docRef);
 
-    if (docSnap.docs.length > 0) {
-      const data = docSnap.docs[0].data();
+    if (docSnap.exists()) {
+      const data = docSnap.data();
       return {
-        id: docSnap.docs[0].id,
+        id: docSnap.id,
         ...data,
         createdAt: data.createdAt?.toDate?.() || new Date(),
         updatedAt: data.updatedAt?.toDate?.() || new Date(),
