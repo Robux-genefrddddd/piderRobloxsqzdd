@@ -181,7 +181,7 @@ export default function GroupChat({ groupId }: GroupChatProps) {
               return (
                 <div
                   key={message.id}
-                  className={`flex gap-1 group ${
+                  className={`flex gap-1 ${
                     isOwnMessage ? "flex-row-reverse" : ""
                   }`}
                   onMouseEnter={() => setHoveredMessageId(message.id)}
