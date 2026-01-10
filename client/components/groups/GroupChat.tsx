@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useGroupMessages, useSendMessage } from "@/hooks/useGroups";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,8 @@ interface GroupChatProps {
   groupId: string;
 }
 
+const SCROLL_THRESHOLD = 150; // pixels from bottom
+
 export default function GroupChat({ groupId }: GroupChatProps) {
   const { userProfile } = useAuth();
   const { messages, loading } = useGroupMessages(groupId);
@@ -22,17 +24,48 @@ export default function GroupChat({ groupId }: GroupChatProps) {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const [hoveredMessageId, setHoveredMessageId] = useState<string | null>(null);
+  const [isNearBottom, setIsNearBottom] = useState(true);
+  const [shouldAutoScroll, setShouldAutoScroll] = useState(false);
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const previousMessagesLengthRef = useRef(0);
 
-  const scrollToBottom = () => {
+  // Detect if user is scrolled near the bottom
+  const handleScroll = useCallback(() => {
+    if (!messagesContainerRef.current) return;
+
+    const { scrollHeight, scrollTop, clientHeight } = messagesContainerRef.current;
+    const distanceFromBottom = scrollHeight - (scrollTop + clientHeight);
+    
+    setIsNearBottom(distanceFromBottom < SCROLL_THRESHOLD);
+  }, []);
+
+  // Scroll to bottom smoothly (only when appropriate)
+  const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  }, []);
 
+  // Handle auto-scroll on new messages
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+    const messagesLength = messages.length;
+    const isNewMessage = messagesLength > previousMessagesLengthRef.current;
+
+    if (isNewMessage && isNearBottom) {
+      setShouldAutoScroll(true);
+    }
+
+    previousMessagesLengthRef.current = messagesLength;
+  }, [messages, isNearBottom]);
+
+  // Execute auto-scroll when flag is set
+  useEffect(() => {
+    if (shouldAutoScroll) {
+      scrollToBottom();
+      setShouldAutoScroll(false);
+    }
+  }, [shouldAutoScroll, scrollToBottom]);
 
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -113,11 +146,12 @@ export default function GroupChat({ groupId }: GroupChatProps) {
   };
 
   return (
-    <div className="flex flex-col h-full bg-card rounded-lg border border-border/30">
+    <div className="flex flex-col h-full bg-card rounded-lg border border-border/30 overflow-hidden">
       {/* Messages Container */}
       <div
         ref={messagesContainerRef}
-        className="flex-1 overflow-y-auto px-4 py-3 space-y-2"
+        onScroll={handleScroll}
+        className="flex-1 overflow-y-auto px-4 py-3"
       >
         {loading ? (
           <div className="flex items-center justify-center h-full">
@@ -126,136 +160,135 @@ export default function GroupChat({ groupId }: GroupChatProps) {
         ) : messages.length === 0 ? (
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
-              <p className="text-sm text-muted-foreground mb-1">
-                No messages yet
-              </p>
-              <p className="text-xs text-muted-foreground">
-                Start the conversation
-              </p>
+              <p className="text-sm text-muted-foreground">No messages yet</p>
+              <p className="text-xs text-muted-foreground/70">Start the conversation</p>
             </div>
           </div>
         ) : (
-          messages.map((message) => {
-            const isOwnMessage = message.senderId === userProfile?.uid;
-            return (
-              <div
-                key={message.id}
-                className={`flex gap-2 group ${
-                  isOwnMessage ? "flex-row-reverse" : ""
-                }`}
-                onMouseEnter={() => setHoveredMessageId(message.id)}
-                onMouseLeave={() => setHoveredMessageId(null)}
-              >
-                {/* Avatar */}
-                <img
-                  src={
-                    message.senderAvatar ||
-                    "https://tr.rbxcdn.com/180DAY-bd2c1a5fc86fd014cbbbaaafdd777643/420/420/Hat/Webp/noFilter"
-                  }
-                  alt={message.senderName}
-                  className="w-6 h-6 rounded-full flex-shrink-0 mt-0.5"
-                  title={message.senderName}
-                />
-
-                {/* Message Content */}
+          <div className="space-y-1">
+            {messages.map((message) => {
+              const isOwnMessage = message.senderId === userProfile?.uid;
+              return (
                 <div
-                  className={`flex flex-col max-w-xs ${
-                    isOwnMessage ? "items-end" : "items-start"
+                  key={message.id}
+                  className={`flex gap-1.5 group ${
+                    isOwnMessage ? "flex-row-reverse" : ""
                   }`}
+                  onMouseEnter={() => setHoveredMessageId(message.id)}
+                  onMouseLeave={() => setHoveredMessageId(null)}
                 >
-                  {/* Sender Name - Show on hover or first message */}
-                  {hoveredMessageId === message.id && (
-                    <span className="text-xs font-medium text-foreground mb-0.5">
-                      {message.senderName}
-                    </span>
-                  )}
+                  {/* Avatar */}
+                  <img
+                    src={
+                      message.senderAvatar ||
+                      "https://tr.rbxcdn.com/180DAY-bd2c1a5fc86fd014cbbbaaafdd777643/420/420/Hat/Webp/noFilter"
+                    }
+                    alt={message.senderName}
+                    className="w-5 h-5 rounded-full flex-shrink-0 mt-0.5"
+                    title={message.senderName}
+                  />
 
-                  {/* Message Bubble */}
+                  {/* Message Content */}
                   <div
-                    className={`rounded-lg px-3 py-1.5 break-words ${
-                      isOwnMessage
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-secondary text-secondary-foreground"
+                    className={`flex flex-col max-w-sm ${
+                      isOwnMessage ? "items-end" : "items-start"
                     }`}
                   >
-                    {message.imageUrl && (
-                      <img
-                        src={message.imageUrl}
-                        alt="Message attachment"
-                        className="max-w-xs rounded mb-1 max-h-48"
-                      />
+                    {/* Sender Name - Show on hover */}
+                    {hoveredMessageId === message.id && (
+                      <span className="text-xs font-medium text-foreground/70 px-2 leading-tight">
+                        {message.senderName}
+                      </span>
                     )}
-                    <p className="text-sm">{message.content}</p>
-                    {message.isEdited && (
-                      <p className="text-xs opacity-60 mt-0.5">(edited)</p>
+
+                    {/* Message Bubble */}
+                    <div
+                      className={`rounded-lg px-2.5 py-1 break-words ${
+                        isOwnMessage
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-secondary text-secondary-foreground"
+                      }`}
+                    >
+                      {message.imageUrl && (
+                        <img
+                          src={message.imageUrl}
+                          alt="Message attachment"
+                          className="max-w-xs rounded max-h-40 mb-1"
+                        />
+                      )}
+                      <p className="text-sm leading-snug">{message.content}</p>
+                      {message.isEdited && (
+                        <p className="text-xs opacity-60 mt-0.5">(edited)</p>
+                      )}
+                    </div>
+
+                    {/* Timestamp - Show on hover */}
+                    {hoveredMessageId === message.id && (
+                      <span className="text-xs text-muted-foreground/60 px-2 mt-0.5">
+                        {formatTime(message.timestamp)}
+                      </span>
                     )}
                   </div>
-
-                  {/* Timestamp - Show on hover */}
-                  {hoveredMessageId === message.id && (
-                    <span className="text-xs text-muted-foreground mt-0.5">
-                      {formatTime(message.timestamp)}
-                    </span>
-                  )}
                 </div>
-              </div>
-            );
-          })
+              );
+            })}
+            <div ref={messagesEndRef} />
+          </div>
         )}
-        <div ref={messagesEndRef} />
       </div>
 
       {/* Message Input - Fixed Footer */}
-      <div className="border-t border-border/20 bg-card p-3 space-y-2">
+      <div className="border-t border-border/20 bg-card">
         {previewUrl && (
-          <div className="relative inline-block">
-            <img
-              src={previewUrl}
-              alt="Preview"
-              className="max-w-xs h-24 object-cover rounded"
-            />
-            <button
-              onClick={handleDeleteImage}
-              className="absolute top-1 right-1 bg-destructive text-destructive-foreground rounded-full p-0.5 hover:bg-destructive/90"
-              type="button"
-            >
-              <X size={14} />
-            </button>
+          <div className="px-4 pt-2 pb-1">
+            <div className="relative inline-block">
+              <img
+                src={previewUrl}
+                alt="Preview"
+                className="max-w-xs h-20 object-cover rounded"
+              />
+              <button
+                onClick={handleDeleteImage}
+                className="absolute top-0.5 right-0.5 bg-destructive text-destructive-foreground rounded-full p-0.5 hover:bg-destructive/90 transition-colors"
+                type="button"
+              >
+                <X size={12} />
+              </button>
+            </div>
           </div>
         )}
 
-        <form onSubmit={handleSendMessage} className="space-y-2">
-          <div className="flex gap-2">
+        <form onSubmit={handleSendMessage} className="p-3 space-y-1.5">
+          <div className="flex gap-1.5">
             <Input
               type="text"
               placeholder="Message..."
               value={content}
               onChange={(e) => setContent(e.target.value)}
               disabled={sendingMessage || uploading}
-              className="flex-1 h-8 text-sm"
+              className="flex-1 h-8 text-sm px-2.5 py-1"
             />
 
             <Button
               type="submit"
               disabled={!content.trim() || sendingMessage || uploading}
               size="sm"
-              className="px-3"
+              className="px-2.5 h-8"
               title="Send (Enter to send)"
+              variant="ghost"
             >
               {sendingMessage || uploading ? (
-                <Loader size={14} className="animate-spin" />
+                <Loader size={16} className="animate-spin" />
               ) : (
-                <Send size={14} />
+                <Send size={16} />
               )}
             </Button>
-          </div>
 
-          <div className="flex items-center gap-2">
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
               disabled={sendingMessage || uploading}
-              className="p-1.5 hover:bg-secondary/50 rounded transition-colors flex-shrink-0"
+              className="p-1.5 hover:bg-secondary/50 rounded transition-colors flex-shrink-0 h-8 w-8 flex items-center justify-center"
               title="Attach image"
             >
               <ImageIcon size={16} className="text-muted-foreground" />
@@ -268,10 +301,6 @@ export default function GroupChat({ groupId }: GroupChatProps) {
               onChange={handleImageSelect}
               className="hidden"
             />
-
-            <span className="text-xs text-muted-foreground">
-              Attach image (optional)
-            </span>
           </div>
         </form>
       </div>
