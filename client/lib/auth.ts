@@ -20,10 +20,14 @@ export interface UserProfile {
   displayName: string;
   createdAt: Date;
   memberRank: "starter" | "creator" | "pro" | "studio";
+  role: "member" | "partner" | "admin" | "founder" | "support";
   assetsCreated: number;
   assetsDownloaded: number;
   earnings: number;
   profileImage?: string;
+  isBanned: boolean;
+  banReason?: string;
+  banDate?: Date;
 }
 
 export async function registerUser(
