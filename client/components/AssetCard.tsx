@@ -1,9 +1,5 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
 import { Star, Download, Lock } from "lucide-react";
-import { downloadAssetFile, forceDownloadFile } from "@/lib/fileService";
-import { incrementAssetDownloads } from "@/lib/assetService";
-import { toast } from "sonner";
 import type { Asset } from "@/lib/assetService";
 
 interface AssetCardProps {
@@ -11,7 +7,6 @@ interface AssetCardProps {
 }
 
 export function AssetCard({ asset }: AssetCardProps) {
-  const [downloading, setDownloading] = useState(false);
   const isFree = asset.price === null || asset.price === 0;
 
   const handleDownload = (e: React.MouseEvent) => {
