@@ -10,21 +10,21 @@ import { StepRole } from "@/components/register/StepRole";
 const ROLES = [
   {
     id: "member",
-    name: "Creator",
-    description: "Create and sell assets",
+    name: "UI Designer",
+    description: "Create UI components",
     icon: "🎨",
   },
   {
     id: "partner",
-    name: "Partner",
-    description: "Collaborate with team",
-    icon: "🤝",
+    name: "Developer",
+    description: "Develop scripts & tools",
+    icon: "💻",
   },
   {
     id: "support",
-    name: "Support Staff",
-    description: "Help our community",
-    icon: "💬",
+    name: "3D Artist",
+    description: "Create 3D models",
+    icon: "🎭",
   },
 ];
 
@@ -134,9 +134,9 @@ export default function Register() {
           : true;
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center py-8">
+    <div className="min-h-screen bg-background flex items-center justify-center py-8 px-4">
       <div className="w-full max-w-md">
-        {/* Logo & Title */}
+        {/* Logo & Title - Centered */}
         <div className="text-center mb-8">
           <div className="flex justify-center mb-4">
             <img
@@ -145,19 +145,19 @@ export default function Register() {
               className="h-8 object-contain"
             />
           </div>
-          <h1 className="text-2xl font-bold mb-1">RbxAssets</h1>
+          <h1 className="text-2xl font-bold mb-2 text-foreground">RbxAssets</h1>
           <p className="text-sm text-muted-foreground">
             Create your creator account
           </p>
         </div>
 
-        {/* Step Indicator */}
+        {/* Step Indicator - Centered */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             {STEPS.map((step, index) => (
               <div key={step.id} className="flex items-center flex-1">
                 <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold transition-all ${
+                  className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold transition-all flex-shrink-0 ${
                     index <= currentStep
                       ? "bg-primary text-primary-foreground"
                       : "bg-border/30 text-muted-foreground"
@@ -175,11 +175,11 @@ export default function Register() {
               </div>
             ))}
           </div>
-          <div className="flex justify-between items-center">
-            <p className="text-xs text-muted-foreground">
+          <div className="flex justify-between items-center text-center">
+            <p className="text-xs text-muted-foreground flex-1">
               Step {currentStep + 1} of {STEPS.length}
             </p>
-            <p className="text-xs font-medium text-foreground">
+            <p className="text-xs font-medium text-foreground flex-1">
               {STEPS[currentStep].label}
             </p>
           </div>
@@ -244,7 +244,7 @@ export default function Register() {
               <label className="flex items-start gap-2 cursor-pointer">
                 <input
                   type="checkbox"
-                  className="w-4 h-4 bg-background border border-border/30 rounded cursor-pointer mt-0.5"
+                  className="w-4 h-4 bg-background border border-border/30 rounded cursor-pointer mt-0.5 flex-shrink-0"
                   required
                 />
                 <span className="text-xs text-muted-foreground leading-relaxed">
@@ -267,7 +267,7 @@ export default function Register() {
             )}
 
             {/* Navigation Buttons */}
-            <div className="flex gap-3">
+            <div className="flex gap-3 pt-4">
               {currentStep > 0 && (
                 <button
                   type="button"
@@ -331,7 +331,7 @@ export default function Register() {
           )}
         </div>
 
-        {/* Sign In Link */}
+        {/* Sign In Link - Centered */}
         <p className="text-center text-sm text-muted-foreground mt-6">
           Already have an account?{" "}
           <Link
