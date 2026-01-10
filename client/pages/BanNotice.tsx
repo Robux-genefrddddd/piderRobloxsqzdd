@@ -15,13 +15,15 @@ export default function BanNotice() {
   useEffect(() => {
     const loadBanInfo = async () => {
       if (!user) {
-        navigate("/login");
+        setLoading(false);
         return;
       }
 
       try {
         const warnings = await getUserWarnings(user.uid);
-        const activeWarning = warnings.find((w) => w.isActive);
+        const activeWarning = warnings.find(
+          (w) => (w.type === "ban" || w.type === "suspension") && w.isActive,
+        );
         if (activeWarning) {
           setWarning(activeWarning);
         } else {
