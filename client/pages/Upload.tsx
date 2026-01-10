@@ -50,6 +50,7 @@ export default function Upload() {
       name: file.name,
       size: file.size,
       type: file.type,
+      file: file, // Store the actual file for upload
     }));
     setFiles((prev) => [...prev, ...newPreviews]);
   };
