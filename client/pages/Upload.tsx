@@ -192,6 +192,43 @@ export default function Upload() {
     }
   };
 
+  if (uploadSuccess) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="container mx-auto px-4">
+          <div className="max-w-2xl mx-auto text-center space-y-6">
+            <div className="flex justify-center">
+              <div className="w-20 h-20 rounded-full bg-green-500/20 flex items-center justify-center animate-fade-in">
+                <CheckCircle size={48} className="text-green-400" />
+              </div>
+            </div>
+            <div className="space-y-3">
+              <h1 className="text-4xl font-bold text-foreground">
+                Upload Successful! ✓
+              </h1>
+              <p className="text-lg text-muted-foreground">
+                Your asset has been uploaded and is now in verification process.
+              </p>
+              <p className="text-base text-muted-foreground max-w-xl mx-auto">
+                Our team will review it to ensure it meets our quality standards
+                and is virus-free. Once approved, it will appear on the
+                marketplace and in your dashboard.
+              </p>
+            </div>
+            <div className="pt-6 flex flex-col sm:flex-row gap-4 justify-center">
+              <Link to="/dashboard">
+                <Button>Go to Dashboard</Button>
+              </Link>
+              <Link to="/marketplace">
+                <Button variant="outline">View Marketplace</Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-12 md:py-16">
