@@ -501,6 +501,40 @@ export default function Dashboard() {
           </div>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Edit Asset Dialog */}
+      <EditAssetDialog
+        asset={editingAsset}
+        isOpen={editDialogOpen}
+        onClose={() => {
+          setEditDialogOpen(false);
+          setEditingAsset(null);
+        }}
+        onSuccess={(updatedAsset) => {
+          setAssets(
+            assets.map((a) => (a.id === updatedAsset.id ? updatedAsset : a)),
+          );
+          setEditingAsset(null);
+          setEditDialogOpen(false);
+        }}
+      />
+
+      {/* Update File Dialog */}
+      <UpdateFileDialog
+        asset={updateFileAsset}
+        isOpen={updateFileDialogOpen}
+        onClose={() => {
+          setUpdateFileDialogOpen(false);
+          setUpdateFileAsset(null);
+        }}
+        onSuccess={(updatedAsset) => {
+          setAssets(
+            assets.map((a) => (a.id === updatedAsset.id ? updatedAsset : a)),
+          );
+          setUpdateFileAsset(null);
+          setUpdateFileDialogOpen(false);
+        }}
+      />
     </div>
   );
 }
