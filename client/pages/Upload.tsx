@@ -152,9 +152,6 @@ export default function Upload() {
           "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=500&h=500&fit=crop",
         authorId: user.uid,
         authorName: userProfile.displayName,
-        downloads: 0,
-        rating: 0,
-        reviews: 0,
         status: "uploading" as const,
         tags: formData.tags
           .split(",")
