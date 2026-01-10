@@ -95,7 +95,7 @@ export function NavBar() {
   };
 
   return (
-    <nav className="sticky top-0 z-40 bg-background/95 backdrop-blur-lg border-b border-border/20">
+    <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur-lg border-b border-border/20">
       <div className="flex items-center justify-between h-14 px-4">
         {/* Left - Hamburger + Logo */}
         <div className="flex items-center gap-3 flex-1">
