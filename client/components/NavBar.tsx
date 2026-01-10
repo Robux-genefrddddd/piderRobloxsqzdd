@@ -541,23 +541,17 @@ export function NavBar() {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.4 }}
-                      className="border-t border-blue-500/10 px-4 py-4"
+                      className="border-t border-border/20 px-4 py-4"
                     >
                       <button
                         onClick={() => {
                           handleLogout();
                           closeMenu();
                         }}
-                        className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-red-500/20 transition-all duration-200 font-medium text-red-400 group"
+                        className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-destructive/20 transition-colors duration-150 text-destructive group"
                       >
-                        <span className="text-2xl group-hover:scale-125 transition-transform duration-200">
-                          👋
-                        </span>
-                        <div className="text-left flex-1">
-                          <div className="text-sm font-semibold">Sign Out</div>
-                          <div className="text-xs text-red-300/60">See you soon</div>
-                        </div>
-                        <span className="text-xs text-slate-600">→</span>
+                        <LogOut size={18} className="text-destructive" />
+                        <span className="text-sm font-medium">Sign Out</span>
                       </button>
                     </motion.div>
                   )}
