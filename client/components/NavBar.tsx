@@ -463,7 +463,7 @@ export function NavBar() {
                           className="px-4 py-6 border-t border-blue-500/10"
                         >
                           <p className="text-xs font-semibold text-blue-400/70 uppercase tracking-wider mb-4 px-2">
-                            Tools
+                            🛠️ Tools
                           </p>
                           <div className="space-y-2">
                             <motion.div
@@ -477,17 +477,18 @@ export function NavBar() {
                                 className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-blue-500/15 transition-all duration-200 font-medium text-slate-100 hover:text-blue-300 group"
                                 onClick={closeMenu}
                               >
-                                <span className="text-xl group-hover:scale-110 transition-transform">
+                                <span className="text-2xl group-hover:scale-125 transition-transform duration-200">
                                   👥
                                 </span>
-                                <div>
+                                <div className="flex-1">
                                   <div className="text-sm font-semibold">
                                     Groups
                                   </div>
                                   <div className="text-xs text-slate-500">
-                                    Manage groups
+                                    Collaborate
                                   </div>
                                 </div>
+                                <span className="text-xs text-slate-600">→</span>
                               </Link>
                             </motion.div>
                             <motion.div
@@ -501,15 +502,15 @@ export function NavBar() {
                                 className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-blue-500/15 transition-all duration-200 font-medium text-slate-100 hover:text-blue-300 group"
                                 onClick={closeMenu}
                               >
-                                <span className="text-xl group-hover:scale-110 transition-transform">
-                                  💬
+                                <span className="text-2xl group-hover:scale-125 transition-transform duration-200">
+                                  💌
                                 </span>
                                 <div className="flex-1">
                                   <div className="text-sm font-semibold">
                                     Messages
                                   </div>
                                   <div className="text-xs text-slate-500">
-                                    Conversations
+                                    Chat
                                   </div>
                                 </div>
                                 {unreadCount > 0 && (
