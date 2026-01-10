@@ -51,10 +51,10 @@ export default function BanNotice() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-red-600 mb-4" />
-          <p className="text-gray-500">Loading ban information...</p>
+      <div className="min-h-screen bg-black flex items-center justify-center p-4">
+        <div className="text-center space-y-4">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-red-600" />
+          <p className="text-gray-400 text-sm">Loading account information...</p>
         </div>
       </div>
     );
