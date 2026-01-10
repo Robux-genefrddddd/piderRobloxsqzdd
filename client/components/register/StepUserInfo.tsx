@@ -17,7 +17,7 @@ export function StepUserInfo({
 }: StepUserInfoProps) {
   return (
     <div className="space-y-5">
-      <div>
+      <div className="text-center">
         <h2 className="text-xl font-semibold text-foreground mb-1">
           Create your profile
         </h2>
