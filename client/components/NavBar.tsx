@@ -646,13 +646,14 @@ export function NavBar() {
                         }}
                         className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-red-500/20 transition-all duration-200 font-medium text-red-400 group"
                       >
-                        <span className="text-xl group-hover:scale-110 transition-transform">
-                          🚪
+                        <span className="text-2xl group-hover:scale-125 transition-transform duration-200">
+                          👋
                         </span>
-                        <div className="text-left">
+                        <div className="text-left flex-1">
                           <div className="text-sm font-semibold">Sign Out</div>
-                          <div className="text-xs text-red-300/60">Logout</div>
+                          <div className="text-xs text-red-300/60">See you soon</div>
                         </div>
+                        <span className="text-xs text-slate-600">→</span>
                       </button>
                     </motion.div>
                   )}
