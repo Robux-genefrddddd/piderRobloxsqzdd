@@ -186,7 +186,8 @@ export function UploadStep1({
                 Drag and drop your files here
               </p>
               <p className="text-xs text-muted-foreground">
-                or click to select (ZIP, 3D Models, Scripts, Images, Audio, etc.)
+                or click to select (ZIP, 3D Models, Scripts, Images, Audio,
+                etc.)
               </p>
             </div>
           </div>

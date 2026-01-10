@@ -45,7 +45,9 @@ export async function getUserWarnings(userId: string): Promise<Warning[]> {
         createdAt: doc.data().createdAt?.toDate?.() || new Date(),
         expiresAt: doc.data().expiresAt?.toDate?.() || undefined,
       }))
-      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()) as Warning[];
+      .sort(
+        (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
+      ) as Warning[];
 
     return warnings;
   } catch (error) {

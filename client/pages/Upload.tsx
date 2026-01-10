@@ -144,7 +144,10 @@ export default function Upload() {
             const filePath = await uploadAssetFile(assetId, filePreview.file);
             filePaths.push(filePath);
           } catch (uploadError) {
-            console.error(`Error uploading file ${filePreview.name}:`, uploadError);
+            console.error(
+              `Error uploading file ${filePreview.name}:`,
+              uploadError,
+            );
             toast.error(`Failed to upload file: ${filePreview.name}`);
           }
         }

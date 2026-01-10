@@ -36,7 +36,9 @@ export async function getUserFavorites(userId: string): Promise<Favorite[]> {
         ...doc.data(),
         createdAt: doc.data().createdAt?.toDate?.() || new Date(),
       }))
-      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()) as Favorite[];
+      .sort(
+        (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
+      ) as Favorite[];
 
     return favorites;
   } catch (error) {

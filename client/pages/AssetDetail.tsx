@@ -1,7 +1,19 @@
 import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { Star, Download, Heart, ArrowRight, Loader, Trash2, FileDown } from "lucide-react";
-import { getAsset, incrementAssetDownloads, deleteAsset } from "@/lib/assetService";
+import {
+  Star,
+  Download,
+  Heart,
+  ArrowRight,
+  Loader,
+  Trash2,
+  FileDown,
+} from "lucide-react";
+import {
+  getAsset,
+  incrementAssetDownloads,
+  deleteAsset,
+} from "@/lib/assetService";
 import { getUserProfile } from "@/lib/auth";
 import { useAuth } from "@/contexts/AuthContext";
 import {
@@ -118,7 +130,13 @@ export default function AssetDetail() {
         });
       } else {
         // Create new review
-        await createReview(id, user.uid, userProfile.displayName, rating, reviewMessage);
+        await createReview(
+          id,
+          user.uid,
+          userProfile.displayName,
+          rating,
+          reviewMessage,
+        );
         toast.success("Review posted successfully");
 
         // Reload reviews
@@ -173,12 +191,7 @@ export default function AssetDetail() {
         setIsFav(false);
         toast.success("Removed from favorites");
       } else {
-        await addFavorite(
-          user.uid,
-          asset.id,
-          asset.name,
-          asset.imageUrl,
-        );
+        await addFavorite(user.uid, asset.id, asset.name, asset.imageUrl);
         setIsFav(true);
         toast.success("Added to favorites");
       }
@@ -249,7 +262,7 @@ export default function AssetDetail() {
       if (id) {
         await incrementAssetDownloads(id);
         setAsset((prev) =>
-          prev ? { ...prev, downloads: prev.downloads + 1 } : null
+          prev ? { ...prev, downloads: prev.downloads + 1 } : null,
         );
       }
 
@@ -472,7 +485,10 @@ export default function AssetDetail() {
 
             {/* Review Form */}
             {user ? (
-              <form onSubmit={handleSubmitReview} className="bg-secondary/15 border border-border/15 rounded-lg p-6 mb-6">
+              <form
+                onSubmit={handleSubmitReview}
+                className="bg-secondary/15 border border-border/15 rounded-lg p-6 mb-6"
+              >
                 <h3 className="font-semibold mb-4">
                   {userReview ? "Edit Your Review" : "Leave a Review"}
                 </h3>
@@ -561,7 +577,9 @@ export default function AssetDetail() {
             {/* Existing Reviews */}
             <div className="space-y-3">
               <h3 className="font-semibold text-sm mb-4">
-                {reviews.length === 0 ? "No reviews yet" : `${reviews.length} Review${reviews.length !== 1 ? "s" : ""}`}
+                {reviews.length === 0
+                  ? "No reviews yet"
+                  : `${reviews.length} Review${reviews.length !== 1 ? "s" : ""}`}
               </h3>
 
               {reviews.map((review) => (

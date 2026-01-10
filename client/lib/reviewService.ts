@@ -38,7 +38,9 @@ export async function getAssetReviews(assetId: string): Promise<Review[]> {
         ...doc.data(),
         createdAt: doc.data().createdAt?.toDate?.() || new Date(),
       }))
-      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()) as Review[];
+      .sort(
+        (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
+      ) as Review[];
 
     return reviews;
   } catch (error) {
