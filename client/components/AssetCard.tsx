@@ -43,39 +43,39 @@ export function AssetCard({ asset }: AssetCardProps) {
           </div>
 
           {/* Content Section */}
-          <div className="p-3 flex flex-col flex-1">
+          <div className="p-4 flex flex-col flex-1">
             {/* Name */}
             <div className="flex-1 mb-3">
-              <h3 className="font-medium text-sm line-clamp-2 group-hover:text-accent transition-colors">
+              <h3 className="font-semibold text-sm line-clamp-2 group-hover:text-accent transition-colors">
                 {asset.name}
               </h3>
-              <p className="text-xs text-muted-foreground mt-1 capitalize">
+              <p className="text-xs text-muted-foreground mt-2 capitalize font-medium">
                 {asset.category}
               </p>
             </div>
 
             {/* Stats */}
-            <div className="flex items-center justify-between text-xs text-muted-foreground border-t border-border/40 pt-2 mb-2">
-              <div className="flex items-center gap-1">
-                <Star size={12} className="fill-accent text-accent" />
-                <span className="font-medium text-foreground text-xs">
+            <div className="flex items-center justify-between text-xs text-muted-foreground border-t border-border/25 pt-3 mb-3">
+              <div className="flex items-center gap-1.5">
+                <Star size={13} className="fill-accent text-accent" />
+                <span className="font-semibold text-foreground text-xs">
                   {asset.rating.toFixed(1)}
                 </span>
-                <span className="text-muted-foreground">({asset.reviews})</span>
+                <span className="text-muted-foreground text-xs">({asset.reviews})</span>
               </div>
               <div className="flex items-center gap-1 text-muted-foreground">
-                <Download size={12} />
+                <Download size={13} />
                 <span className="text-xs">{asset.downloads}</span>
               </div>
             </div>
 
             {/* Author */}
-            <div className="flex items-center gap-2 border-t border-border/40 pt-2 mb-3">
+            <div className="flex items-center gap-2 border-t border-border/25 pt-3 mb-4">
               {asset.authorAvatar && (
                 <img
                   src={asset.authorAvatar}
                   alt={asset.authorName}
-                  className="w-5 h-5 rounded-sm object-cover flex-shrink-0"
+                  className="w-5 h-5 rounded-md object-cover flex-shrink-0"
                 />
               )}
               <p className="text-xs text-muted-foreground truncate">
@@ -88,20 +88,20 @@ export function AssetCard({ asset }: AssetCardProps) {
               onClick={(e) => {
                 e.preventDefault();
               }}
-              className={`w-full flex items-center justify-center gap-1.5 py-1.5 rounded-sm font-medium transition-all text-xs ${
+              className={`w-full flex items-center justify-center gap-1.5 py-2 rounded-lg font-semibold transition-all text-xs ${
                 isFree
-                  ? "bg-secondary/50 border border-border/50 text-foreground hover:bg-secondary"
-                  : "bg-accent/10 text-accent border border-accent/20 hover:bg-accent/15"
+                  ? "bg-secondary/50 border border-border/30 text-foreground hover:bg-secondary/70 active:scale-95"
+                  : "bg-accent/15 text-accent border border-accent/25 hover:bg-accent/25 active:scale-95"
               }`}
             >
               {isFree ? (
                 <>
-                  <Download size={13} />
+                  <Download size={14} />
                   Download
                 </>
               ) : (
                 <>
-                  <Lock size={13} />
+                  <Lock size={14} />
                   Get Access
                 </>
               )}
