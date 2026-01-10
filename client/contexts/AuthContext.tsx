@@ -5,6 +5,8 @@ import {
   DEFAULT_PROFILE_IMAGE,
   getUserProfile,
 } from "@/lib/auth";
+import * as notificationService from "@/lib/notificationService";
+import { Notification } from "@shared/api";
 
 interface UserProfile {
   uid: string;
@@ -24,6 +26,8 @@ interface AuthContextType {
   userProfile: UserProfile | null;
   loading: boolean;
   isAuthenticated: boolean;
+  notifications: Notification[];
+  unreadCount: number;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -32,6 +36,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [unreadCount, setUnreadCount] = useState(0);
 
   useEffect(() => {
     const unsubscribe = onAuthChange(async (authUser) => {
@@ -55,11 +61,33 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
               role: "member",
             });
           }
+
+          // Subscribe to real-time notifications
+          const notificationsUnsub = notificationService.subscribeToUserNotifications(
+            authUser.uid,
+            (notifs) => {
+              setNotifications(notifs);
+            }
+          );
+
+          const unreadUnsub = notificationService.subscribeToUnreadCount(
+            authUser.uid,
+            (count) => {
+              setUnreadCount(count);
+            }
+          );
+
+          return () => {
+            notificationsUnsub();
+            unreadUnsub();
+          };
         } catch (error) {
           console.error("Error fetching user profile:", error);
         }
       } else {
         setUserProfile(null);
+        setNotifications([]);
+        setUnreadCount(0);
       }
       setLoading(false);
     });
@@ -72,6 +100,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     userProfile,
     loading,
     isAuthenticated: !!user,
+    notifications,
+    unreadCount,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
