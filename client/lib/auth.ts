@@ -97,9 +97,12 @@ export async function loginUser(
   password: string,
 ): Promise<User> {
   try {
+    // Trim email to handle whitespace (common when copy/pasting)
+    const trimmedEmail = email.trim();
+
     const userCredential = await signInWithEmailAndPassword(
       auth,
-      email,
+      trimmedEmail,
       password,
     );
     return userCredential.user;
