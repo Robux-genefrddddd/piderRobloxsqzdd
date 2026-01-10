@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X, LogOut, Crown, Shield } from "lucide-react";
+import { Menu, X, LogOut, Crown, Shield, Users, Mail } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { logoutUser, DEFAULT_PROFILE_IMAGE } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
