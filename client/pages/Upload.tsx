@@ -209,54 +209,54 @@ export default function Upload() {
   }
 
   return (
-    <div className="min-h-screen bg-background py-8 px-4">
+    <div className="bg-background py-6 px-4">
       <div className="max-w-2xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">
+        <div className="mb-6">
+          <h1 className="text-2xl font-semibold text-foreground mb-1">
             Upload Asset
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-xs text-muted-foreground/70">
             Share your creation with the RbxAssets community
           </p>
         </div>
 
         {/* Step Indicator */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
+        <div className="mb-6">
+          <div className="flex items-center justify-between mb-3">
             {STEPS.map((step, index) => (
               <div key={step.id} className="flex items-center flex-1">
                 <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold transition-all flex-shrink-0 ${
+                  className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium transition-all flex-shrink-0 ${
                     index <= currentStep
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-border/30 text-muted-foreground"
+                      ? "bg-primary/20 text-primary/70"
+                      : "bg-border/20 text-muted-foreground/50"
                   }`}
                 >
                   {index + 1}
                 </div>
                 {index < STEPS.length - 1 && (
                   <div
-                    className={`flex-1 h-1 mx-2 rounded-full transition-all ${
-                      index < currentStep ? "bg-primary" : "bg-border/30"
+                    className={`flex-1 h-0.5 mx-1.5 rounded-full transition-all ${
+                      index < currentStep ? "bg-primary/30" : "bg-border/20"
                     }`}
                   />
                 )}
               </div>
             ))}
           </div>
-          <div className="flex justify-between items-center">
-            <p className="text-xs text-muted-foreground">
+          <div className="flex justify-between items-center text-xs">
+            <p className="text-muted-foreground/50">
               Step {currentStep + 1} of {STEPS.length}
             </p>
-            <p className="text-xs font-medium text-foreground">
+            <p className="font-medium text-foreground/80">
               {STEPS[currentStep].label}
             </p>
           </div>
         </div>
 
         {/* Form Card */}
-        <div className="bg-secondary/15 border border-border/15 rounded-lg p-6 md:p-8">
+        <div className="bg-secondary/8 border border-border/15 rounded-lg p-5 md:p-6">
           {/* Error Message */}
           {error && (
             <div className="mb-6 flex items-start gap-3 p-4 bg-destructive/15 border border-destructive/30 rounded-lg">
