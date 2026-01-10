@@ -112,9 +112,12 @@ export function NavBar() {
                         alt={userProfile.username}
                         className="w-6 h-6 rounded-full object-cover"
                       />
-                      <span className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors">
-                        {userProfile.username}
-                      </span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors">
+                          {userProfile.username}
+                        </span>
+                        <RoleBadge role={userProfile.role} />
+                      </div>
                     </button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-48">
