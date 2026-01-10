@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { X, AlertCircle, Clock, Check, ChevronRight, MoreVertical } from "lucide-react";
+import {
+  X,
+  AlertCircle,
+  Clock,
+  Check,
+  ChevronRight,
+  MoreVertical,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
@@ -39,7 +46,12 @@ interface UserDetailModalProps {
 }
 
 type ModerationStep = "select" | "warning" | "suspension" | "ban" | "history";
-type ConfirmDialogType = "warning" | "suspension" | "ban" | "deleteAccount" | null;
+type ConfirmDialogType =
+  | "warning"
+  | "suspension"
+  | "ban"
+  | "deleteAccount"
+  | null;
 
 export function UserDetailModal({
   user,
@@ -48,7 +60,8 @@ export function UserDetailModal({
   currentUserRole = "member",
 }: UserDetailModalProps) {
   const [activeTab, setActiveTab] = useState<"info" | "moderation">("info");
-  const [moderationStep, setModerationStep] = useState<ModerationStep>("select");
+  const [moderationStep, setModerationStep] =
+    useState<ModerationStep>("select");
   const [warnings, setWarnings] = useState<Warning[]>([]);
   const [loading, setLoading] = useState(false);
   const [reason, setReason] = useState("");
@@ -69,7 +82,9 @@ export function UserDetailModal({
     }
   };
 
-  const handleCreateWarning = async (type: "warning" | "suspension" | "ban") => {
+  const handleCreateWarning = async (
+    type: "warning" | "suspension" | "ban",
+  ) => {
     if (!reason.trim()) {
       toast.error("Please provide a reason");
       return;
@@ -247,23 +262,33 @@ export function UserDetailModal({
               {/* Quick Info */}
               <div className="space-y-2">
                 <div>
-                  <p className="text-xs text-muted-foreground font-medium">Email</p>
+                  <p className="text-xs text-muted-foreground font-medium">
+                    Email
+                  </p>
                   <p className="text-sm text-foreground">{user.email}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-muted-foreground font-medium">Role</p>
-                  <p className="text-sm text-foreground capitalize">{user.role}</p>
+                  <p className="text-xs text-muted-foreground font-medium">
+                    Role
+                  </p>
+                  <p className="text-sm text-foreground capitalize">
+                    {user.role}
+                  </p>
                 </div>
                 {user.memberRank && (
                   <div>
-                    <p className="text-xs text-muted-foreground font-medium">Rank</p>
+                    <p className="text-xs text-muted-foreground font-medium">
+                      Rank
+                    </p>
                     <p className="text-sm text-foreground capitalize">
                       {user.memberRank}
                     </p>
                   </div>
                 )}
                 <div>
-                  <p className="text-xs text-muted-foreground font-medium">Member Since</p>
+                  <p className="text-xs text-muted-foreground font-medium">
+                    Member Since
+                  </p>
                   <p className="text-sm text-foreground">
                     {new Date(user.createdAt).toLocaleDateString("en-US", {
                       year: "numeric",
@@ -273,7 +298,9 @@ export function UserDetailModal({
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs text-muted-foreground font-medium">Status</p>
+                  <p className="text-xs text-muted-foreground font-medium">
+                    Status
+                  </p>
                   <div className="flex items-center gap-2 mt-1">
                     <div
                       className={`w-2 h-2 rounded-full ${
@@ -308,7 +335,10 @@ export function UserDetailModal({
                           First notice for minor infractions
                         </p>
                       </div>
-                      <ChevronRight size={16} className="text-muted-foreground group-hover:text-foreground" />
+                      <ChevronRight
+                        size={16}
+                        className="text-muted-foreground group-hover:text-foreground"
+                      />
                     </div>
                   </button>
 
@@ -319,12 +349,17 @@ export function UserDetailModal({
                   >
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm font-medium">Temporary Suspension</p>
+                        <p className="text-sm font-medium">
+                          Temporary Suspension
+                        </p>
                         <p className="text-xs text-muted-foreground mt-0.5">
                           Block access for a limited period
                         </p>
                       </div>
-                      <ChevronRight size={16} className="text-muted-foreground group-hover:text-foreground" />
+                      <ChevronRight
+                        size={16}
+                        className="text-muted-foreground group-hover:text-foreground"
+                      />
                     </div>
                   </button>
 
@@ -335,12 +370,17 @@ export function UserDetailModal({
                   >
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm font-medium text-yellow-700">Permanent Ban</p>
+                        <p className="text-sm font-medium text-yellow-700">
+                          Permanent Ban
+                        </p>
                         <p className="text-xs text-yellow-600/70 mt-0.5">
                           Irreversible action - requires confirmation
                         </p>
                       </div>
-                      <ChevronRight size={16} className="text-yellow-600 group-hover:text-yellow-700" />
+                      <ChevronRight
+                        size={16}
+                        className="text-yellow-600 group-hover:text-yellow-700"
+                      />
                     </div>
                   </button>
 
@@ -357,7 +397,10 @@ export function UserDetailModal({
                             See past warnings and actions
                           </p>
                         </div>
-                        <ChevronRight size={16} className="text-muted-foreground group-hover:text-foreground" />
+                        <ChevronRight
+                          size={16}
+                          className="text-muted-foreground group-hover:text-foreground"
+                        />
                       </div>
                     </button>
                   )}
@@ -505,7 +548,8 @@ export function UserDetailModal({
 
                   <div className="p-2.5 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
                     <p className="text-xs text-yellow-700">
-                      <strong>Permanent ban</strong> is irreversible. Only founders can delete this action.
+                      <strong>Permanent ban</strong> is irreversible. Only
+                      founders can delete this action.
                     </p>
                   </div>
 
@@ -569,7 +613,10 @@ export function UserDetailModal({
             <div className="bg-card border border-border/40 rounded-xl w-full max-w-sm shadow-2xl">
               <div className="p-4 border-b border-border/20">
                 <h3 className="font-semibold text-sm">
-                  Confirm {confirmDialog === "deleteAccount" ? "Account Deletion" : confirmDialog}
+                  Confirm{" "}
+                  {confirmDialog === "deleteAccount"
+                    ? "Account Deletion"
+                    : confirmDialog}
                 </h3>
               </div>
 
@@ -577,7 +624,8 @@ export function UserDetailModal({
                 {confirmDialog === "warning" && (
                   <>
                     <p className="text-sm text-foreground">
-                      Issue a <strong>warning</strong> to {user.displayName} for {durationDays} days?
+                      Issue a <strong>warning</strong> to {user.displayName} for{" "}
+                      {durationDays} days?
                     </p>
                     <p className="text-xs text-muted-foreground bg-secondary/20 p-2 rounded border border-border/30">
                       Reason: {reason}
@@ -587,7 +635,8 @@ export function UserDetailModal({
                 {confirmDialog === "suspension" && (
                   <>
                     <p className="text-sm text-foreground">
-                      <strong>Suspend</strong> {user.displayName} for {durationDays} days?
+                      <strong>Suspend</strong> {user.displayName} for{" "}
+                      {durationDays} days?
                     </p>
                     <p className="text-xs text-muted-foreground bg-secondary/20 p-2 rounded border border-border/30">
                       Reason: {reason}
@@ -600,7 +649,8 @@ export function UserDetailModal({
                       Permanently ban {user.displayName}?
                     </p>
                     <p className="text-xs text-muted-foreground bg-yellow-500/10 p-2 rounded border border-yellow-500/20">
-                      This action is irreversible. Only founders can delete this ban.
+                      This action is irreversible. Only founders can delete this
+                      ban.
                     </p>
                     <p className="text-xs text-muted-foreground bg-secondary/20 p-2 rounded border border-border/30">
                       Reason: {reason}
@@ -640,7 +690,9 @@ export function UserDetailModal({
                       : "default"
                   }
                 >
-                  {confirmDialog === "deleteAccount" ? "Delete Account" : "Confirm"}
+                  {confirmDialog === "deleteAccount"
+                    ? "Delete Account"
+                    : "Confirm"}
                 </Button>
                 <Button
                   onClick={() => setConfirmDialog(null)}

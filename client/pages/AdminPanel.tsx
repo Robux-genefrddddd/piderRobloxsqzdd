@@ -224,7 +224,10 @@ export default function AdminPanel() {
         {maintenanceStatus?.enabled && (
           <div className="mb-4 p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg flex items-start justify-between gap-3">
             <div className="flex items-start gap-2 flex-1">
-              <AlertTriangle size={16} className="text-yellow-600 mt-0.5 flex-shrink-0" />
+              <AlertTriangle
+                size={16}
+                className="text-yellow-600 mt-0.5 flex-shrink-0"
+              />
               <div className="min-w-0">
                 <p className="text-sm font-medium text-yellow-600">
                   Maintenance Mode Active
@@ -273,7 +276,10 @@ export default function AdminPanel() {
                   {users.filter((u) => u.isBanned).length}
                 </p>
               </div>
-              <AlertTriangle size={16} className="text-yellow-600 flex-shrink-0 mt-0.5" />
+              <AlertTriangle
+                size={16}
+                className="text-yellow-600 flex-shrink-0 mt-0.5"
+              />
             </div>
           </div>
 
@@ -285,7 +291,10 @@ export default function AdminPanel() {
                 </p>
                 <p className="text-2xl font-bold mt-1">{auditLogs.length}</p>
               </div>
-              <Activity size={16} className="text-primary/70 flex-shrink-0 mt-0.5" />
+              <Activity
+                size={16}
+                className="text-primary/70 flex-shrink-0 mt-0.5"
+              />
             </div>
           </div>
         </div>
@@ -300,7 +309,10 @@ export default function AdminPanel() {
                 : "border-transparent text-muted-foreground hover:text-foreground"
             }`}
           >
-            Users {users.length > 0 && <span className="text-xs ml-1">({users.length})</span>}
+            Users{" "}
+            {users.length > 0 && (
+              <span className="text-xs ml-1">({users.length})</span>
+            )}
           </button>
           <button
             onClick={() => setActiveTab("logs")}
@@ -310,7 +322,10 @@ export default function AdminPanel() {
                 : "border-transparent text-muted-foreground hover:text-foreground"
             }`}
           >
-            Audit Logs {auditLogs.length > 0 && <span className="text-xs ml-1">({auditLogs.length})</span>}
+            Audit Logs{" "}
+            {auditLogs.length > 0 && (
+              <span className="text-xs ml-1">({auditLogs.length})</span>
+            )}
           </button>
           {userProfile?.role === "founder" && (
             <>
@@ -322,7 +337,12 @@ export default function AdminPanel() {
                     : "border-transparent text-muted-foreground hover:text-foreground"
                 }`}
               >
-                Messages {broadcastMessages.length > 0 && <span className="text-xs ml-1">({broadcastMessages.length})</span>}
+                Messages{" "}
+                {broadcastMessages.length > 0 && (
+                  <span className="text-xs ml-1">
+                    ({broadcastMessages.length})
+                  </span>
+                )}
               </button>
               <button
                 onClick={() => setActiveTab("maintenance")}
@@ -342,7 +362,9 @@ export default function AdminPanel() {
           <div className="flex items-center justify-center py-12">
             <div className="text-center">
               <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-4" />
-              <p className="text-sm text-muted-foreground">Loading admin data...</p>
+              <p className="text-sm text-muted-foreground">
+                Loading admin data...
+              </p>
             </div>
           </div>
         ) : activeTab === "users" ? (
@@ -369,7 +391,9 @@ export default function AdminPanel() {
                     size={32}
                     className="mx-auto text-muted-foreground mb-2"
                   />
-                  <p className="text-sm text-muted-foreground">No users found</p>
+                  <p className="text-sm text-muted-foreground">
+                    No users found
+                  </p>
                 </div>
               ) : (
                 filteredUsers.map((u) => (
@@ -420,7 +444,10 @@ export default function AdminPanel() {
                       </div>
 
                       {/* Action Indicator */}
-                      <ChevronRight size={16} className="text-muted-foreground group-hover:text-primary flex-shrink-0" />
+                      <ChevronRight
+                        size={16}
+                        className="text-muted-foreground group-hover:text-primary flex-shrink-0"
+                      />
                     </div>
                   </div>
                 ))
@@ -443,7 +470,10 @@ export default function AdminPanel() {
 
             {broadcastMessages.length === 0 ? (
               <div className="text-center py-8">
-                <Mail size={32} className="mx-auto text-muted-foreground mb-2" />
+                <Mail
+                  size={32}
+                  className="mx-auto text-muted-foreground mb-2"
+                />
                 <p className="text-sm text-muted-foreground">
                   No messages sent yet
                 </p>
@@ -501,7 +531,14 @@ export default function AdminPanel() {
 
               <div className="flex items-center justify-between p-3 bg-secondary/20 border border-border/30 rounded-lg mb-3">
                 <div className="text-sm font-medium">
-                  Status: <span className={maintenanceStatus?.enabled ? "text-yellow-600" : "text-green-600"}>
+                  Status:{" "}
+                  <span
+                    className={
+                      maintenanceStatus?.enabled
+                        ? "text-yellow-600"
+                        : "text-green-600"
+                    }
+                  >
                     {maintenanceStatus?.enabled ? "Active" : "Inactive"}
                   </span>
                 </div>
@@ -520,7 +557,8 @@ export default function AdminPanel() {
 
             <div className="p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg">
               <p className="text-xs text-blue-600/90">
-                When enabled, visitors will see a maintenance page. No users will be able to access the site.
+                When enabled, visitors will see a maintenance page. No users
+                will be able to access the site.
               </p>
             </div>
           </div>
@@ -528,8 +566,13 @@ export default function AdminPanel() {
           <div className="space-y-2">
             {auditLogs.length === 0 ? (
               <div className="text-center py-12">
-                <Clock size={32} className="mx-auto text-muted-foreground mb-2" />
-                <p className="text-sm text-muted-foreground">No audit logs yet</p>
+                <Clock
+                  size={32}
+                  className="mx-auto text-muted-foreground mb-2"
+                />
+                <p className="text-sm text-muted-foreground">
+                  No audit logs yet
+                </p>
               </div>
             ) : (
               auditLogs.map((log) => (
@@ -543,10 +586,16 @@ export default function AdminPanel() {
                         {log.action.replace(/_/g, " ")}
                       </p>
                       <p className="text-xs text-muted-foreground mt-1">
-                        By <span className="font-medium text-foreground">{log.performedByName}</span>
+                        By{" "}
+                        <span className="font-medium text-foreground">
+                          {log.performedByName}
+                        </span>
                         {log.targetUserName && (
                           <>
-                            {" "}<span className="text-muted-foreground">→</span>{" "}
+                            {" "}
+                            <span className="text-muted-foreground">
+                              →
+                            </span>{" "}
                             <span className="font-medium text-foreground">
                               {log.targetUserName}
                             </span>
@@ -561,7 +610,12 @@ export default function AdminPanel() {
                     </div>
                     <div className="text-xs text-muted-foreground whitespace-nowrap flex-shrink-0 text-right">
                       <div>{log.timestamp.toLocaleDateString()}</div>
-                      <div>{log.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</div>
+                      <div>
+                        {log.timestamp.toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -612,7 +666,8 @@ export default function AdminPanel() {
 
                   <div className="p-2.5 bg-blue-500/10 border border-blue-500/20 rounded-lg">
                     <p className="text-xs text-blue-600/90">
-                      When enabled, all site access will be blocked with a maintenance notice.
+                      When enabled, all site access will be blocked with a
+                      maintenance notice.
                     </p>
                   </div>
                 </>
@@ -621,7 +676,8 @@ export default function AdminPanel() {
               {maintenanceStatus?.enabled && (
                 <div className="p-2.5 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
                   <p className="text-xs text-yellow-600/90">
-                    Disabling maintenance mode will immediately restore site access to all users.
+                    Disabling maintenance mode will immediately restore site
+                    access to all users.
                   </p>
                 </div>
               )}

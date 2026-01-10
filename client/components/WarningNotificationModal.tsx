@@ -2,13 +2,19 @@ import { useEffect, useState } from "react";
 import { AlertTriangle, Ban, Clock, X, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
-import { subscribeToUserWarnings, Warning, acknowledgeWarning } from "@/lib/warningService";
+import {
+  subscribeToUserWarnings,
+  Warning,
+  acknowledgeWarning,
+} from "@/lib/warningService";
 import { toast } from "sonner";
 
 export function WarningNotificationModal() {
   const { user, userProfile } = useAuth();
   const [warnings, setWarnings] = useState<Warning[]>([]);
-  const [displayedWarningId, setDisplayedWarningId] = useState<string | null>(null);
+  const [displayedWarningId, setDisplayedWarningId] = useState<string | null>(
+    null,
+  );
   const [acknowledging, setAcknowledging] = useState(false);
 
   useEffect(() => {
@@ -21,7 +27,7 @@ export function WarningNotificationModal() {
       // Auto-select the most relevant warning to display
       // Priority: unacknowledged warnings > active suspensions/bans
       const unacknowledgedWarning = newWarnings.find(
-        (w) => w.type === "warning" && !w.acknowledgedAt
+        (w) => w.type === "warning" && !w.acknowledgedAt,
       );
 
       const activeAction = newWarnings.find((w) => {
@@ -50,7 +56,9 @@ export function WarningNotificationModal() {
   const isSuspension = currentWarning.type === "suspension";
   const isBan = currentWarning.type === "ban";
   const isTemporary = currentWarning.expiresAt !== undefined;
-  const isExpired = currentWarning.expiresAt && new Date() >= new Date(currentWarning.expiresAt);
+  const isExpired =
+    currentWarning.expiresAt &&
+    new Date() >= new Date(currentWarning.expiresAt);
 
   // Don't show expired temporary actions
   if (isExpired && !isBan) {
@@ -66,7 +74,8 @@ export function WarningNotificationModal() {
       toast.success("Warning acknowledged");
       // Auto-select next warning or action
       const remaining = warnings.filter((w) => w.id !== currentWarning.id);
-      const next = remaining.find((w) => w.type === "warning" && !w.acknowledgedAt) ||
+      const next =
+        remaining.find((w) => w.type === "warning" && !w.acknowledgedAt) ||
         remaining.find((w) => {
           if (w.type === "ban") return true;
           if (w.expiresAt && new Date() < new Date(w.expiresAt)) return true;
@@ -84,7 +93,8 @@ export function WarningNotificationModal() {
   const handleDismiss = () => {
     // For non-warning modals, just move to next one
     const remaining = warnings.filter((w) => w.id !== currentWarning.id);
-    const next = remaining.find((w) => w.type === "warning" && !w.acknowledgedAt) ||
+    const next =
+      remaining.find((w) => w.type === "warning" && !w.acknowledgedAt) ||
       remaining.find((w) => {
         if (w.type === "ban") return true;
         if (w.expiresAt && new Date() < new Date(w.expiresAt)) return true;
@@ -205,7 +215,10 @@ export function WarningNotificationModal() {
           {/* Dates Section */}
           <div className="space-y-2 pt-1">
             <div className="flex items-center gap-2 text-xs">
-              <Clock size={14} className="text-muted-foreground flex-shrink-0" />
+              <Clock
+                size={14}
+                className="text-muted-foreground flex-shrink-0"
+              />
               <span className="text-muted-foreground font-medium">
                 {getDateLabel()}:
               </span>
@@ -217,7 +230,10 @@ export function WarningNotificationModal() {
             {/* Expiration info for temporary actions */}
             {isTemporary && !isBan && (
               <div className="flex items-center gap-2 text-xs">
-                <Clock size={14} className="text-muted-foreground flex-shrink-0" />
+                <Clock
+                  size={14}
+                  className="text-muted-foreground flex-shrink-0"
+                />
                 <span className="text-muted-foreground font-medium">
                   Expires:
                 </span>
@@ -232,7 +248,9 @@ export function WarningNotificationModal() {
           {isBan && (
             <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-lg">
               <p className="text-xs text-red-700 leading-relaxed">
-                <strong>Your account has been permanently banned.</strong> You cannot access your account or create new accounts. Contact support if you believe this is an error.
+                <strong>Your account has been permanently banned.</strong> You
+                cannot access your account or create new accounts. Contact
+                support if you believe this is an error.
               </p>
             </div>
           )}
@@ -241,7 +259,9 @@ export function WarningNotificationModal() {
           {isSuspension && isTemporary && (
             <div className="p-3 bg-orange-500/10 border border-orange-500/20 rounded-lg">
               <p className="text-xs text-orange-700 leading-relaxed">
-                <strong>Your account is temporarily suspended.</strong> {getDurationText()}. You will regain access when the suspension expires.
+                <strong>Your account is temporarily suspended.</strong>{" "}
+                {getDurationText()}. You will regain access when the suspension
+                expires.
               </p>
             </div>
           )}
@@ -250,7 +270,9 @@ export function WarningNotificationModal() {
           {isWarning && !currentWarning.acknowledgedAt && (
             <div className="p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg">
               <p className="text-xs text-blue-700 leading-relaxed">
-                This is a notice about your account activity. Please review the reason above and ensure compliance with our community guidelines.
+                This is a notice about your account activity. Please review the
+                reason above and ensure compliance with our community
+                guidelines.
               </p>
             </div>
           )}
@@ -258,7 +280,10 @@ export function WarningNotificationModal() {
           {/* Acknowledged state */}
           {isWarning && currentWarning.acknowledgedAt && (
             <div className="p-3 bg-green-500/10 border border-green-500/20 rounded-lg flex items-start gap-2">
-              <CheckCircle size={14} className="text-green-700 flex-shrink-0 mt-0.5" />
+              <CheckCircle
+                size={14}
+                className="text-green-700 flex-shrink-0 mt-0.5"
+              />
               <p className="text-xs text-green-700">
                 You acknowledged this warning on{" "}
                 {formatDate(currentWarning.acknowledgedAt)}

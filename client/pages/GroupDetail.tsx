@@ -71,7 +71,8 @@ export default function GroupDetail() {
                   {group.name}
                 </h1>
                 <p className="text-xs text-muted-foreground">
-                  {group.memberCount} {group.memberCount === 1 ? "member" : "members"}
+                  {group.memberCount}{" "}
+                  {group.memberCount === 1 ? "member" : "members"}
                 </p>
               </div>
             </div>

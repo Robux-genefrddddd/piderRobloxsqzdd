@@ -90,7 +90,8 @@ export default function SupportNewTicket() {
           </div>
           <h1 className="text-2xl font-bold">Ticket Created</h1>
           <p className="text-sm text-muted-foreground max-w-sm">
-            Your support ticket has been created. Our team will review it shortly.
+            Your support ticket has been created. Our team will review it
+            shortly.
           </p>
         </div>
       </div>
@@ -120,7 +121,10 @@ export default function SupportNewTicket() {
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Category */}
           <div className="space-y-2">
-            <Label htmlFor="category" className="text-xs font-semibold uppercase text-muted-foreground">
+            <Label
+              htmlFor="category"
+              className="text-xs font-semibold uppercase text-muted-foreground"
+            >
               Category
             </Label>
             <Select
@@ -142,7 +146,10 @@ export default function SupportNewTicket() {
 
           {/* Subject */}
           <div className="space-y-2">
-            <Label htmlFor="subject" className="text-xs font-semibold uppercase text-muted-foreground">
+            <Label
+              htmlFor="subject"
+              className="text-xs font-semibold uppercase text-muted-foreground"
+            >
               Subject
             </Label>
             <Input
@@ -157,7 +164,10 @@ export default function SupportNewTicket() {
 
           {/* Description */}
           <div className="space-y-2">
-            <Label htmlFor="description" className="text-xs font-semibold uppercase text-muted-foreground">
+            <Label
+              htmlFor="description"
+              className="text-xs font-semibold uppercase text-muted-foreground"
+            >
               Description
             </Label>
             <Textarea
@@ -175,7 +185,10 @@ export default function SupportNewTicket() {
           {category === "bug-report" && (
             <>
               <div className="space-y-2 pt-2 border-t border-border/20">
-                <Label htmlFor="steps" className="text-xs font-semibold uppercase text-muted-foreground">
+                <Label
+                  htmlFor="steps"
+                  className="text-xs font-semibold uppercase text-muted-foreground"
+                >
                   Steps to Reproduce
                 </Label>
                 <Textarea
@@ -189,7 +202,10 @@ export default function SupportNewTicket() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="error" className="text-xs font-semibold uppercase text-muted-foreground">
+                <Label
+                  htmlFor="error"
+                  className="text-xs font-semibold uppercase text-muted-foreground"
+                >
                   Error Message
                 </Label>
                 <Input
@@ -208,7 +224,8 @@ export default function SupportNewTicket() {
             <div className="space-y-2 pt-2 border-t border-border/20">
               <div className="p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg">
                 <p className="text-xs text-blue-700">
-                  <strong>Tip:</strong> Include your transaction ID or order number if available.
+                  <strong>Tip:</strong> Include your transaction ID or order
+                  number if available.
                 </p>
               </div>
             </div>
@@ -219,7 +236,8 @@ export default function SupportNewTicket() {
             <div className="space-y-2 pt-2 border-t border-border/20">
               <div className="p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
                 <p className="text-xs text-yellow-700">
-                  <strong>Note:</strong> Please include specific details and links if possible.
+                  <strong>Note:</strong> Please include specific details and
+                  links if possible.
                 </p>
               </div>
             </div>

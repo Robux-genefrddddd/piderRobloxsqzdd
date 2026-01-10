@@ -33,7 +33,9 @@ export default function GroupCard({
 
       <div className="flex items-center gap-2 text-xs text-muted-foreground mt-3 pt-2 border-t border-border/20">
         <Users size={12} />
-        <span>{group.memberCount} {group.memberCount === 1 ? "member" : "members"}</span>
+        <span>
+          {group.memberCount} {group.memberCount === 1 ? "member" : "members"}
+        </span>
       </div>
     </div>
   );
