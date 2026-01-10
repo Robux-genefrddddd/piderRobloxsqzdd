@@ -133,10 +133,10 @@ export default function Dashboard() {
 
         {/* Overview Tab */}
         {activeTab === "overview" && (
-          <div className="space-y-6">
+          <div className="space-y-5">
             {/* Stats Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-              <div className="bg-secondary/50 border border-border rounded-lg p-4 space-y-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
+              <div className="bg-secondary/50 border border-border rounded-lg p-3 space-y-1">
                 <div className="flex items-center justify-between">
                   <h3 className="text-xs font-medium text-muted-foreground">
                     Total Earnings
