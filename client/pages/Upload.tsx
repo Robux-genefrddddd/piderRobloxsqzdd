@@ -259,12 +259,12 @@ export default function Upload() {
         <div className="bg-secondary/8 border border-border/15 rounded-lg p-5 md:p-6">
           {/* Error Message */}
           {error && (
-            <div className="mb-6 flex items-start gap-3 p-4 bg-destructive/15 border border-destructive/30 rounded-lg">
+            <div className="mb-4 flex items-start gap-2 p-3 bg-destructive/10 border border-destructive/20 rounded-lg">
               <AlertCircle
-                size={18}
-                className="text-destructive flex-shrink-0 mt-0.5"
+                size={16}
+                className="text-destructive/70 flex-shrink-0 mt-0"
               />
-              <p className="text-sm text-destructive">{error}</p>
+              <p className="text-xs text-destructive/80">{error}</p>
             </div>
           )}
 
