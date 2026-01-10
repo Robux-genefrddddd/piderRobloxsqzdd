@@ -156,20 +156,22 @@ export function subscribeToUserWarnings(
   userId: string,
   callback: (warnings: Warning[]) => void,
 ): () => void {
+  // Only filter by userId in the query, then filter by isActive client-side
   const q = query(
     collection(db, WARNINGS_COLLECTION),
     where("userId", "==", userId),
-    where("isActive", "==", true),
-    orderBy("createdAt", "desc"),
   );
 
   const unsubscribe = onSnapshot(q, (querySnapshot) => {
-    const warnings = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-      createdAt: doc.data().createdAt?.toDate?.() || new Date(),
-      expiresAt: doc.data().expiresAt?.toDate?.() || undefined,
-    })) as Warning[];
+    const warnings = querySnapshot.docs
+      .map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+        createdAt: doc.data().createdAt?.toDate?.() || new Date(),
+        expiresAt: doc.data().expiresAt?.toDate?.() || undefined,
+      }))
+      .filter((w) => w.isActive)
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()) as Warning[];
 
     callback(warnings);
   });
