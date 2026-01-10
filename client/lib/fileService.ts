@@ -87,3 +87,16 @@ export async function getFileMetadata(filePath: string) {
     return null;
   }
 }
+
+// Upload image file to Firebase Storage (for messages, etc)
+export async function uploadImageToStorage(
+  storageRef: any,
+  file: File | Blob,
+): Promise<void> {
+  try {
+    await uploadBytes(storageRef, file);
+  } catch (error) {
+    console.error("Error uploading image:", error);
+    throw error;
+  }
+}

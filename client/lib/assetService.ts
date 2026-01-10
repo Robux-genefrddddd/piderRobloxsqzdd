@@ -12,6 +12,8 @@ import {
   Timestamp,
   orderBy,
   limit,
+  onSnapshot,
+  Unsubscribe,
 } from "firebase/firestore";
 
 export interface Asset {
@@ -172,9 +174,19 @@ export async function updateAsset(
   }
 }
 
-// Delete asset
-export async function deleteAsset(assetId: string) {
+// Delete asset (check ownership)
+export async function deleteAsset(assetId: string, userId: string) {
   try {
+    const asset = await getAsset(assetId);
+
+    if (!asset) {
+      throw new Error("Asset not found");
+    }
+
+    if (asset.authorId !== userId) {
+      throw new Error("You can only delete your own assets");
+    }
+
     const docRef = doc(db, ASSETS_COLLECTION, assetId);
     await deleteDoc(docRef);
   } catch (error) {
@@ -204,21 +216,21 @@ export async function getFeaturedAssets(limitCount: number = 6) {
     const q = query(
       collection(db, ASSETS_COLLECTION),
       where("status", "==", "published"),
-      where("featured", "==", true),
     );
     const querySnapshot = await getDocs(q);
 
-    const assets = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-      createdAt: doc.data().createdAt?.toDate?.() || new Date(),
-      updatedAt: doc.data().updatedAt?.toDate?.() || new Date(),
-    })) as Asset[];
-
-    // Sort by downloads descending and limit results on the client side
-    return assets
+    const assets = querySnapshot.docs
+      .map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+        createdAt: doc.data().createdAt?.toDate?.() || new Date(),
+        updatedAt: doc.data().updatedAt?.toDate?.() || new Date(),
+      }))
+      .filter((a) => a.featured === true) // Filter on client side
       .sort((a, b) => b.downloads - a.downloads)
-      .slice(0, limitCount);
+      .slice(0, limitCount) as Asset[];
+
+    return assets;
   } catch (error) {
     console.error("Error fetching featured assets:", error);
     return [];
@@ -270,5 +282,149 @@ export async function getSiteStats(): Promise<SiteStats> {
       totalCreators: 0,
       totalDistributed: 0,
     };
+  }
+}
+
+// Favorites/Saved Assets
+const FAVORITES_COLLECTION = "favorites";
+
+export interface Favorite {
+  id: string;
+  userId: string;
+  assetId: string;
+  assetName: string;
+  assetImage: string;
+  authorId: string;
+  authorName: string;
+  savedAt: Date;
+}
+
+// Add asset to favorites
+export async function addToFavorites(
+  userId: string,
+  assetId: string,
+  assetName: string,
+  assetImage: string,
+  authorId: string,
+  authorName: string,
+): Promise<string> {
+  try {
+    // Check if already favorited
+    const q = query(
+      collection(db, FAVORITES_COLLECTION),
+      where("userId", "==", userId),
+      where("assetId", "==", assetId),
+    );
+    const existing = await getDocs(q);
+
+    if (existing.size > 0) {
+      throw new Error("Asset already in favorites");
+    }
+
+    const docRef = await addDoc(collection(db, FAVORITES_COLLECTION), {
+      userId,
+      assetId,
+      assetName,
+      assetImage,
+      authorId,
+      authorName,
+      savedAt: Timestamp.now(),
+    });
+
+    return docRef.id;
+  } catch (error) {
+    console.error("Error adding to favorites:", error);
+    throw error;
+  }
+}
+
+// Remove from favorites
+export async function removeFromFavorites(
+  userId: string,
+  assetId: string,
+): Promise<void> {
+  try {
+    const q = query(
+      collection(db, FAVORITES_COLLECTION),
+      where("userId", "==", userId),
+      where("assetId", "==", assetId),
+    );
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach((doc) => {
+      deleteDoc(doc.ref);
+    });
+  } catch (error) {
+    console.error("Error removing from favorites:", error);
+    throw error;
+  }
+}
+
+// Get user's favorite assets
+export async function getUserFavorites(userId: string): Promise<Favorite[]> {
+  try {
+    const q = query(
+      collection(db, FAVORITES_COLLECTION),
+      where("userId", "==", userId),
+      orderBy("savedAt", "desc"),
+    );
+    const querySnapshot = await getDocs(q);
+
+    const favorites = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+      savedAt: doc.data().savedAt?.toDate?.() || new Date(),
+    })) as Favorite[];
+
+    return favorites;
+  } catch (error) {
+    console.error("Error fetching favorites:", error);
+    return [];
+  }
+}
+
+// Check if asset is favorited
+export async function isFavorited(
+  userId: string,
+  assetId: string,
+): Promise<boolean> {
+  try {
+    const q = query(
+      collection(db, FAVORITES_COLLECTION),
+      where("userId", "==", userId),
+      where("assetId", "==", assetId),
+    );
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.size > 0;
+  } catch (error) {
+    console.error("Error checking favorite status:", error);
+    return false;
+  }
+}
+
+// Subscribe to user's favorites (real-time)
+export function subscribeToUserFavorites(
+  userId: string,
+  onFavoritesUpdate: (favorites: Favorite[]) => void,
+): Unsubscribe {
+  try {
+    const q = query(
+      collection(db, FAVORITES_COLLECTION),
+      where("userId", "==", userId),
+      orderBy("savedAt", "desc"),
+    );
+
+    return onSnapshot(q, (snapshot) => {
+      const favorites = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+        savedAt: doc.data().savedAt?.toDate?.() || new Date(),
+      })) as Favorite[];
+
+      onFavoritesUpdate(favorites);
+    });
+  } catch (error) {
+    console.error("Error subscribing to favorites:", error);
+    return () => {};
   }
 }

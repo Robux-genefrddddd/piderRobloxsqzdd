@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X, LogOut, Crown, Shield } from "lucide-react";
+import { Menu, X, LogOut, Crown, Shield, Users, Mail } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { logoutUser, DEFAULT_PROFILE_IMAGE } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
@@ -60,7 +60,7 @@ function RoleBadge({ role }: { role?: string }) {
 
 export function NavBar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { isAuthenticated, userProfile, loading } = useAuth();
+  const { isAuthenticated, userProfile, loading, unreadCount } = useAuth();
 
   const handleLogout = async () => {
     try {
@@ -152,6 +152,29 @@ export function NavBar() {
                     <DropdownMenuItem asChild>
                       <Link to="/upload" className="cursor-pointer">
                         Upload Asset
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link to="/groups" className="cursor-pointer">
+                        <Users size={16} className="mr-2" />
+                        Groups
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link
+                        to="/messages"
+                        className="cursor-pointer flex items-center justify-between"
+                      >
+                        <div className="flex items-center">
+                          <Mail size={16} className="mr-2" />
+                          Messages
+                        </div>
+                        {unreadCount > 0 && (
+                          <span className="ml-auto bg-destructive text-destructive-foreground text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center">
+                            {unreadCount > 9 ? "9+" : unreadCount}
+                          </span>
+                        )}
                       </Link>
                     </DropdownMenuItem>
                     {(userProfile.role === "founder" ||

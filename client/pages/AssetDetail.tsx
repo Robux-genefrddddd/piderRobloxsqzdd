@@ -220,7 +220,7 @@ export default function AssetDetail() {
     setDeletingAsset(true);
 
     try {
-      await deleteAsset(asset.id);
+      await deleteAsset(asset.id, user.uid);
       toast.success("Asset deleted successfully");
 
       setTimeout(() => {
@@ -228,7 +228,9 @@ export default function AssetDetail() {
       }, 1500);
     } catch (error) {
       console.error("Error deleting asset:", error);
-      toast.error("Failed to delete asset");
+      toast.error(
+        error instanceof Error ? error.message : "Failed to delete asset",
+      );
     } finally {
       setDeletingAsset(false);
     }

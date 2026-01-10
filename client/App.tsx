@@ -30,6 +30,9 @@ import Support from "./pages/Support";
 import SupportNewTicket from "./pages/SupportNewTicket";
 import SupportTicketDetail from "./pages/SupportTicketDetail";
 import NotFound from "./pages/NotFound";
+import Groups from "./pages/Groups";
+import GroupDetail from "./pages/GroupDetail";
+import Messages from "./pages/Messages";
 
 const queryClient = new QueryClient();
 
@@ -199,6 +202,30 @@ const App = () => (
               element={
                 <Layout>
                   <SupportTicketDetail />
+                </Layout>
+              }
+            />
+            <Route
+              path="/groups"
+              element={
+                <Layout>
+                  <Groups />
+                </Layout>
+              }
+            />
+            <Route
+              path="/groups/:id"
+              element={
+                <Layout>
+                  <GroupDetail />
+                </Layout>
+              }
+            />
+            <Route
+              path="/messages"
+              element={
+                <Layout>
+                  <Messages />
                 </Layout>
               }
             />
