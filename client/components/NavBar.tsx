@@ -227,162 +227,235 @@ export function NavBar() {
         <>
           {/* Overlay */}
           <div
-            className="fixed inset-0 top-14 bg-black/50 z-40"
+            className="fixed inset-0 top-14 bg-black/60 z-40"
             onClick={() => setMenuOpen(false)}
           />
           {/* Menu Panel */}
-          <div className="fixed left-0 top-14 bottom-0 w-64 bg-card border-r border-border overflow-y-auto z-50 shadow-2xl">
-            <div className="flex flex-col h-full bg-card text-foreground">
+          <div className="fixed left-0 top-14 bottom-0 w-72 bg-gradient-to-b from-sidebar to-sidebar/95 border-r border-sidebar-border overflow-y-auto z-50 shadow-2xl">
+            <div className="flex flex-col h-full">
               {/* Menu Header */}
-              <div className="px-4 py-4 border-b border-border/40 flex-shrink-0">
-                <p className="text-xs font-bold text-primary uppercase tracking-widest">
-                  Menu
-                </p>
+              <div className="px-6 py-6 border-b border-sidebar-border/50">
+                <h2 className="text-xl font-bold text-sidebar-foreground mb-1">Navigation</h2>
+                <p className="text-xs text-sidebar-foreground/60">Access all features</p>
               </div>
 
-              {/* Menu Items */}
-              <div className="flex-1 overflow-y-auto py-4 space-y-2 px-2">
-                <Link
-                  to="/marketplace"
-                  className="block px-3 py-3 rounded-lg hover:bg-primary/10 transition-colors font-medium text-sm text-foreground"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  📦 Marketplace
-                </Link>
-                <Link
-                  to="/support"
-                  className="block px-3 py-3 rounded-lg hover:bg-primary/10 transition-colors font-medium text-sm text-foreground"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  🆘 Support
-                </Link>
-                <Link
-                  to="/about"
-                  className="block px-3 py-3 rounded-lg hover:bg-primary/10 transition-colors font-medium text-sm text-foreground"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  ℹ️ About
-                </Link>
+              {/* Menu Content */}
+              <div className="flex-1 overflow-y-auto">
+                {/* Main Navigation */}
+                <div className="px-4 py-6">
+                  <p className="text-xs font-semibold text-sidebar-primary/70 uppercase tracking-wider mb-3 px-2">
+                    Explore
+                  </p>
+                  <div className="space-y-2">
+                    <Link
+                      to="/marketplace"
+                      className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-sidebar-primary/20 transition-all duration-200 font-medium text-sidebar-foreground group"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      <span className="text-xl">📦</span>
+                      <div>
+                        <div className="text-sm font-semibold">Marketplace</div>
+                        <div className="text-xs text-sidebar-foreground/50">Browse all assets</div>
+                      </div>
+                    </Link>
+                    <Link
+                      to="/support"
+                      className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-sidebar-primary/20 transition-all duration-200 font-medium text-sidebar-foreground"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      <span className="text-xl">🆘</span>
+                      <div>
+                        <div className="text-sm font-semibold">Support</div>
+                        <div className="text-xs text-sidebar-foreground/50">Get help & resources</div>
+                      </div>
+                    </Link>
+                    <Link
+                      to="/about"
+                      className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-sidebar-primary/20 transition-all duration-200 font-medium text-sidebar-foreground"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      <span className="text-xl">ℹ️</span>
+                      <div>
+                        <div className="text-sm font-semibold">About Us</div>
+                        <div className="text-xs text-sidebar-foreground/50">Learn more</div>
+                      </div>
+                    </Link>
+                  </div>
+                </div>
 
-                {isAuthenticated && userProfile && (
+                {isAuthenticated && userProfile ? (
                   <>
-                    <div className="px-3 py-4 border-t border-border/40 mt-4">
-                      <div className="flex items-center gap-3">
-                        <img
-                          src={
-                            userProfile.profileImage ||
-                            "https://api.dicebear.com/7.x/avataaars/svg?seed=" +
-                              userProfile.username
-                          }
-                          alt={userProfile.username}
-                          className="w-10 h-10 rounded-full object-cover"
-                        />
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-bold text-foreground truncate">
-                            {userProfile.username}
-                          </p>
-                          <p className="text-xs text-muted-foreground truncate">
-                            {userProfile.email}
-                          </p>
+                    {/* User Profile Section */}
+                    <div className="px-4 py-6 border-t border-sidebar-border/30">
+                      <p className="text-xs font-semibold text-sidebar-primary/70 uppercase tracking-wider mb-3 px-2">
+                        Your Account
+                      </p>
+                      <div className="bg-sidebar-primary/10 rounded-xl p-4 mb-4">
+                        <div className="flex items-center gap-3">
+                          <img
+                            src={
+                              userProfile.profileImage ||
+                              "https://api.dicebear.com/7.x/avataaars/svg?seed=" +
+                                userProfile.username
+                            }
+                            alt={userProfile.username}
+                            className="w-12 h-12 rounded-lg object-cover"
+                          />
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-bold text-sidebar-foreground truncate">
+                              {userProfile.username}
+                            </p>
+                            <p className="text-xs text-sidebar-foreground/60 truncate">
+                              {userProfile.email}
+                            </p>
+                          </div>
                         </div>
+                      </div>
+                      <div className="space-y-2">
+                        <Link
+                          to="/dashboard"
+                          className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-sidebar-primary/20 transition-all duration-200 font-medium text-sidebar-foreground"
+                          onClick={() => setMenuOpen(false)}
+                        >
+                          <span className="text-xl">📊</span>
+                          <div>
+                            <div className="text-sm font-semibold">Dashboard</div>
+                            <div className="text-xs text-sidebar-foreground/50">View your stats</div>
+                          </div>
+                        </Link>
+                        <Link
+                          to="/upload"
+                          className="flex items-center gap-3 px-4 py-3 rounded-xl bg-sidebar-primary/30 hover:bg-sidebar-primary/40 transition-all duration-200 font-semibold text-sidebar-primary"
+                          onClick={() => setMenuOpen(false)}
+                        >
+                          <span className="text-xl">⬆️</span>
+                          <div>
+                            <div className="text-sm font-bold">Upload Asset</div>
+                            <div className="text-xs text-sidebar-primary/70">Create new</div>
+                          </div>
+                        </Link>
                       </div>
                     </div>
 
-                    <Link
-                      to="/dashboard"
-                      className="block px-3 py-3 rounded-lg hover:bg-primary/10 transition-colors font-medium text-sm text-foreground"
-                      onClick={() => setMenuOpen(false)}
-                    >
-                      📊 Dashboard
-                    </Link>
-                    <Link
-                      to="/upload"
-                      className="block px-3 py-3 rounded-lg hover:bg-primary/10 transition-colors font-medium text-sm text-foreground"
-                      onClick={() => setMenuOpen(false)}
-                    >
-                      ⬆️ Upload Asset
-                    </Link>
-                    <Link
-                      to="/groups"
-                      className="block px-3 py-3 rounded-lg hover:bg-primary/10 transition-colors font-medium text-sm text-foreground"
-                      onClick={() => setMenuOpen(false)}
-                    >
-                      👥 Groups
-                    </Link>
-                    <Link
-                      to="/messages"
-                      className="block px-3 py-3 rounded-lg hover:bg-primary/10 transition-colors font-medium text-sm text-foreground flex items-center justify-between"
-                      onClick={() => setMenuOpen(false)}
-                    >
-                      💬 Messages
-                      {unreadCount > 0 && (
-                        <span className="bg-destructive text-destructive-foreground text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">
-                          {unreadCount > 9 ? "9+" : unreadCount}
-                        </span>
-                      )}
-                    </Link>
+                    {/* Tools Section */}
+                    <div className="px-4 py-6 border-t border-sidebar-border/30">
+                      <p className="text-xs font-semibold text-sidebar-primary/70 uppercase tracking-wider mb-3 px-2">
+                        Tools
+                      </p>
+                      <div className="space-y-2">
+                        <Link
+                          to="/groups"
+                          className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-sidebar-primary/20 transition-all duration-200 font-medium text-sidebar-foreground"
+                          onClick={() => setMenuOpen(false)}
+                        >
+                          <span className="text-xl">👥</span>
+                          <div>
+                            <div className="text-sm font-semibold">Groups</div>
+                            <div className="text-xs text-sidebar-foreground/50">Manage groups</div>
+                          </div>
+                        </Link>
+                        <Link
+                          to="/messages"
+                          className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-sidebar-primary/20 transition-all duration-200 font-medium text-sidebar-foreground"
+                          onClick={() => setMenuOpen(false)}
+                        >
+                          <span className="text-xl">💬</span>
+                          <div className="flex-1">
+                            <div className="text-sm font-semibold">Messages</div>
+                            <div className="text-xs text-sidebar-foreground/50">Your conversations</div>
+                          </div>
+                          {unreadCount > 0 && (
+                            <span className="bg-destructive text-destructive-foreground text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">
+                              {unreadCount > 9 ? "9+" : unreadCount}
+                            </span>
+                          )}
+                        </Link>
+                      </div>
+                    </div>
 
+                    {/* Admin Section */}
                     {(userProfile.role === "founder" ||
                       userProfile.role === "admin") && (
-                      <>
-                        <div className="border-t border-border/40 mt-4 pt-2">
-                          <Link
-                            to="/admin"
-                            className="block px-3 py-3 rounded-lg hover:bg-amber-500/10 transition-colors font-medium text-sm text-amber-400"
-                            onClick={() => setMenuOpen(false)}
-                          >
-                            ⚙️ Admin Panel
-                          </Link>
-                        </div>
-                      </>
+                      <div className="px-4 py-6 border-t border-sidebar-border/30">
+                        <p className="text-xs font-semibold text-amber-500/70 uppercase tracking-wider mb-3 px-2">
+                          Administration
+                        </p>
+                        <Link
+                          to="/admin"
+                          className="flex items-center gap-3 px-4 py-3 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 transition-all duration-200 font-semibold text-amber-400"
+                          onClick={() => setMenuOpen(false)}
+                        >
+                          <span className="text-xl">⚙️</span>
+                          <div>
+                            <div className="text-sm font-bold">Admin Panel</div>
+                            <div className="text-xs text-amber-300/60">Manage site</div>
+                          </div>
+                        </Link>
+                      </div>
                     )}
                   </>
-                )}
-
-                {!isAuthenticated && (
+                ) : (
                   <>
-                    <div className="border-t border-border/40 mt-4 pt-2 space-y-2">
-                      <Link
-                        to="/login"
-                        className="block px-3 py-3 rounded-lg hover:bg-primary/10 transition-colors font-medium text-sm text-foreground"
-                        onClick={() => setMenuOpen(false)}
-                      >
-                        🔑 Sign In
-                      </Link>
-                      <Link
-                        to="/register"
-                        className="block px-3 py-3 rounded-lg bg-primary/20 hover:bg-primary/30 transition-colors font-medium text-sm text-primary"
-                        onClick={() => setMenuOpen(false)}
-                      >
-                        ➕ Sign Up
-                      </Link>
+                    {/* Auth Section */}
+                    <div className="px-4 py-6 border-t border-sidebar-border/30">
+                      <p className="text-xs font-semibold text-sidebar-primary/70 uppercase tracking-wider mb-3 px-2">
+                        Account
+                      </p>
+                      <div className="space-y-2">
+                        <Link
+                          to="/login"
+                          className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-sidebar-primary/20 transition-all duration-200 font-medium text-sidebar-foreground"
+                          onClick={() => setMenuOpen(false)}
+                        >
+                          <span className="text-xl">🔑</span>
+                          <div>
+                            <div className="text-sm font-semibold">Sign In</div>
+                            <div className="text-xs text-sidebar-foreground/50">Login to account</div>
+                          </div>
+                        </Link>
+                        <Link
+                          to="/register"
+                          className="flex items-center gap-3 px-4 py-3 rounded-xl bg-sidebar-primary/30 hover:bg-sidebar-primary/40 transition-all duration-200 font-semibold text-sidebar-primary"
+                          onClick={() => setMenuOpen(false)}
+                        >
+                          <span className="text-xl">✨</span>
+                          <div>
+                            <div className="text-sm font-bold">Create Account</div>
+                            <div className="text-xs text-sidebar-primary/70">Join now</div>
+                          </div>
+                        </Link>
+                      </div>
                     </div>
                   </>
                 )}
               </div>
 
-              {/* Menu Footer */}
+              {/* Footer Section */}
               {isAuthenticated && userProfile && (
-                <div className="border-t border-border/40 px-4 py-3 flex-shrink-0">
+                <div className="border-t border-sidebar-border/30 px-4 py-4">
                   <button
                     onClick={() => {
                       handleLogout();
                       setMenuOpen(false);
                     }}
-                    className="w-full text-left px-3 py-3 text-red-400 hover:bg-red-500/20 transition-colors font-medium text-sm rounded-lg"
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-red-500/20 transition-all duration-200 font-medium text-red-400"
                   >
-                    🚪 Sign Out
+                    <span className="text-xl">🚪</span>
+                    <div className="text-left">
+                      <div className="text-sm font-semibold">Sign Out</div>
+                      <div className="text-xs text-red-300/60">Logout</div>
+                    </div>
                   </button>
                 </div>
               )}
 
-              {/* Footer Logo */}
-              <div className="border-t border-border/40 px-4 py-4 flex-shrink-0 flex justify-center">
+              {/* Branding */}
+              <div className="border-t border-sidebar-border/30 px-4 py-4 flex justify-center">
                 <a
                   href="https://roblox.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="opacity-70 hover:opacity-100 transition-opacity"
+                  className="opacity-60 hover:opacity-100 transition-opacity"
                 >
                   <img
                     src="https://i.ibb.co/B531Dsh6/roblox-logo-roblox-symbol-meaning-history-and-evolution-3-removebg-preview.png"
