@@ -361,14 +361,15 @@ export default function AssetDetail() {
     <div className="min-h-screen bg-background py-6">
       <div className="max-w-6xl mx-auto px-4">
         {/* Header with Image & Metadata */}
-        <div className="grid lg:grid-cols-[1fr_380px] gap-6 mb-8">
+        <div className="grid lg:grid-cols-[1fr_380px] gap-8 mb-8">
           {/* Asset Image */}
-          <div className="relative rounded-lg overflow-hidden bg-muted border border-border/20 h-96 lg:h-full min-h-80">
-            <img
-              src={asset.imageUrl}
-              alt={asset.name}
-              className="w-full h-full object-cover"
-            />
+          <div className="flex items-center justify-start lg:justify-center">
+            <div className="relative rounded-xl overflow-hidden bg-muted border border-border/15 shadow-sm w-full max-w-2xl h-72 lg:h-96">
+              <img
+                src={asset.imageUrl}
+                alt={asset.name}
+                className="w-full h-full object-cover"
+              />
 
             {/* Top-right action menu */}
             <TooltipProvider>
@@ -420,7 +421,8 @@ export default function AssetDetail() {
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
-            </TooltipProvider>
+              </TooltipProvider>
+            </div>
           </div>
 
           {/* Metadata Panel */}
