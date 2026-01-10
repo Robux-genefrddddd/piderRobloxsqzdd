@@ -25,6 +25,8 @@ export interface Warning {
   createdAt: Date;
   isActive: boolean;
   details?: string;
+  // Only for warnings: tracks if user has acknowledged
+  acknowledgedAt?: Date;
 }
 
 const WARNINGS_COLLECTION = "user_warnings";
