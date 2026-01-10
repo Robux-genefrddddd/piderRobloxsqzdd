@@ -236,13 +236,3 @@ export default function GroupChat({ groupId }: GroupChatProps) {
     </div>
   );
 }
-
-// Helper function for image upload
-async function uploadImageToStorage(
-  storageRef: any,
-  blob: Blob,
-): Promise<void> {
-  const response = await fetch(URL.createObjectURL(blob));
-  const arrayBuffer = await response.arrayBuffer();
-  // This is a placeholder - the actual upload happens via Firebase
-}
