@@ -81,41 +81,6 @@ export default function About() {
     fetchTeamMembers();
   }, []);
 
-  const getRoleInfo = (role: string) => {
-    switch (role) {
-      case "founder":
-        return {
-          label: "Founder",
-          color: "bg-yellow-500/20 text-yellow-400",
-          icon: Crown,
-        };
-      case "admin":
-        return {
-          label: "Admin",
-          color: "bg-red-500/20 text-red-400",
-          icon: Shield,
-        };
-      case "partner":
-        return {
-          label: "Partner",
-          color: "bg-blue-500/20 text-blue-400",
-          icon: Users,
-        };
-      case "support":
-        return {
-          label: "Support",
-          color: "bg-green-500/20 text-green-400",
-          icon: Users,
-        };
-      default:
-        return {
-          label: role,
-          color: "bg-primary/20 text-primary",
-          icon: Users,
-        };
-    }
-  };
-
   const teamByRole = {
     founder: teamMembers.filter((m) => m.role === "founder"),
     admin: teamMembers.filter((m) => m.role === "admin"),
