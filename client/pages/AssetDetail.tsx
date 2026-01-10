@@ -37,6 +37,8 @@ export default function AssetDetail() {
   const [reviewMessage, setReviewMessage] = useState("");
   const [hoveredRating, setHoveredRating] = useState(0);
   const [downloading, setDownloading] = useState(false);
+  const [isFav, setIsFav] = useState(false);
+  const [deletingAsset, setDeletingAsset] = useState(false);
 
   useEffect(() => {
     const fetchAssetDetails = async () => {
