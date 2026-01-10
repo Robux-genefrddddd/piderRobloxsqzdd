@@ -10,6 +10,11 @@ import { NavBar } from "@/components/NavBar";
 import { Footer } from "@/components/Footer";
 import Index from "./pages/Index";
 import Marketplace from "./pages/Marketplace";
+import AssetDetail from "./pages/AssetDetail";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard";
+import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
