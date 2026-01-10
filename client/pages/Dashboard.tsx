@@ -110,20 +110,22 @@ export default function Dashboard() {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-4 mb-6 border-b border-border">
+        <div className="flex gap-4 mb-6 border-b border-border overflow-x-auto">
           {[
             { id: "overview", label: "Overview" },
             { id: "assets", label: "My Assets" },
+            { id: "warnings", label: "Warnings & Bans", icon: AlertTriangle },
           ].map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as typeof activeTab)}
-              className={`pb-3 px-2 text-sm font-medium transition-colors ${
+              className={`pb-3 px-2 text-sm font-medium transition-colors flex items-center gap-2 whitespace-nowrap ${
                 activeTab === tab.id
                   ? "border-b-2 border-primary text-foreground"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
+              {tab.icon && <tab.icon size={14} />}
               {tab.label}
             </button>
           ))}
