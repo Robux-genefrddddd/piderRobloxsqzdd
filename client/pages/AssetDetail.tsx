@@ -98,6 +98,13 @@ export default function AssetDetail() {
     fetchAssetDetails();
   }, [id, user]);
 
+  // Auto-open preview modal if preview=true in query params
+  useEffect(() => {
+    if (searchParams.get("preview") === "true") {
+      setShowFilePreview(true);
+    }
+  }, [searchParams]);
+
   const handleSubmitReview = async (e: React.FormEvent) => {
     e.preventDefault();
 
