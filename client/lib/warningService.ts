@@ -157,6 +157,19 @@ export async function deleteWarning(warningId: string): Promise<void> {
   }
 }
 
+// Mark a warning as acknowledged by user (warnings only)
+export async function acknowledgeWarning(warningId: string): Promise<void> {
+  try {
+    const docRef = doc(db, WARNINGS_COLLECTION, warningId);
+    await updateDoc(docRef, {
+      acknowledgedAt: Timestamp.now(),
+    });
+  } catch (error) {
+    console.error("Error acknowledging warning:", error);
+    throw error;
+  }
+}
+
 // Subscribe to user warnings in real-time
 export function subscribeToUserWarnings(
   userId: string,
