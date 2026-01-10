@@ -10,7 +10,9 @@ interface UserProfile {
   profileImage?: string;
   createdAt: Date;
   memberRank?: "starter" | "creator" | "pro" | "studio";
-  role?: "member" | "partner" | "admin" | "founder";
+  role: "member" | "partner" | "admin" | "founder" | "support";
+  isBanned?: boolean;
+  banReason?: string;
 }
 
 interface AuthContextType {
