@@ -243,8 +243,8 @@ export default function Marketplace() {
       </section>
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-12 md:py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+      <div className="container mx-auto px-4 py-8 md:py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Sidebar Filters - Desktop */}
           <div className="hidden lg:block space-y-6">
             <div>
