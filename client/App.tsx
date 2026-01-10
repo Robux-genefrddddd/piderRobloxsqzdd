@@ -154,6 +154,14 @@ const App = () => (
               </Layout>
             }
           />
+          <Route
+            path="/legal"
+            element={
+              <Layout>
+                <Legal />
+              </Layout>
+            }
+          />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route
             path="*"
