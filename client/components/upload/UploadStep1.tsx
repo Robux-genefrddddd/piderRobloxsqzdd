@@ -66,19 +66,32 @@ export function UploadStep1({
     if (e.dataTransfer.files?.[0]) {
       const file = e.dataTransfer.files[0];
 
-      // Validate banner image
-      const validationResult = await validateImage(file);
-      if (!validationResult.approved) {
-        const errorMsg = getValidationErrorMessage(validationResult);
-        toast.error(`Banner image rejected: ${errorMsg}`);
-        return;
-      }
+      // Show loading state
+      setBannerValidating(true);
+      toast.loading("Validating banner image...");
 
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        onBannerChange(event.target?.result as string);
-      };
-      reader.readAsDataURL(file);
+      try {
+        // Validate banner image
+        const validationResult = await validateImage(file);
+        if (!validationResult.approved) {
+          const errorMsg = getValidationErrorMessage(validationResult);
+          toast.error(`Banner rejected: ${errorMsg}`);
+          setBannerValidating(false);
+          return;
+        }
+
+        // Image approved
+        toast.success("✓ Banner image approved");
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          onBannerChange(event.target?.result as string);
+          setBannerValidating(false);
+        };
+        reader.readAsDataURL(file);
+      } catch (error) {
+        toast.error("Validation error. Please try again.");
+        setBannerValidating(false);
+      }
     }
   };
 
@@ -88,20 +101,34 @@ export function UploadStep1({
     if (e.target.files?.[0]) {
       const file = e.target.files[0];
 
-      // Validate banner image
-      const validationResult = await validateImage(file);
-      if (!validationResult.approved) {
-        const errorMsg = getValidationErrorMessage(validationResult);
-        toast.error(`Banner image rejected: ${errorMsg}`);
-        e.target.value = ""; // Reset input
-        return;
-      }
+      // Show loading state
+      setBannerValidating(true);
+      toast.loading("Validating banner image...");
 
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        onBannerChange(event.target?.result as string);
-      };
-      reader.readAsDataURL(file);
+      try {
+        // Validate banner image
+        const validationResult = await validateImage(file);
+        if (!validationResult.approved) {
+          const errorMsg = getValidationErrorMessage(validationResult);
+          toast.error(`Banner rejected: ${errorMsg}`);
+          e.target.value = ""; // Reset input
+          setBannerValidating(false);
+          return;
+        }
+
+        // Image approved
+        toast.success("✓ Banner image approved");
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          onBannerChange(event.target?.result as string);
+          setBannerValidating(false);
+        };
+        reader.readAsDataURL(file);
+      } catch (error) {
+        toast.error("Validation error. Please try again.");
+        setBannerValidating(false);
+        e.target.value = ""; // Reset input
+      }
     }
   };
 
