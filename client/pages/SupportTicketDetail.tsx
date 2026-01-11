@@ -262,9 +262,13 @@ export default function SupportTicketDetail() {
                       className={`px-4 py-2 rounded-lg ${
                         isCurrentUser
                           ? "bg-primary text-primary-foreground rounded-br-none"
-                          : msg.senderRole !== "user"
-                            ? "bg-blue-500/15 border border-blue-500/30 rounded-bl-none"
-                            : "bg-secondary/50 border border-border rounded-bl-none"
+                          : msg.senderRole === "support"
+                            ? "bg-blue-500/25 border border-blue-400/40 text-foreground rounded-bl-none"
+                            : msg.senderRole === "admin"
+                              ? "bg-purple-500/25 border border-purple-400/40 text-foreground rounded-bl-none"
+                              : msg.senderRole === "founder"
+                                ? "bg-yellow-500/25 border border-yellow-400/40 text-foreground rounded-bl-none"
+                                : "bg-secondary/40 border border-border rounded-bl-none text-foreground"
                       }`}
                     >
                       <p className="text-sm break-words">{msg.message}</p>
