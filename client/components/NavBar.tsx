@@ -447,7 +447,8 @@ export function NavBar() {
                         </motion.div>
 
                         {(userProfile.role === "founder" ||
-                          userProfile.role === "admin") && (
+                          userProfile.role === "admin" ||
+                          userProfile.role === "support") && (
                           <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
@@ -455,7 +456,9 @@ export function NavBar() {
                             className="px-3 py-3 border-t border-border/10"
                           >
                             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-tight px-2 mb-2">
-                              Admin
+                              {userProfile.role === "support"
+                                ? "Support"
+                                : "Admin"}
                             </p>
                             <motion.div
                               custom={7}
@@ -472,7 +475,11 @@ export function NavBar() {
                                   size={16}
                                   className="text-accent flex-shrink-0"
                                 />
-                                <span className="font-medium">Admin</span>
+                                <span className="font-medium">
+                                  {userProfile.role === "support"
+                                    ? "Support Panel"
+                                    : "Admin"}
+                                </span>
                               </Link>
                             </motion.div>
                           </motion.div>
