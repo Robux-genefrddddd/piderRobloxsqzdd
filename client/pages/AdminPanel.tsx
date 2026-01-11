@@ -64,11 +64,13 @@ export default function AdminPanel() {
   const navigate = useNavigate();
   const { user, userProfile } = useAuth();
   const [activeTab, setActiveTab] = useState<
-    "users" | "logs" | "maintenance" | "messages"
+    "users" | "logs" | "maintenance" | "messages" | "tickets"
   >("users");
   const [users, setUsers] = useState<User[]>([]);
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
+  const [tickets, setTickets] = useState<Ticket[]>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [maintenanceStatus, setMaintenanceStatus] =
