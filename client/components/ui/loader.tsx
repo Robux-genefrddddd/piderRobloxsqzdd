@@ -5,8 +5,9 @@ interface LoaderProps {
   minDisplay?: number;
 }
 
-export function Loader({ text = "Loading", minDisplay = 1500 }: LoaderProps) {
+export function Loader({ text, minDisplay = 1500 }: LoaderProps) {
   const [showLoader, setShowLoader] = useState(true);
+  const [dots, setDots] = useState(".");
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -15,6 +16,18 @@ export function Loader({ text = "Loading", minDisplay = 1500 }: LoaderProps) {
 
     return () => clearTimeout(timer);
   }, [minDisplay]);
+
+  useEffect(() => {
+    const dotInterval = setInterval(() => {
+      setDots((prev) => {
+        if (prev === ".") return "..";
+        if (prev === "..") return "...";
+        return ".";
+      });
+    }, 500);
+
+    return () => clearInterval(dotInterval);
+  }, []);
 
   return (
     <div className="fixed inset-0 bg-background flex items-center justify-center z-50">
@@ -29,7 +42,11 @@ export function Loader({ text = "Loading", minDisplay = 1500 }: LoaderProps) {
             }}
           />
         </div>
-        {text && <p className="text-muted-foreground text-sm">{text}</p>}
+        <div className="h-6 flex items-center justify-center">
+          <p className="text-muted-foreground text-sm font-medium w-6">
+            {dots}
+          </p>
+        </div>
       </div>
 
       <style>{`
