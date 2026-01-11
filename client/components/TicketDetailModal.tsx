@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { toast } from "sonner";
 import { addMessageToTicket, Ticket } from "@/lib/ticketService";
+import { getRoleLogo } from "@/lib/roleLogos";
 
 interface TicketDetailModalProps {
   ticket: Ticket | null;
