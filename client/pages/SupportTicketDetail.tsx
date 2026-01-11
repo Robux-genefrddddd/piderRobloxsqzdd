@@ -155,6 +155,21 @@ export default function SupportTicketDetail() {
     }
   };
 
+  const getMemberRankBadgeColors = (rank: string): string => {
+    switch (rank) {
+      case "starter":
+        return "bg-gray-500/20 text-gray-400";
+      case "creator":
+        return "bg-blue-500/20 text-blue-400";
+      case "pro":
+        return "bg-purple-500/20 text-purple-400";
+      case "studio":
+        return "bg-yellow-500/20 text-yellow-400";
+      default:
+        return "bg-gray-500/20 text-gray-400";
+    }
+  };
+
   const getRoleBadge = (senderRole: string, senderMemberRank?: string) => {
     // Priority 1: Check for staff roles
     switch (senderRole) {
@@ -179,12 +194,12 @@ export default function SupportTicketDetail() {
       default:
         // Priority 2: Show member rank if not a staff member
         if (senderMemberRank && senderRole === "user") {
-          const rankColor = getMemberRankColor(senderMemberRank);
           const rankLabel = getMemberRankLabel(senderMemberRank);
+          const rankColors = getMemberRankBadgeColors(senderMemberRank);
           return {
             icon: "⭐",
             label: rankLabel,
-            color: rankColor,
+            color: rankColors,
           };
         }
         return {
