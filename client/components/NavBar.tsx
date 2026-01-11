@@ -167,7 +167,8 @@ export function NavBar() {
                     </Link>
                   </DropdownMenuItem>
                   {(userProfile.role === "founder" ||
-                    userProfile.role === "admin") && (
+                    userProfile.role === "admin" ||
+                    userProfile.role === "support") && (
                     <>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem asChild>
