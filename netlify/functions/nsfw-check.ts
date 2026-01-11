@@ -94,7 +94,7 @@ async function parseFormData(
  *
  * Validates images for NSFW content before upload
  */
-const handler: Handler = async (event, context) => {
+const handler: Handler = async (event, context): Promise<any> => {
   try {
     // Only allow POST requests
     if (event.httpMethod !== "POST") {
