@@ -17,6 +17,7 @@ export default function SupportTicketDetail() {
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
   const [sending, setSending] = useState(false);
+  const [userProfiles, setUserProfiles] = useState<Record<string, UserProfile | null>>({});
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const [hasUserScrolled, setHasUserScrolled] = useState(false);
