@@ -30,30 +30,6 @@ export default function SupportTicketDetail() {
   }, [ticketId]);
 
   useEffect(() => {
-    // Load user profiles for all message senders
-    const loadUserProfiles = async () => {
-      if (!ticket?.messages) return;
-
-      const senderIds = Array.from(
-        new Set(ticket.messages.map((msg) => msg.senderId))
-      );
-
-      const profiles: Record<string, UserProfile | null> = {};
-
-      for (const senderId of senderIds) {
-        if (!userProfiles[senderId]) {
-          const profile = await getUserProfile(senderId);
-          profiles[senderId] = profile;
-        }
-      }
-
-      setUserProfiles((prev) => ({ ...prev, ...profiles }));
-    };
-
-    loadUserProfiles();
-  }, [ticket?.messages]);
-
-  useEffect(() => {
     // Auto-scroll only if user hasn't manually scrolled or if there are new messages
     if (
       ticket?.messages &&
