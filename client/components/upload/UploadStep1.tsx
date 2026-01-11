@@ -57,16 +57,26 @@ export function UploadStep1({
     }
   };
 
-  const handleBannerDrop = (e: React.DragEvent) => {
+  const handleBannerDrop = async (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setBannerDragActive(false);
     if (e.dataTransfer.files?.[0]) {
+      const file = e.dataTransfer.files[0];
+
+      // Validate banner image
+      const validationResult = await validateImage(file);
+      if (!validationResult.approved) {
+        const errorMsg = getValidationErrorMessage(validationResult);
+        toast.error(`Banner image rejected: ${errorMsg}`);
+        return;
+      }
+
       const reader = new FileReader();
       reader.onload = (event) => {
         onBannerChange(event.target?.result as string);
       };
-      reader.readAsDataURL(e.dataTransfer.files[0]);
+      reader.readAsDataURL(file);
     }
   };
 
