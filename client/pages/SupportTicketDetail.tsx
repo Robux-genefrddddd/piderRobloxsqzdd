@@ -17,6 +17,9 @@ export default function SupportTicketDetail() {
   const [message, setMessage] = useState("");
   const [sending, setSending] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const [hasUserScrolled, setHasUserScrolled] = useState(false);
+  const previousMessageCount = useRef(0);
 
   useEffect(() => {
     if (!ticketId) return;
@@ -26,11 +29,27 @@ export default function SupportTicketDetail() {
   }, [ticketId]);
 
   useEffect(() => {
-    scrollToBottom();
-  }, [ticket?.messages]);
+    // Auto-scroll only if user hasn't manually scrolled or if there are new messages
+    if (ticket?.messages && !hasUserScrolled && ticket.messages.length > previousMessageCount.current) {
+      setTimeout(() => {
+        scrollToBottom();
+      }, 100);
+    }
+    previousMessageCount.current = ticket?.messages?.length || 0;
+  }, [ticket?.messages, hasUserScrolled]);
+
+  const handleScroll = () => {
+    if (!messagesContainerRef.current) return;
+
+    const { scrollTop, scrollHeight, clientHeight } = messagesContainerRef.current;
+    const isAtBottom = scrollHeight - scrollTop - clientHeight < 50;
+
+    setHasUserScrolled(!isAtBottom);
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    setHasUserScrolled(false);
   };
 
   const loadTicket = async () => {
