@@ -9,7 +9,7 @@
 interface NSFWDetectionResult {
   isNSFW: boolean;
   confidence: number;
-  category: 'safe' | 'nsfw' | 'uncertain';
+  category: "safe" | "nsfw" | "uncertain";
   error?: string;
 }
 
@@ -36,9 +36,11 @@ const auditLogs: NSFWAuditLog[] = [];
  * Validate image file format and structure
  * Returns basic file info without complex image processing
  */
-function validateImageFile(
-  imageBuffer: Buffer,
-): { valid: boolean; format?: string; dimensions?: { width: number; height: number } } {
+function validateImageFile(imageBuffer: Buffer): {
+  valid: boolean;
+  format?: string;
+  dimensions?: { width: number; height: number };
+} {
   try {
     // Check for image magic numbers (file signatures)
     if (imageBuffer.length < 4) {
@@ -46,18 +48,22 @@ function validateImageFile(
     }
 
     // JPEG
-    if (imageBuffer[0] === 0xFF && imageBuffer[1] === 0xD8 && imageBuffer[2] === 0xFF) {
-      return { valid: true, format: 'jpeg' };
+    if (
+      imageBuffer[0] === 0xff &&
+      imageBuffer[1] === 0xd8 &&
+      imageBuffer[2] === 0xff
+    ) {
+      return { valid: true, format: "jpeg" };
     }
 
     // PNG
     if (
       imageBuffer[0] === 0x89 &&
       imageBuffer[1] === 0x50 &&
-      imageBuffer[2] === 0x4E &&
+      imageBuffer[2] === 0x4e &&
       imageBuffer[3] === 0x47
     ) {
-      return { valid: true, format: 'png' };
+      return { valid: true, format: "png" };
     }
 
     // WebP
@@ -75,7 +81,7 @@ function validateImageFile(
         imageBuffer[10] === 0x42 &&
         imageBuffer[11] === 0x50
       ) {
-        return { valid: true, format: 'webp' };
+        return { valid: true, format: "webp" };
       }
     }
 
@@ -85,19 +91,19 @@ function validateImageFile(
       imageBuffer[1] === 0x49 &&
       imageBuffer[2] === 0x46
     ) {
-      return { valid: true, format: 'gif' };
+      return { valid: true, format: "gif" };
     }
 
     return { valid: false };
   } catch (error) {
-    console.error('[NSFW] Image format validation error:', error);
+    console.error("[NSFW] Image format validation error:", error);
     return { valid: false };
   }
 }
 
 /**
  * Detect NSFW content in image
- * 
+ *
  * This implementation:
  * - Validates image file format (magic bytes)
  * - Checks file size
@@ -118,8 +124,8 @@ export async function detectNSFW(
       const result: NSFWDetectionResult = {
         isNSFW: true,
         confidence: 1.0,
-        category: 'nsfw',
-        error: 'File size exceeds limit',
+        category: "nsfw",
+        error: "File size exceeds limit",
       };
 
       logAudit({
@@ -128,7 +134,7 @@ export async function detectNSFW(
         isNSFW: true,
         confidence: 1.0,
         fileSize: fileSize || 0,
-        error: 'File size exceeds limit',
+        error: "File size exceeds limit",
       });
 
       return result;
@@ -139,8 +145,8 @@ export async function detectNSFW(
       const result: NSFWDetectionResult = {
         isNSFW: true,
         confidence: 1.0,
-        category: 'nsfw',
-        error: 'Empty file',
+        category: "nsfw",
+        error: "Empty file",
       };
 
       logAudit({
@@ -149,7 +155,7 @@ export async function detectNSFW(
         isNSFW: true,
         confidence: 1.0,
         fileSize: 0,
-        error: 'Empty file',
+        error: "Empty file",
       });
 
       return result;
@@ -162,8 +168,8 @@ export async function detectNSFW(
       const result: NSFWDetectionResult = {
         isNSFW: true,
         confidence: 1.0,
-        category: 'nsfw',
-        error: 'Invalid image format',
+        category: "nsfw",
+        error: "Invalid image format",
       };
 
       logAudit({
@@ -172,7 +178,7 @@ export async function detectNSFW(
         isNSFW: true,
         confidence: 1.0,
         fileSize: fileSize || imageBuffer.length,
-        error: 'Invalid image format',
+        error: "Invalid image format",
       });
 
       return result;
@@ -187,7 +193,7 @@ export async function detectNSFW(
     const detectionResult: NSFWDetectionResult = {
       isNSFW,
       confidence,
-      category: 'safe',
+      category: "safe",
     };
 
     // Log detection
@@ -200,7 +206,7 @@ export async function detectNSFW(
     });
 
     const duration = Date.now() - startTime;
-    console.log('[NSFW] Validation completed in ' + duration + 'ms', {
+    console.log("[NSFW] Validation completed in " + duration + "ms", {
       fileName,
       format: validation.format,
       approved: !isNSFW,
@@ -209,12 +215,12 @@ export async function detectNSFW(
     return detectionResult;
   } catch (error) {
     // FAIL-SAFE: Reject on any detection error
-    console.error('[NSFW] Validation error (REJECTING FOR SAFETY):', error);
+    console.error("[NSFW] Validation error (REJECTING FOR SAFETY):", error);
 
     const result: NSFWDetectionResult = {
       isNSFW: true,
       confidence: 1.0,
-      category: 'nsfw',
+      category: "nsfw",
       error: String(error),
     };
 
@@ -234,7 +240,7 @@ export async function detectNSFW(
 /**
  * Log NSFW detection audit trail
  */
-function logAudit(log: Omit<NSFWAuditLog, 'timestamp'>): void {
+function logAudit(log: Omit<NSFWAuditLog, "timestamp">): void {
   const auditEntry: NSFWAuditLog = {
     ...log,
     timestamp: new Date(),
@@ -248,9 +254,9 @@ function logAudit(log: Omit<NSFWAuditLog, 'timestamp'>): void {
   }
 
   // Log to console
-  console.log('[NSFW-AUDIT]', {
+  console.log("[NSFW-AUDIT]", {
     timestamp: auditEntry.timestamp.toISOString(),
-    userId: auditEntry.userId || 'unknown',
+    userId: auditEntry.userId || "unknown",
     fileName: auditEntry.fileName,
     isNSFW: auditEntry.isNSFW,
     confidence: Math.round(auditEntry.confidence * 100) / 100,
@@ -270,7 +276,7 @@ export function getAuditLogs(limit: number = 100): NSFWAuditLog[] {
  */
 export function clearAuditLogs(): void {
   auditLogs.length = 0;
-  console.log('[NSFW] Audit logs cleared');
+  console.log("[NSFW] Audit logs cleared");
 }
 
 /**
@@ -278,7 +284,7 @@ export function clearAuditLogs(): void {
  */
 export function getNSFWStats() {
   const totalChecks = auditLogs.length;
-  const blockedCount = auditLogs.filter(log => log.isNSFW).length;
+  const blockedCount = auditLogs.filter((log) => log.isNSFW).length;
   const allowedCount = totalChecks - blockedCount;
 
   return {

@@ -1,6 +1,15 @@
-import { Upload as UploadIcon, X, Image as ImageIcon, CheckCircle, AlertCircle } from "lucide-react";
+import {
+  Upload as UploadIcon,
+  X,
+  Image as ImageIcon,
+  CheckCircle,
+  AlertCircle,
+} from "lucide-react";
 import { useState } from "react";
-import { validateImage, getValidationErrorMessage } from "@/lib/imageValidationService";
+import {
+  validateImage,
+  getValidationErrorMessage,
+} from "@/lib/imageValidationService";
 import { toast } from "sonner";
 
 interface FilePreview {
@@ -197,7 +206,10 @@ export function UploadStep1({
                 <div className="w-10 h-10 rounded-lg bg-muted/20 flex items-center justify-center">
                   {bannerValidating ? (
                     <div className="animate-spin">
-                      <UploadIcon size={20} className="text-muted-foreground/50" />
+                      <UploadIcon
+                        size={20}
+                        className="text-muted-foreground/50"
+                      />
                     </div>
                   ) : (
                     <ImageIcon size={20} className="text-muted-foreground/50" />
@@ -254,7 +266,10 @@ export function UploadStep1({
               <div className="w-10 h-10 rounded-lg bg-muted/20 flex items-center justify-center">
                 {isValidatingFiles ? (
                   <div className="animate-spin">
-                    <UploadIcon size={20} className="text-muted-foreground/50" />
+                    <UploadIcon
+                      size={20}
+                      className="text-muted-foreground/50"
+                    />
                   </div>
                 ) : (
                   <UploadIcon size={20} className="text-muted-foreground/50" />
@@ -296,7 +311,10 @@ export function UploadStep1({
               >
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1.5">
-                    <CheckCircle size={14} className="text-green-500/60 flex-shrink-0" />
+                    <CheckCircle
+                      size={14}
+                      className="text-green-500/60 flex-shrink-0"
+                    />
                     <p className="text-xs font-medium text-foreground truncate">
                       {file.name}
                     </p>

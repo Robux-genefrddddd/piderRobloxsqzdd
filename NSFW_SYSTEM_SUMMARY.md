@@ -28,6 +28,7 @@ Key Features:
 ### New Files Created
 
 #### Server-Side Components
+
 ```
 server/services/nsfw-detection.ts          (353 lines)
   - Core NSFW detection logic
@@ -52,6 +53,7 @@ server/services/__tests__/nsfw-detection.test.ts (301 lines)
 ```
 
 #### Client-Side Components
+
 ```
 client/lib/imageValidationService.ts       (186 lines)
   - Client-side image validation
@@ -68,6 +70,7 @@ client/lib/__tests__/imageValidationService.test.ts (368 lines)
 ```
 
 #### Integration
+
 ```
 client/components/upload/UploadStep1.tsx   (Modified)
   - Banner image validation on upload
@@ -83,6 +86,7 @@ client/pages/Upload.tsx                    (Modified)
 ```
 
 #### Documentation
+
 ```
 NSFW_SECURITY.md                           (405 lines)
   - Complete security architecture
@@ -133,6 +137,7 @@ package.json
 ### 2. Fail-Safe Architecture ✅
 
 **Guarantees**:
+
 - Image rejected if model crashes
 - Image rejected if detection times out
 - Image rejected if file is corrupted
@@ -187,6 +192,7 @@ GET /api/nsfw-check/audit-logs (admin)
 ### 6. Audit Logging ✅
 
 **Data Tracked**:
+
 - Timestamp of each check
 - User ID
 - File name
@@ -197,6 +203,7 @@ GET /api/nsfw-check/audit-logs (admin)
 - Any errors encountered
 
 **Functions**:
+
 - `getAuditLogs(limit)` - Retrieve recent logs
 - `getNSFWStats()` - Get statistics
 - `clearAuditLogs()` - Admin reset
@@ -301,14 +308,14 @@ Content-Type: multipart/form-data
 
 ## Performance Metrics
 
-| Metric | Value |
-|--------|-------|
-| Detection time | 50-200ms |
-| Model size | ~50MB |
-| Memory usage | ~100MB (with buffers) |
-| Throughput | 10-20 images/sec |
-| Accuracy | 99.7% |
-| False positive rate | 2-3% |
+| Metric              | Value                 |
+| ------------------- | --------------------- |
+| Detection time      | 50-200ms              |
+| Model size          | ~50MB                 |
+| Memory usage        | ~100MB (with buffers) |
+| Throughput          | 10-20 images/sec      |
+| Accuracy            | 99.7%                 |
+| False positive rate | 2-3%                  |
 
 ## Installation & Deployment
 
@@ -334,6 +341,7 @@ multer            # File upload handling
 ### ✅ Ready to Use
 
 No additional setup required! The system is:
+
 - ✅ Fully integrated
 - ✅ Tested
 - ✅ Documented
@@ -371,21 +379,25 @@ const MAX_IMAGE_SIZE_MB = 50;
 ## Zero Dependencies on External APIs
 
 ✅ **No API Keys**
+
 - No authentication tokens
 - No credential management
 - No key rotation procedures
 
 ✅ **No External Calls**
+
 - Model runs locally
 - All processing server-side
 - Zero external network requests
 
 ✅ **No Subscription**
+
 - One-time model download
 - No ongoing costs
 - No rate limits
 
 ✅ **No Data Sharing**
+
 - Images not sent to third parties
 - Complete privacy
 - Full control over data
@@ -457,11 +469,13 @@ pnpm test
 ## Support Resources
 
 ### Documentation Files
+
 - Read: `NSFW_SECURITY.md` for security details
 - Read: `NSFW_IMPLEMENTATION_GUIDE.md` for setup/configuration
 - Review: Test files in `__tests__/` directories
 
 ### Code References
+
 - `server/services/nsfw-detection.ts` - Core logic
 - `client/lib/imageValidationService.ts` - Client integration
 - `client/pages/Upload.tsx` - Real-world example
@@ -485,7 +499,7 @@ You now have a **production-grade NSFW detection system** that:
 ✅ Handles errors safely (fail-safe)  
 ✅ Includes full test coverage  
 ✅ Is fully documented  
-✅ Ready for immediate use  
+✅ Ready for immediate use
 
 **The system is complete and operational. No further setup required.**
 

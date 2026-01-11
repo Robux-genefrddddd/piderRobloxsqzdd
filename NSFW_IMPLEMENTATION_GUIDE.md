@@ -5,6 +5,7 @@
 This guide walks you through the complete NSFW image detection system that has been integrated into your application.
 
 **Key Features:**
+
 - ✅ 100% server-side NSFW detection (no client bypass)
 - ✅ Zero external API dependencies (fully open-source)
 - ✅ Fail-safe architecture (rejects on errors)
@@ -44,6 +45,7 @@ This guide walks you through the complete NSFW image detection system that has b
 **File**: `server/services/nsfw-detection.ts`
 
 **Features:**
+
 - ONNX Runtime model inference
 - Image preprocessing (224x224 resize)
 - Confidence threshold: 0.7 (70%)
@@ -59,13 +61,13 @@ async function detectNSFW(
   fileName: string,
   userId?: string,
   fileSize?: number,
-): Promise<NSFWDetectionResult>
+): Promise<NSFWDetectionResult>;
 
 // Get audit logs
-function getAuditLogs(limit: number = 100): NSFWAuditLog[]
+function getAuditLogs(limit: number = 100): NSFWAuditLog[];
 
 // Get statistics
-function getNSFWStats()
+function getNSFWStats();
 ```
 
 ### 2. API Endpoint
@@ -97,13 +99,15 @@ GET /api/nsfw-check/audit-logs?limit=100
 
 ```typescript
 // Validate single image
-async function validateImage(file: File): Promise<ImageValidationResult>
+async function validateImage(file: File): Promise<ImageValidationResult>;
 
 // Validate multiple images
-async function validateImages(files: File[]): Promise<Map<File, ImageValidationResult>>
+async function validateImages(
+  files: File[],
+): Promise<Map<File, ImageValidationResult>>;
 
 // Get user-friendly error message
-function getValidationErrorMessage(result: ImageValidationResult): string
+function getValidationErrorMessage(result: ImageValidationResult): string;
 ```
 
 ### 4. Integrated Upload Page
@@ -111,6 +115,7 @@ function getValidationErrorMessage(result: ImageValidationResult): string
 **File**: `client/pages/Upload.tsx`
 
 **Changes:**
+
 - Banner images validated before preview
 - Asset files validated before upload
 - NSFW rejections shown with friendly error messages
@@ -157,6 +162,7 @@ app.get("/api/nsfw-check/audit-logs", handleNSFWAuditLogs);
 ### 3. No Environment Variables Required
 
 The system requires **zero** API keys or configuration:
+
 - No external API dependencies
 - No credentials needed
 - No rate limit from third parties
@@ -173,6 +179,7 @@ pnpm test
 ### Test Coverage
 
 Tests cover:
+
 - ✅ Safe image detection
 - ✅ NSFW image rejection
 - ✅ Error handling (fail-safe)
@@ -184,19 +191,23 @@ Tests cover:
 ### Manual Testing
 
 #### Test Case 1: Safe Image Upload
+
 1. Upload a landscape or portrait photo
 2. Expect: ✅ Image approved (confidence < 0.7)
 3. Image uploaded to Firebase
 
 #### Test Case 2: Large File Rejection
+
 1. Try to upload file > 50MB
 2. Expect: ❌ File size error (no server call)
 
 #### Test Case 3: Invalid File Type
+
 1. Try to upload PDF or text file
 2. Expect: ❌ Invalid file type error
 
 #### Test Case 4: Network Error (Simulate)
+
 1. Disable network while uploading
 2. Expect: ❌ Network error, image not uploaded
 
@@ -246,6 +257,7 @@ curl http://localhost:8080/api/nsfw-check/stats
 ```
 
 Response:
+
 ```json
 {
   "stats": {
@@ -265,6 +277,7 @@ curl http://localhost:8080/api/nsfw-check/audit-logs?limit=50
 ```
 
 Response:
+
 ```json
 {
   "logs": [
@@ -287,21 +300,25 @@ Response:
 ### What's Protected
 
 ✅ **Direct Bypass Prevention**
+
 - NSFW detection runs on server only
 - Client cannot disable or bypass checks
 - All images validated before storage
 
 ✅ **Fail-Safe Error Handling**
+
 - If detection fails: upload is REJECTED
 - Network errors: upload is REJECTED
 - Model errors: upload is REJECTED
 
 ✅ **Rate Limiting**
+
 - Max 30 checks per user per minute
 - Prevents brute-force attacks
 - Protects server resources
 
 ✅ **Audit Trail**
+
 - Every check is logged
 - Tracks user ID, file name, confidence, decision
 - Historical data for compliance
@@ -309,14 +326,17 @@ Response:
 ### What's Not Protected
 
 ❌ **Legally-protected content**
+
 - Some regions allow adult content
 - Your own moderation policy must apply
 
 ❌ **Heavily edited content**
+
 - Model may not detect modified images
 - Consider additional manual review
 
 ❌ **API-level bypasses**
+
 - If someone calls Firebase API directly
 - Implement additional backend validation
 
@@ -339,21 +359,24 @@ None required! But you can add custom logging:
 
 ```typescript
 // server/services/nsfw-detection.ts
-const ENABLE_DETAILED_LOGGING = process.env.NSFW_DETAILED_LOGS === 'true';
+const ENABLE_DETAILED_LOGGING = process.env.NSFW_DETAILED_LOGS === "true";
 ```
 
 ### Performance Metrics
 
 **Single Image Detection:**
+
 - Time: 50-200ms
 - Memory: ~100MB (model + buffers)
 - CPU: Varies by hardware
 
 **Throughput:**
+
 - Single instance: ~10-20 images/sec
 - Can be parallelized with worker threads
 
 **Scaling Strategy:**
+
 1. Single server: Works up to ~1000 images/day
 2. Load balanced: Multiple servers with shared rate limit (Redis)
 3. Serverless: AWS Lambda/Netlify Functions with cold start
@@ -365,6 +388,7 @@ const ENABLE_DETAILED_LOGGING = process.env.NSFW_DETAILED_LOGS === 'true';
 **Error**: "Failed to initialize NSFW model"
 
 **Solutions**:
+
 1. Check disk space (needs ~50MB)
 2. Verify Node.js version >= 14
 3. Clear model cache: `rm -rf .model-cache`
@@ -374,6 +398,7 @@ const ENABLE_DETAILED_LOGGING = process.env.NSFW_DETAILED_LOGS === 'true';
 **Symptoms**: Detection takes > 500ms per image
 
 **Solutions**:
+
 1. Check server CPU usage
 2. Reduce image dimensions before processing
 3. Implement batch processing
@@ -381,6 +406,7 @@ const ENABLE_DETAILED_LOGGING = process.env.NSFW_DETAILED_LOGS === 'true';
 ### Issue: High false positive rate
 
 **Solutions**:
+
 1. Increase confidence threshold (0.75 or 0.8)
 2. Implement manual review for uncertain images
 3. Retrain model with your dataset
@@ -388,6 +414,7 @@ const ENABLE_DETAILED_LOGGING = process.env.NSFW_DETAILED_LOGS === 'true';
 ### Issue: Rate limit too strict
 
 **Solutions**:
+
 1. Increase `RATE_LIMIT_CHECKS_PER_MINUTE`
 2. Implement Redis-based distributed rate limiting
 3. Create allowlist for trusted users
@@ -410,7 +437,7 @@ To process multiple images:
 ```typescript
 // Create batch endpoint
 async function detectNSFWBatch(
-  images: Array<{ buffer: Buffer; fileName: string }>
+  images: Array<{ buffer: Buffer; fileName: string }>,
 ): Promise<NSFWDetectionResult[]> {
   const results = [];
   for (const image of images) {
@@ -428,7 +455,7 @@ To send logs to external service:
 // server/services/nsfw-detection.ts
 function logAudit(log: NSFWAuditLog) {
   // ... existing code ...
-  
+
   // Send to external logging service
   if (process.env.LOGGING_SERVICE) {
     sendToLoggingService(log);
@@ -439,12 +466,15 @@ function logAudit(log: NSFWAuditLog) {
 ## Compliance & Legal
 
 ### COPPA (Children's Online Privacy)
+
 This system helps comply with COPPA by filtering adult content from platforms serving children.
 
 ### GDPR (Data Protection)
+
 Audit logs are kept in-memory (not persistent). For persistence, add database encryption.
 
 ### Community Standards
+
 Aligned with major platforms' content policies (Facebook, YouTube, etc.)
 
 ## Support & Resources
@@ -458,6 +488,7 @@ Aligned with major platforms' content policies (Facebook, YouTube, etc.)
 ### Code References
 
 Key files to review:
+
 1. `server/services/nsfw-detection.ts` - Core logic
 2. `server/routes/nsfw-check.ts` - API endpoints
 3. `client/lib/imageValidationService.ts` - Client integration
@@ -494,9 +525,9 @@ A: Single server handles ~1000 images/day. Use load balancing and Redis for high
 
 ## Version History
 
-| Version | Date | Changes |
-|---------|------|---------|
-| 1.0.0 | 2024-01-15 | Initial release with full NSFW detection |
+| Version | Date       | Changes                                  |
+| ------- | ---------- | ---------------------------------------- |
+| 1.0.0   | 2024-01-15 | Initial release with full NSFW detection |
 
 ## Next Steps
 

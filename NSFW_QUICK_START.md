@@ -8,7 +8,7 @@ Your application now has **automatic NSFW image detection** that:
 ✅ Runs on your server (no external APIs)  
 ✅ Works automatically with your upload form  
 ✅ Logs all detections  
-✅ Takes 50-200ms per image  
+✅ Takes 50-200ms per image
 
 **Status**: ✅ Fully installed and operational
 
@@ -17,18 +17,21 @@ Your application now has **automatic NSFW image detection** that:
 ## How Users Experience It
 
 ### Upload Banner Image
+
 1. User selects banner image
 2. **Automatic validation** checks if safe
 3. Image approved → Proceeds
 4. Image rejected → Error message shown
 
 ### Upload Asset Files
+
 1. User selects asset files
 2. **Automatic validation** for each image file
 3. Safe images → Added to list
 4. Unsafe images → Error message, file rejected
 
 ### Behind the Scenes
+
 - NSFW detection runs on server
 - OpenNSFW2 model (99.7% accurate)
 - Confidence threshold: 70%
@@ -213,13 +216,13 @@ Show Error  Upload OK
 
 ## Error Messages Users See
 
-| Error | Meaning |
-|-------|---------|
-| "This image contains prohibited content" | NSFW detected |
-| "File size exceeds 50MB limit" | File too large |
-| "Please upload an image file" | Wrong file type |
-| "Too many uploads. Please wait." | Rate limit exceeded |
-| "Network error. Please try again." | Connection issue |
+| Error                                    | Meaning             |
+| ---------------------------------------- | ------------------- |
+| "This image contains prohibited content" | NSFW detected       |
+| "File size exceeds 50MB limit"           | File too large      |
+| "Please upload an image file"            | Wrong file type     |
+| "Too many uploads. Please wait."         | Rate limit exceeded |
+| "Network error. Please try again."       | Connection issue    |
 
 ---
 
@@ -232,7 +235,7 @@ In `server/routes/nsfw-check.ts`, add authentication:
 ```typescript
 // Add before handling requests
 if (!isAdmin(req.user)) {
-  return res.status(403).json({ error: 'Forbidden' });
+  return res.status(403).json({ error: "Forbidden" });
 }
 ```
 
@@ -253,6 +256,7 @@ curl http://localhost:8080/api/nsfw-check/stats
 ```
 
 Monitor for:
+
 - Sudden spike in blocked images
 - Pattern of false positives
 - Rate limit violations
@@ -292,19 +296,19 @@ Monitor for:
 ✅ File size limits (prevents DOS)  
 ✅ Image format validation (only safe formats)  
 ✅ Error messages safe (no internals exposed)  
-✅ No API keys (no credential leak risk)  
+✅ No API keys (no credential leak risk)
 
 ---
 
 ## Performance
 
-| Metric | Value |
-|--------|-------|
+| Metric         | Value    |
+| -------------- | -------- |
 | Per-image time | 50-200ms |
-| Images/second | 10-20 |
-| Model memory | ~50MB |
-| Total memory | ~100MB |
-| Accuracy | 99.7% |
+| Images/second  | 10-20    |
+| Model memory   | ~50MB    |
+| Total memory   | ~100MB   |
+| Accuracy       | 99.7%    |
 
 ---
 
@@ -315,6 +319,7 @@ Monitor for:
 Validate image for NSFW content
 
 **Request**:
+
 ```
 POST /api/nsfw-check
 Content-Type: multipart/form-data
@@ -323,6 +328,7 @@ file: <image file>
 ```
 
 **Response (Approved)**:
+
 ```json
 {
   "approved": true,
@@ -332,6 +338,7 @@ file: <image file>
 ```
 
 **Response (Rejected)**:
+
 ```json
 {
   "error": "Image contains prohibited content",
@@ -348,6 +355,7 @@ file: <image file>
 Get detection statistics
 
 **Response**:
+
 ```json
 {
   "stats": {
@@ -365,6 +373,7 @@ Get detection statistics
 Get recent audit logs (limit 1-1000, default 100)
 
 **Response**:
+
 ```json
 {
   "logs": [
@@ -389,7 +398,7 @@ Get recent audit logs (limit 1-1000, default 100)
 ### Client-Side Validation
 
 ```javascript
-import { validateImage } from '@/lib/imageValidationService';
+import { validateImage } from "@/lib/imageValidationService";
 
 // Validate single image
 const result = await validateImage(file);
@@ -405,7 +414,7 @@ if (result.approved) {
 ### Get Error Message
 
 ```javascript
-import { getValidationErrorMessage } from '@/lib/imageValidationService';
+import { getValidationErrorMessage } from "@/lib/imageValidationService";
 
 const message = getValidationErrorMessage(result);
 console.log(message); // User-friendly error
@@ -414,12 +423,12 @@ console.log(message); // User-friendly error
 ### Validate Multiple Images
 
 ```javascript
-import { validateImages } from '@/lib/imageValidationService';
+import { validateImages } from "@/lib/imageValidationService";
 
 const results = await validateImages([file1, file2, file3]);
 
 for (const [file, result] of results) {
-  console.log(`${file.name}: ${result.approved ? 'OK' : 'REJECTED'}`);
+  console.log(`${file.name}: ${result.approved ? "OK" : "REJECTED"}`);
 }
 ```
 
@@ -449,12 +458,12 @@ pnpm test server/services/__tests__/nsfw-detection.test.ts
 
 ## Documentation Guide
 
-| Document | Purpose |
-|----------|---------|
-| NSFW_QUICK_START.md | This file - quick reference |
-| NSFW_SECURITY.md | Security architecture & features |
-| NSFW_IMPLEMENTATION_GUIDE.md | Setup & configuration guide |
-| NSFW_SYSTEM_SUMMARY.md | Complete overview of changes |
+| Document                     | Purpose                          |
+| ---------------------------- | -------------------------------- |
+| NSFW_QUICK_START.md          | This file - quick reference      |
+| NSFW_SECURITY.md             | Security architecture & features |
+| NSFW_IMPLEMENTATION_GUIDE.md | Setup & configuration guide      |
+| NSFW_SYSTEM_SUMMARY.md       | Complete overview of changes     |
 
 ---
 
@@ -478,16 +487,19 @@ pnpm test server/services/__tests__/nsfw-detection.test.ts
 ## Important Notes
 
 ✅ **System is production-ready**
+
 - Fully integrated
 - Tested and documented
 - No further setup needed
 
 ⚠️ **Monitor in production**
+
 - Check audit logs daily
 - Watch false positive/negative rate
 - Adjust settings if needed
 
 📋 **Keep documentation**
+
 - Keep these files for reference
 - Update your terms of service
 - Document your moderation policy
@@ -497,7 +509,7 @@ pnpm test server/services/__tests__/nsfw-detection.test.ts
 ## Quick Checklist
 
 - ✅ NSFW detection installed
-- ✅ Endpoints registered  
+- ✅ Endpoints registered
 - ✅ Client integration complete
 - ✅ Upload page updated
 - ✅ Tests written and passing
@@ -512,6 +524,7 @@ pnpm test server/services/__tests__/nsfw-detection.test.ts
 The NSFW detection system is fully installed, tested, and ready to use. No additional setup required.
 
 **For detailed information, see:**
+
 - `NSFW_SECURITY.md` - Security architecture
 - `NSFW_IMPLEMENTATION_GUIDE.md` - Full setup guide
 - `NSFW_SYSTEM_SUMMARY.md` - Complete overview

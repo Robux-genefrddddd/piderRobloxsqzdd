@@ -12,8 +12,12 @@
  * - Rate limited per user
  */
 
-import { RequestHandler } from 'express';
-import { detectNSFW, getAuditLogs, getNSFWStats } from '../services/nsfw-detection';
+import { RequestHandler } from "express";
+import {
+  detectNSFW,
+  getAuditLogs,
+  getNSFWStats,
+} from "../services/nsfw-detection";
 
 // In-memory rate limiter (simple implementation)
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
@@ -50,12 +54,12 @@ function checkRateLimit(userId: string): boolean {
 export const handleNSFWCheck: RequestHandler = async (req, res) => {
   try {
     // This is a stub - in production, integrate with authentication middleware
-    const userId = (req as any).userId || 'anonymous';
+    const userId = (req as any).userId || "anonymous";
 
     // Rate limiting
     if (!checkRateLimit(userId)) {
       return res.status(429).json({
-        error: 'Rate limit exceeded. Maximum 30 checks per minute.',
+        error: "Rate limit exceeded. Maximum 30 checks per minute.",
         retryAfter: 60,
       });
     }
@@ -63,16 +67,16 @@ export const handleNSFWCheck: RequestHandler = async (req, res) => {
     // Validate request
     if (!req.file) {
       return res.status(400).json({
-        error: 'No image provided',
-        code: 'NO_IMAGE',
+        error: "No image provided",
+        code: "NO_IMAGE",
       });
     }
 
     // Validate file is image
-    if (!req.file.mimetype.startsWith('image/')) {
+    if (!req.file.mimetype.startsWith("image/")) {
       return res.status(400).json({
-        error: 'File must be an image',
-        code: 'INVALID_FILE_TYPE',
+        error: "File must be an image",
+        code: "INVALID_FILE_TYPE",
       });
     }
 
@@ -86,8 +90,8 @@ export const handleNSFWCheck: RequestHandler = async (req, res) => {
 
     if (result.isNSFW) {
       return res.status(403).json({
-        error: 'Image rejected: contains prohibited content',
-        code: 'NSFW_CONTENT_DETECTED',
+        error: "Image rejected: contains prohibited content",
+        code: "NSFW_CONTENT_DETECTED",
         details: {
           category: result.category,
           confidence: Math.round(result.confidence * 100) / 100,
@@ -102,12 +106,12 @@ export const handleNSFWCheck: RequestHandler = async (req, res) => {
       confidence: Math.round(result.confidence * 100) / 100,
     });
   } catch (error) {
-    console.error('[NSFW-ENDPOINT] Error:', error);
+    console.error("[NSFW-ENDPOINT] Error:", error);
 
     // FAIL-SAFE: Return error that blocks upload
     return res.status(500).json({
-      error: 'Image validation failed',
-      code: 'VALIDATION_ERROR',
+      error: "Image validation failed",
+      code: "VALIDATION_ERROR",
     });
   }
 };
@@ -126,9 +130,9 @@ export const handleNSFWStats: RequestHandler = async (_req, res) => {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error('[NSFW-STATS] Error:', error);
+    console.error("[NSFW-STATS] Error:", error);
     return res.status(500).json({
-      error: 'Failed to retrieve statistics',
+      error: "Failed to retrieve statistics",
     });
   }
 };
@@ -149,9 +153,9 @@ export const handleNSFWAuditLogs: RequestHandler = async (req, res) => {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error('[NSFW-AUDIT] Error:', error);
+    console.error("[NSFW-AUDIT] Error:", error);
     return res.status(500).json({
-      error: 'Failed to retrieve audit logs',
+      error: "Failed to retrieve audit logs",
     });
   }
 };

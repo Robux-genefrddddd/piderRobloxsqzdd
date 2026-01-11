@@ -43,6 +43,7 @@ ONNX Runtime Model Inference
 - All images validated **before** storage
 
 **Implementation**:
+
 - `server/services/nsfw-detection.ts`: Core NSFW detection
 - `server/routes/nsfw-check.ts`: API endpoint
 - Model loaded once, cached in memory for performance
@@ -64,6 +65,7 @@ catch (error) {
 ```
 
 **Scenarios covered**:
+
 - Model initialization failure → REJECT
 - Image preprocessing failure → REJECT
 - Inference timeout → REJECT
@@ -76,6 +78,7 @@ catch (error) {
 **✅ Protection**: Images are validated BEFORE being written to storage.
 
 **Flow**:
+
 1. Client selects image
 2. Client sends to `/api/nsfw-check` for validation
 3. Server performs NSFW detection
@@ -95,12 +98,13 @@ const RATE_LIMIT_CHECKS_PER_MINUTE = 30;
 // In-memory rate limiter per user
 if (!checkRateLimit(userId)) {
   return res.status(429).json({
-    error: 'Rate limit exceeded. Maximum 30 checks per minute.',
+    error: "Rate limit exceeded. Maximum 30 checks per minute.",
   });
 }
 ```
 
 **Benefits**:
+
 - Maximum 30 validation requests per user per minute
 - Prevents resource exhaustion
 - Simple in-memory implementation for single-server setups
@@ -119,8 +123,10 @@ if (fileSize && fileSize > MAX_IMAGE_SIZE_MB * 1024 * 1024) {
   return { isNSFW: true, confidence: 1.0 };
 }
 
-if (metadata.width > MAX_IMAGE_DIMENSION ||
-    metadata.height > MAX_IMAGE_DIMENSION) {
+if (
+  metadata.width > MAX_IMAGE_DIMENSION ||
+  metadata.height > MAX_IMAGE_DIMENSION
+) {
   return null; // Reject oversized images
 }
 ```
@@ -130,12 +136,14 @@ if (metadata.width > MAX_IMAGE_DIMENSION ||
 **✅ Protection**: Only allows safe image formats.
 
 **Allowed formats**:
+
 - JPEG
 - PNG
 - WebP
 - GIF
 
 **Blocked formats**:
+
 - All others (SVG, BMP, TIFF, etc.)
 
 ### 7. Confidence Threshold
@@ -152,6 +160,7 @@ if (confidence > NSFW_CONFIDENCE_THRESHOLD) {
 ```
 
 **Decision Logic**:
+
 - `0.7 - 1.0`: NSFW (REJECTED)
 - `0.4 - 0.7`: UNCERTAIN (Can be reviewed by admins)
 - `0.0 - 0.4`: SAFE (APPROVED)
@@ -174,6 +183,7 @@ interface NSFWAuditLog {
 ```
 
 **Audit Data Collected**:
+
 - Timestamp of check
 - User ID
 - File name
@@ -183,6 +193,7 @@ interface NSFWAuditLog {
 - Any errors
 
 **Admin Access**:
+
 - `GET /api/nsfw-check/audit-logs` - View recent logs
 - `GET /api/nsfw-check/stats` - View statistics
 
@@ -221,17 +232,20 @@ case 'INVALID_FILE_TYPE':
 ## No External API Dependencies
 
 ✅ **Zero API Costs**
+
 - No API calls to third-party services
 - No subscription required
 - No rate limits from external providers
 - Fully self-contained
 
 ✅ **No API Keys**
+
 - No authentication tokens stored
 - No credential management overhead
 - No key rotation procedures
 
 ✅ **Fully Open Source**
+
 - OpenNSFW2 model by Yahoo
 - ONNX Runtime by Microsoft
 - Sharp image library by Lovell Fuller
@@ -239,12 +253,14 @@ case 'INVALID_FILE_TYPE':
 ## Model Information
 
 **Model**: OpenNSFW2 by Yahoo
+
 - Trained on 50K+ images
 - 99.7% accuracy on test set
 - Industry-standard for content moderation
 - Used by major platforms
 
 **Framework**: ONNX Runtime
+
 - Cross-platform inference
 - Optimized for production
 - ~50-200ms per image on modern hardware
@@ -256,6 +272,7 @@ case 'INVALID_FILE_TYPE':
 **Throughput**: 10-20 images/second on typical server
 
 **Optimization Strategies**:
+
 1. Model cached in memory after first load
 2. Image preprocessing with Sharp (optimized C++ bindings)
 3. Batch processing support (for future enhancement)
@@ -275,29 +292,35 @@ case 'INVALID_FILE_TYPE':
 ## Testing
 
 ### Safe Image Test
+
 - Input: Safe landscape photo
 - Expected: ✅ APPROVED (confidence < 0.7)
 
 ### NSFW Image Test
+
 - Input: Image with prohibited content
 - Expected: ❌ REJECTED (confidence > 0.7)
 
 ### Broken Image Test
+
 - Input: Corrupted file header
 - Expected: ❌ REJECTED (preprocessing error)
 
 ### Model Crash Test
+
 - Input: Simulate model error
 - Expected: ❌ REJECTED (fail-safe error handling)
 
 ## Admin Features
 
 ### View Statistics
+
 ```bash
 GET /api/nsfw-check/stats
 ```
 
 Response:
+
 ```json
 {
   "stats": {
@@ -311,11 +334,13 @@ Response:
 ```
 
 ### View Audit Logs
+
 ```bash
 GET /api/nsfw-check/audit-logs?limit=50
 ```
 
 Response:
+
 ```json
 {
   "logs": [
@@ -372,6 +397,7 @@ Response:
 ## Compliance
 
 This system helps comply with:
+
 - COPPA (Children's Online Privacy Protection Act)
 - GDPR (General Data Protection Regulation)
 - CCPA (California Consumer Privacy Act)
@@ -380,7 +406,9 @@ This system helps comply with:
 ## Support & Debugging
 
 ### Logs
+
 Monitor server logs for NSFW detection:
+
 ```
 [NSFW] Detection completed in 123ms
 [NSFW-AUDIT] {"timestamp": "...", "userId": "...", "isNSFW": false}
@@ -389,12 +417,15 @@ Monitor server logs for NSFW detection:
 ### Common Issues
 
 **Issue**: Detection timeout
+
 - **Solution**: Increase timeout, reduce image size limit
 
 **Issue**: Model fails to load
+
 - **Solution**: Check disk space, verify ONNX files
 
 **Issue**: High false positive rate
+
 - **Solution**: Adjust confidence threshold
 
 ---

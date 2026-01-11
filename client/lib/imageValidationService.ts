@@ -9,7 +9,7 @@
 
 export interface ImageValidationResult {
   approved: boolean;
-  category?: 'safe' | 'nsfw' | 'uncertain';
+  category?: "safe" | "nsfw" | "uncertain";
   confidence?: number;
   error?: string;
   code?: string;
@@ -26,11 +26,11 @@ export async function validateImage(
 ): Promise<ImageValidationResult> {
   try {
     // Client-side: Validate file is an image
-    if (!file.type.startsWith('image/')) {
+    if (!file.type.startsWith("image/")) {
       return {
         approved: false,
-        error: 'File must be an image (PNG, JPG, WebP, GIF)',
-        code: 'INVALID_FILE_TYPE',
+        error: "File must be an image (PNG, JPG, WebP, GIF)",
+        code: "INVALID_FILE_TYPE",
       };
     }
 
@@ -40,26 +40,26 @@ export async function validateImage(
       return {
         approved: false,
         error: `File size exceeds ${MAX_FILE_SIZE_MB}MB limit`,
-        code: 'FILE_TOO_LARGE',
+        code: "FILE_TOO_LARGE",
       };
     }
 
     // Prepare file for server validation
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append("file", file);
 
-    console.log('[ImageValidation] Sending image to server:', file.name);
+    console.log("[ImageValidation] Sending image to server:", file.name);
 
     // Send to server validation endpoint
-    const response = await fetch('/api/nsfw-check', {
-      method: 'POST',
+    const response = await fetch("/api/nsfw-check", {
+      method: "POST",
       body: formData,
     });
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
 
-      console.warn('[ImageValidation] Server validation failed:', {
+      console.warn("[ImageValidation] Server validation failed:", {
         status: response.status,
         error: errorData.error,
       });
@@ -68,8 +68,9 @@ export async function validateImage(
       if (response.status === 429) {
         return {
           approved: false,
-          error: 'Too many validation requests. Please wait a moment and try again.',
-          code: 'RATE_LIMIT_EXCEEDED',
+          error:
+            "Too many validation requests. Please wait a moment and try again.",
+          code: "RATE_LIMIT_EXCEEDED",
         };
       }
 
@@ -77,16 +78,17 @@ export async function validateImage(
       if (response.status === 400) {
         return {
           approved: false,
-          error: 'Image file is invalid or corrupted. Please try a different image.',
-          code: 'INVALID_IMAGE',
+          error:
+            "Image file is invalid or corrupted. Please try a different image.",
+          code: "INVALID_IMAGE",
         };
       }
 
       // Handle other server errors
       return {
         approved: false,
-        error: errorData.error || 'Image validation failed. Please try again.',
-        code: errorData.code || 'VALIDATION_ERROR',
+        error: errorData.error || "Image validation failed. Please try again.",
+        code: errorData.code || "VALIDATION_ERROR",
       };
     }
 
@@ -94,34 +96,34 @@ export async function validateImage(
     const result = await response.json();
 
     if (!result.approved) {
-      console.warn('[ImageValidation] Image rejected:', {
+      console.warn("[ImageValidation] Image rejected:", {
         fileName: file.name,
         reason: result.category,
       });
 
       return {
         approved: false,
-        error: 'This image cannot be uploaded. Please select a different image.',
-        code: 'CONTENT_REJECTED',
+        error:
+          "This image cannot be uploaded. Please select a different image.",
+        code: "CONTENT_REJECTED",
       };
     }
 
-    console.log('[ImageValidation] Image approved:', file.name);
+    console.log("[ImageValidation] Image approved:", file.name);
 
     return {
       approved: true,
-      category: result.category || 'safe',
+      category: result.category || "safe",
       confidence: result.confidence,
     };
   } catch (error) {
-    console.error('[ImageValidation] Network error:', error);
+    console.error("[ImageValidation] Network error:", error);
 
     // Network error: Still allow retry
     return {
       approved: false,
-      error:
-        'Network error. Please check your connection and try again.',
-      code: 'NETWORK_ERROR',
+      error: "Network error. Please check your connection and try again.",
+      code: "NETWORK_ERROR",
     };
   }
 }
@@ -139,7 +141,10 @@ export async function validateImages(
     results.set(file, result);
 
     // Stop validation on first critical error
-    if (result.code === 'NETWORK_ERROR' || result.code === 'RATE_LIMIT_EXCEEDED') {
+    if (
+      result.code === "NETWORK_ERROR" ||
+      result.code === "RATE_LIMIT_EXCEEDED"
+    ) {
       break;
     }
   }
@@ -150,31 +155,33 @@ export async function validateImages(
 /**
  * Get user-friendly error message
  */
-export function getValidationErrorMessage(result: ImageValidationResult): string {
+export function getValidationErrorMessage(
+  result: ImageValidationResult,
+): string {
   if (result.approved) {
-    return '';
+    return "";
   }
 
   switch (result.code) {
-    case 'INVALID_FILE_TYPE':
-      return 'Please upload an image file (PNG, JPG, WebP, GIF)';
+    case "INVALID_FILE_TYPE":
+      return "Please upload an image file (PNG, JPG, WebP, GIF)";
 
-    case 'FILE_TOO_LARGE':
-      return result.error || 'File size is too large';
+    case "FILE_TOO_LARGE":
+      return result.error || "File size is too large";
 
-    case 'NSFW_CONTENT_DETECTED':
-      return 'This image contains prohibited content. Please select a different image.';
+    case "NSFW_CONTENT_DETECTED":
+      return "This image contains prohibited content. Please select a different image.";
 
-    case 'RATE_LIMIT_EXCEEDED':
-      return 'Too many uploads. Please wait a moment and try again.';
+    case "RATE_LIMIT_EXCEEDED":
+      return "Too many uploads. Please wait a moment and try again.";
 
-    case 'NETWORK_ERROR':
-      return 'Network connection error. Please check your internet and try again.';
+    case "NETWORK_ERROR":
+      return "Network connection error. Please check your internet and try again.";
 
-    case 'VALIDATION_ERROR':
-      return 'Image validation failed. Please try again or contact support.';
+    case "VALIDATION_ERROR":
+      return "Image validation failed. Please try again or contact support.";
 
     default:
-      return result.error || 'Image validation failed. Please try again.';
+      return result.error || "Image validation failed. Please try again.";
   }
 }
