@@ -38,6 +38,8 @@ export interface TicketMessage {
   message: string;
   timestamp: Date;
   isRead?: boolean;
+  senderProfileImage?: string;
+  senderMemberRank?: "starter" | "creator" | "pro" | "studio";
 }
 
 export interface Ticket {
