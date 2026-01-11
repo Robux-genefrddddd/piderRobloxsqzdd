@@ -46,14 +46,14 @@ export async function downloadAssetFile(
   try {
     console.log("Downloading file via backend proxy:", filePath);
 
-    // Use backend proxy endpoint to avoid CORS issues
-    // The backend will fetch from Firebase Storage and return the file
+    // Use Netlify Function proxy endpoint to avoid CORS issues
+    // The function will fetch from Firebase Storage and return the file
     const params = new URLSearchParams({
       filePath: filePath,
       fileName: fileName || filePath.split("/").pop() || "file",
     });
 
-    const response = await fetch(`/api/download?${params.toString()}`);
+    const response = await fetch(`/.netlify/functions/download?${params.toString()}`);
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
