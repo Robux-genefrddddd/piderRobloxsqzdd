@@ -107,48 +107,7 @@ export function TicketDetailModal({
   };
 
   const getRoleBadge = (role: string) => {
-    switch (role) {
-      case "founder":
-        return {
-          label: "Founder",
-          color: "bg-purple-500/20 text-purple-400",
-          svg: (
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-            </svg>
-          ),
-        };
-      case "admin":
-        return {
-          label: "Admin",
-          color: "bg-blue-500/20 text-blue-400",
-          svg: (
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" />
-            </svg>
-          ),
-        };
-      case "support":
-        return {
-          label: "Support",
-          color: "bg-amber-500/20 text-amber-400",
-          svg: (
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M13 5h-2v2h2V5zm0 4h-2v6h2V9zm5.84-2.5c.8-1.6 1.16-3.3 1.16-5.5 0-5.5-4.5-10-10-10S0 0 0 5.5 4.5 15.5 10 15.5c2.2 0 3.9-.36 5.5-1.16l2.05 2.05c.3.3.75.46 1.2.46.9 0 1.65-.75 1.65-1.65 0-.45-.15-.9-.46-1.2l-2.06-2.04z" />
-            </svg>
-          ),
-        };
-      default:
-        return {
-          label: "User",
-          color: "bg-gray-500/20 text-gray-400",
-          svg: (
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-            </svg>
-          ),
-        };
-    }
+    return getRoleLogo(role);
   };
 
   const isUserMessage = (msg: any) => msg.senderRole === "user";
