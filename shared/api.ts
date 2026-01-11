@@ -102,3 +102,61 @@ export interface RealtimeUpdate {
   timestamp: Date;
   data: Record<string, any>;
 }
+
+/**
+ * Product/Order Payment Types
+ */
+export interface PaymentProduct {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  currency: "USD" | "EUR";
+  creatorId: string;
+  creatorName: string;
+  imageUrl: string;
+  status: "draft" | "published" | "archived";
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface PaymentOrder {
+  id: string;
+  paypalOrderId: string;
+  buyerId: string;
+  buyerEmail: string;
+  productId: string;
+  productName: string;
+  productPrice: number;
+  currency: "USD" | "EUR";
+  creatorId: string;
+  creatorName: string;
+  // Split amounts
+  totalAmount: number; // 100%
+  platformFee: number; // 30%
+  sellerAmount: number; // 70%
+  // Status
+  status: "pending" | "approved" | "completed" | "failed" | "cancelled";
+  paypalStatus: string;
+  // Dates
+  createdAt: Date;
+  capturedAt?: Date;
+  updatedAt: Date;
+  // Payout info
+  payoutId?: string;
+  payoutStatus?: "pending" | "completed" | "failed";
+}
+
+export interface Payout {
+  id: string;
+  orderId: string;
+  sellerId: string;
+  sellerEmail: string;
+  amount: number;
+  currency: "USD" | "EUR";
+  paypalPayoutId: string;
+  status: "pending" | "processing" | "completed" | "failed";
+  createdAt: Date;
+  completedAt?: Date;
+  errorMessage?: string;
+}

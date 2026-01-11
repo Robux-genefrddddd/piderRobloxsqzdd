@@ -173,6 +173,57 @@ export async function updateUserProfile(
   }
 }
 
+export async function findUserByEmailOrUsername(
+  emailOrUsername: string,
+): Promise<UserProfile | null> {
+  try {
+    // First, try to get by UID if it's a UID format (28 characters, alphanumeric)
+    if (/^[a-zA-Z0-9]{28}$/.test(emailOrUsername)) {
+      const profile = await getUserProfile(emailOrUsername);
+      if (profile) {
+        return profile;
+      }
+    }
+
+    // Query users by email (Firestore query)
+    const { query, where, getDocs, collection } =
+      await import("firebase/firestore");
+    const usersRef = collection(db, "users");
+
+    // Try to find by email first
+    const emailQuery = query(usersRef, where("email", "==", emailOrUsername));
+    const emailSnapshot = await getDocs(emailQuery);
+    if (!emailSnapshot.empty) {
+      const userData = emailSnapshot.docs[0].data() as UserProfile;
+      return {
+        ...userData,
+        createdAt:
+          userData.createdAt instanceof Date ? userData.createdAt : new Date(),
+      };
+    }
+
+    // Try to find by username
+    const usernameQuery = query(
+      usersRef,
+      where("username", "==", emailOrUsername),
+    );
+    const usernameSnapshot = await getDocs(usernameQuery);
+    if (!usernameSnapshot.empty) {
+      const userData = usernameSnapshot.docs[0].data() as UserProfile;
+      return {
+        ...userData,
+        createdAt:
+          userData.createdAt instanceof Date ? userData.createdAt : new Date(),
+      };
+    }
+
+    return null;
+  } catch (error) {
+    console.error("Error finding user:", error);
+    return null;
+  }
+}
+
 export function onAuthChange(callback: (user: User | null) => void) {
   return onAuthStateChanged(auth, callback);
 }

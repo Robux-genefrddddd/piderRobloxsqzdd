@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { useSendGroupInvite } from "@/hooks/useGroups";
 import { Plus, Loader, X } from "lucide-react";
 import { toast } from "sonner";
+import { findUserByEmailOrUsername } from "@/lib/auth";
 import {
   Dialog,
   DialogContent,
@@ -34,21 +35,49 @@ export default function GroupMembers({
     e.preventDefault();
 
     if (!userProfile || !inviteeEmail.trim()) {
-      toast.error("Please enter an email");
+      toast.error("Please enter an email or username");
       return;
     }
 
-    // Note: In a real app, you'd need to:
-    // 1. Look up user by email
-    // 2. Check if already a member
-    // 3. Check if already invited
-
     try {
-      // This is a placeholder - you'd need to implement user lookup by email
-      toast.info("User lookup not yet implemented - use user ID instead");
-    } catch (error) {
+      // Look up user by email or username
+      const inviteeProfile = await findUserByEmailOrUsername(
+        inviteeEmail.trim(),
+      );
+
+      if (!inviteeProfile) {
+        toast.error("User not found. Please check the email or username.");
+        return;
+      }
+
+      // Check if user is already a member
+      const alreadyMember = group.members.some(
+        (m) => m.userId === inviteeProfile.uid,
+      );
+
+      if (alreadyMember) {
+        toast.error("This user is already a member of the group");
+        return;
+      }
+
+      // Send the invite
+      await sendInvite(
+        group.id,
+        group.name,
+        userProfile.uid,
+        userProfile.username,
+        userProfile.profileImage,
+        inviteeProfile.uid,
+        inviteMessage,
+      );
+
+      toast.success(`Invite sent to ${inviteeProfile.username}`);
+      setInviteeEmail("");
+      setInviteMessage("");
+      setInviteOpen(false);
+    } catch (error: any) {
       console.error("Error sending invite:", error);
-      toast.error("Failed to send invite");
+      toast.error(error?.message || "Failed to send invite");
     }
   };
 

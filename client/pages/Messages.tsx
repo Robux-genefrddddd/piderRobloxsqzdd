@@ -119,59 +119,10 @@ export default function Messages() {
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {totalMessages === 0 ? (
-            // ✨ Empty State - Professional & Inviting
             <div className="flex items-center justify-center min-h-[500px]">
-              <div className="w-full max-w-md">
-                {/* Empty State Card */}
-                <div className="bg-card border border-white/5 rounded-2xl p-8 text-center space-y-6">
-                  {/* Icon Container */}
-                  <div className="flex justify-center">
-                    <div className="p-4 bg-primary/10 rounded-xl">
-                      <Mail size={40} className="text-primary" />
-                    </div>
-                  </div>
-
-                  {/* Content */}
-                  <div className="space-y-2">
-                    <h2 className="text-xl font-bold text-foreground">
-                      Your inbox is empty
-                    </h2>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      Group invitations, system messages, and announcements will
-                      appear here. Stay connected with the community.
-                    </p>
-                  </div>
-
-                  {/* Divider */}
-                  <div className="h-px bg-white/5" />
-
-                  {/* CTA Buttons */}
-                  <div className="space-y-2 sm:space-y-0 sm:flex gap-3">
-                    <Link to="/groups" className="flex-1">
-                      <Button
-                        variant="secondary"
-                        size="default"
-                        className="w-full"
-                      >
-                        <Users size={16} />
-                        Explore Groups
-                      </Button>
-                    </Link>
-                    <Link to="/groups" className="flex-1">
-                      <Button variant="ghost" size="default" className="w-full">
-                        Create Group
-                        <ArrowRight size={16} />
-                      </Button>
-                    </Link>
-                  </div>
-
-                  {/* Help Text */}
-                  <p className="text-xs text-muted-foreground/70">
-                    💡 Tip: Join groups to receive invitations and updates from
-                    members.
-                  </p>
-                </div>
-              </div>
+              <h2 className="text-xl font-bold text-foreground">
+                Your inbox is empty
+              </h2>
             </div>
           ) : (
             // Messages List - Future-proofed for two-column layout
