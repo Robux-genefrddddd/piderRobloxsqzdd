@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { useAuth } from "@/contexts/AuthContext";
 import { getTicket, addMessageToTicket, Ticket } from "@/lib/ticketService";
 import { toast } from "sonner";
+import { Loader } from "@/components/ui/loader";
 
 export default function SupportTicketDetail() {
   const { ticketId } = useParams<{ ticketId: string }>();
