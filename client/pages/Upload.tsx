@@ -4,6 +4,10 @@ import { ArrowLeft, ArrowRight, CheckCircle, AlertCircle } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { createAsset } from "@/lib/assetService";
 import { uploadAssetFile } from "@/lib/fileService";
+import {
+  validateImage,
+  getValidationErrorMessage,
+} from "@/lib/imageValidationService";
 import { toast } from "sonner";
 import { UploadStep1 } from "@/components/upload/UploadStep1";
 import { UploadStep2 } from "@/components/upload/UploadStep2";
