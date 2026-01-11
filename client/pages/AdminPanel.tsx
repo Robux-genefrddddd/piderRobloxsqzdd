@@ -861,6 +861,10 @@ export default function AdminPanel() {
         senderName={userProfile?.displayName || "Admin"}
         senderId={user?.uid || ""}
         users={users}
+        onSuccess={() => {
+          loadData();
+          setShowBroadcastModal(false);
+        }}
       />
 
       {/* Ticket Detail Modal */}
