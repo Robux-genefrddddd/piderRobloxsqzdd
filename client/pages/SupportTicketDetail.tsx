@@ -93,6 +93,7 @@ export default function SupportTicketDetail() {
         message,
         userProfile.profileImage || DEFAULT_PROFILE_IMAGE,
         userProfile.memberRank,
+        userProfile.role,
       );
 
       setMessage("");
