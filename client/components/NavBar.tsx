@@ -28,6 +28,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { RoleBadge } from "@/components/RoleBadge";
+import { useUnreadTicketCount } from "@/hooks/useNotifications";
 
 const menuItemVariants = {
   hidden: { opacity: 0, x: -20 },

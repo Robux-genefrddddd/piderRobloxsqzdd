@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Download, Star, Loader, ArrowLeft } from "lucide-react";
+import { Download, Star, ArrowLeft } from "lucide-react";
 import { getUserProfile, type UserProfile } from "@/lib/auth";
 import { getUserAssets, type Asset } from "@/lib/assetService";
 import { AssetCard } from "@/components/AssetCard";
+import { Loader } from "@/components/ui/loader";
 
 export default function CreatorProfile() {
   const { id } = useParams<{ id: string }>();
@@ -49,14 +50,7 @@ export default function CreatorProfile() {
   }, [id]);
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <Loader size={32} className="animate-spin text-primary mx-auto" />
-          <p className="text-muted-foreground">Loading creator profile...</p>
-        </div>
-      </div>
-    );
+    return <Loader text="Loading creator profile..." />;
   }
 
   if (error || !creator) {

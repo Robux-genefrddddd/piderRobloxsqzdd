@@ -4,8 +4,9 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useGroup } from "@/hooks/useGroups";
 import GroupChat from "@/components/groups/GroupChat";
 import GroupMembers from "@/components/groups/GroupMembers";
-import { Loader, ArrowLeft } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Loader } from "@/components/ui/loader";
 
 export default function GroupDetail() {
   const { id } = useParams<{ id: string }>();
@@ -21,11 +22,7 @@ export default function GroupDetail() {
   }, [authLoading, userProfile, navigate]);
 
   if (authLoading || loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader size={32} className="animate-spin text-primary" />
-      </div>
-    );
+    return <Loader text="Loading group..." />;
   }
 
   if (!group) {

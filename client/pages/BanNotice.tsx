@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { logoutUser } from "@/lib/auth";
 import { getUserWarnings, Warning } from "@/lib/warningService";
+import { Loader } from "@/components/ui/loader";
 
 export default function BanNotice() {
   const navigate = useNavigate();
@@ -50,16 +51,7 @@ export default function BanNotice() {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-black flex items-center justify-center p-4">
-        <div className="text-center space-y-4">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-red-600" />
-          <p className="text-gray-400 text-sm">
-            Loading account information...
-          </p>
-        </div>
-      </div>
-    );
+    return <Loader text="Loading account information..." />;
   }
 
   if (!warning) {

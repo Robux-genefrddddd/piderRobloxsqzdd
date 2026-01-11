@@ -4,7 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useUserGroups } from "@/hooks/useGroups";
 import CreateGroupDialog from "@/components/groups/CreateGroupDialog";
 import GroupCard from "@/components/groups/GroupCard";
-import { Loader } from "lucide-react";
+import { Loader } from "@/components/ui/loader";
 
 export default function Groups() {
   const navigate = useNavigate();
@@ -18,11 +18,7 @@ export default function Groups() {
   }, [authLoading, userProfile, navigate]);
 
   if (authLoading || loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader size={32} className="animate-spin text-primary" />
-      </div>
-    );
+    return <Loader text="Loading groups..." />;
   }
 
   const canCreateGroup =

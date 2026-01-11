@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { useAuth } from "@/contexts/AuthContext";
 import { getTicket, addMessageToTicket, Ticket } from "@/lib/ticketService";
 import { toast } from "sonner";
+import { Loader } from "@/components/ui/loader";
 
 export default function SupportTicketDetail() {
   const { ticketId } = useParams<{ ticketId: string }>();
@@ -16,6 +17,9 @@ export default function SupportTicketDetail() {
   const [message, setMessage] = useState("");
   const [sending, setSending] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const [hasUserScrolled, setHasUserScrolled] = useState(false);
+  const previousMessageCount = useRef(0);
 
   useEffect(() => {
     if (!ticketId) return;
@@ -25,11 +29,32 @@ export default function SupportTicketDetail() {
   }, [ticketId]);
 
   useEffect(() => {
-    scrollToBottom();
-  }, [ticket?.messages]);
+    // Auto-scroll only if user hasn't manually scrolled or if there are new messages
+    if (
+      ticket?.messages &&
+      !hasUserScrolled &&
+      ticket.messages.length > previousMessageCount.current
+    ) {
+      setTimeout(() => {
+        scrollToBottom();
+      }, 100);
+    }
+    previousMessageCount.current = ticket?.messages?.length || 0;
+  }, [ticket?.messages, hasUserScrolled]);
+
+  const handleScroll = () => {
+    if (!messagesContainerRef.current) return;
+
+    const { scrollTop, scrollHeight, clientHeight } =
+      messagesContainerRef.current;
+    const isAtBottom = scrollHeight - scrollTop - clientHeight < 50;
+
+    setHasUserScrolled(!isAtBottom);
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    setHasUserScrolled(false);
   };
 
   const loadTicket = async () => {
@@ -78,14 +103,7 @@ export default function SupportTicketDetail() {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin mx-auto"></div>
-          <p className="text-muted-foreground">Loading ticket...</p>
-        </div>
-      </div>
-    );
+    return <Loader text="Loading ticket..." />;
   }
 
   if (!ticket) {
@@ -131,6 +149,35 @@ export default function SupportTicketDetail() {
         return "text-red-400";
       default:
         return "text-gray-400";
+    }
+  };
+
+  const getRoleBadge = (senderRole: string) => {
+    switch (senderRole) {
+      case "support":
+        return {
+          icon: "🛠️",
+          label: "Support",
+          color: "bg-blue-500/20 text-blue-400",
+        };
+      case "admin":
+        return {
+          icon: "👨‍💼",
+          label: "Admin",
+          color: "bg-purple-500/20 text-purple-400",
+        };
+      case "founder":
+        return {
+          icon: "👑",
+          label: "Founder",
+          color: "bg-yellow-500/20 text-yellow-400",
+        };
+      default:
+        return {
+          icon: "👤",
+          label: "User",
+          color: "bg-gray-500/20 text-gray-400",
+        };
     }
   };
 
@@ -190,40 +237,64 @@ export default function SupportTicketDetail() {
           </div>
 
           {/* Messages */}
-          <div className="bg-secondary/30 border border-border rounded-lg p-4 space-y-4 h-96 overflow-y-auto flex flex-col">
-            {ticket.messages.map((msg) => (
-              <div
-                key={msg.id}
-                className={`flex gap-3 ${
-                  msg.senderId === user?.uid ? "justify-end" : "justify-start"
-                }`}
-              >
+          <div
+            ref={messagesContainerRef}
+            onScroll={handleScroll}
+            className="bg-secondary/30 border border-border rounded-lg p-4 space-y-4 h-96 overflow-y-auto flex flex-col"
+          >
+            {ticket.messages.map((msg) => {
+              const roleBadge = getRoleBadge(msg.senderRole);
+              const isCurrentUser = msg.senderId === user?.uid;
+
+              return (
                 <div
-                  className={`max-w-xs space-y-1 ${
-                    msg.senderId === user?.uid ? "text-right" : ""
+                  key={msg.id}
+                  className={`flex gap-3 ${
+                    isCurrentUser ? "justify-end" : "justify-start"
                   }`}
                 >
-                  <p className="text-xs text-muted-foreground">
-                    {msg.senderName}
-                    {msg.senderRole === "support" && (
-                      <span className="ml-1 text-primary">🛠️ Support</span>
-                    )}
-                  </p>
                   <div
-                    className={`px-4 py-2 rounded-lg ${
-                      msg.senderId === user?.uid
-                        ? "bg-primary text-primary-foreground rounded-br-none"
-                        : "bg-secondary/50 border border-border rounded-bl-none"
+                    className={`max-w-xs space-y-1 ${
+                      isCurrentUser ? "text-right" : ""
                     }`}
                   >
-                    <p className="text-sm break-words">{msg.message}</p>
+                    <div className="flex items-center gap-2">
+                      {!isCurrentUser && (
+                        <span className="text-xs font-medium text-foreground">
+                          {msg.senderName}
+                        </span>
+                      )}
+                      {msg.senderRole !== "user" && (
+                        <span
+                          className={`px-2 py-0.5 rounded text-xs font-medium ${roleBadge.color}`}
+                        >
+                          {roleBadge.icon} {roleBadge.label}
+                        </span>
+                      )}
+                      {isCurrentUser && (
+                        <span className="text-xs font-medium text-foreground">
+                          {msg.senderName}
+                        </span>
+                      )}
+                    </div>
+                    <div
+                      className={`px-4 py-2 rounded-lg ${
+                        isCurrentUser
+                          ? "bg-primary text-primary-foreground rounded-br-none"
+                          : msg.senderRole !== "user"
+                            ? "bg-blue-500/15 border border-blue-500/30 rounded-bl-none"
+                            : "bg-secondary/50 border border-border rounded-bl-none"
+                      }`}
+                    >
+                      <p className="text-sm break-words">{msg.message}</p>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      {msg.timestamp.toLocaleString()}
+                    </p>
                   </div>
-                  <p className="text-xs text-muted-foreground">
-                    {msg.timestamp.toLocaleString()}
-                  </p>
                 </div>
-              </div>
-            ))}
+              );
+            })}
             <div ref={messagesEndRef} />
           </div>
 

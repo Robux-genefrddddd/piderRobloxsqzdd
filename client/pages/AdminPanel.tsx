@@ -32,11 +32,12 @@ import { db } from "@/lib/firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { UserDetailModal } from "@/components/UserDetailModal";
 import { BroadcastMessageModal } from "@/components/BroadcastMessageModal";
+import { TicketDetailModal } from "@/components/TicketDetailModal";
 import {
   getAllBroadcastMessages,
   deleteBroadcastMessage,
 } from "@/lib/broadcastService";
-import { getAllTickets, Ticket } from "@/lib/ticketService";
+import { getAllTickets, Ticket, getTicket } from "@/lib/ticketService";
 import { Loader } from "@/components/ui/loader";
 
 interface User {
@@ -860,6 +861,23 @@ export default function AdminPanel() {
         onSuccess={() => {
           loadData();
           setShowBroadcastModal(false);
+        }}
+      />
+
+      {/* Ticket Detail Modal */}
+      <TicketDetailModal
+        ticket={selectedTicket}
+        onClose={() => setSelectedTicket(null)}
+        currentUserRole={userProfile?.role}
+        currentUserName={userProfile?.displayName}
+        currentUserId={user?.uid}
+        onMessageAdded={async () => {
+          if (selectedTicket) {
+            const updatedTicket = await getTicket(selectedTicket.id);
+            if (updatedTicket) {
+              setSelectedTicket(updatedTicket);
+            }
+          }
         }}
       />
     </div>

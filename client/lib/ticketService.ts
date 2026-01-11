@@ -10,6 +10,8 @@ import {
   getDoc,
   Timestamp,
   orderBy,
+  onSnapshot,
+  Unsubscribe,
 } from "firebase/firestore";
 
 export type TicketCategory =
@@ -32,9 +34,10 @@ export interface TicketMessage {
   id: string;
   senderId: string;
   senderName: string;
-  senderRole: "user" | "support";
+  senderRole: "user" | "support" | "admin" | "founder";
   message: string;
   timestamp: Date;
+  isRead?: boolean;
 }
 
 export interface Ticket {
@@ -184,7 +187,7 @@ export async function addMessageToTicket(
   ticketId: string,
   senderId: string,
   senderName: string,
-  senderRole: "user" | "support",
+  senderRole: "user" | "support" | "admin" | "founder",
   message: string,
 ): Promise<void> {
   try {
@@ -192,7 +195,8 @@ export async function addMessageToTicket(
     const ticketDoc = await getDoc(ticketRef);
 
     if (ticketDoc.exists()) {
-      const currentMessages = ticketDoc.data().messages || [];
+      const ticketData = ticketDoc.data();
+      const currentMessages = ticketData.messages || [];
       const newMessage: TicketMessage = {
         id: Math.random().toString(36),
         senderId,
@@ -200,12 +204,32 @@ export async function addMessageToTicket(
         senderRole,
         message,
         timestamp: new Date(),
+        isRead: false,
       };
 
       await updateDoc(ticketRef, {
         messages: [...currentMessages, newMessage],
         updatedAt: Timestamp.now(),
       });
+
+      // Create notification for support responses
+      if (senderRole !== "user" && ticketData.userId) {
+        try {
+          const { createNotification } = await import("./notificationService");
+          await createNotification(
+            ticketData.userId,
+            "ticket_response",
+            `Response to: ${ticketData.subject}`,
+            `${senderName} replied to your support ticket`,
+            {
+              ticketId,
+              ticketSubject: ticketData.subject,
+            },
+          );
+        } catch (notifError) {
+          console.error("Error creating notification:", notifError);
+        }
+      }
     }
   } catch (error) {
     console.error("Error adding message to ticket:", error);
@@ -257,5 +281,69 @@ export async function assignTicket(
   } catch (error) {
     console.error("Error assigning ticket:", error);
     throw error;
+  }
+}
+
+/**
+ * Get count of unread support ticket messages for a user
+ */
+export async function getUnreadTicketCount(userId: string): Promise<number> {
+  try {
+    const q = query(
+      collection(db, TICKETS_COLLECTION),
+      where("userId", "==", userId),
+    );
+
+    const querySnapshot = await getDocs(q);
+    let unreadCount = 0;
+
+    querySnapshot.docs.forEach((doc) => {
+      const messages = doc.data().messages || [];
+      messages.forEach((msg: TicketMessage) => {
+        // Count messages from support staff that are unread
+        if (msg.senderRole !== "user" && !msg.isRead) {
+          unreadCount++;
+        }
+      });
+    });
+
+    return unreadCount;
+  } catch (error) {
+    console.error("Error getting unread ticket count:", error);
+    return 0;
+  }
+}
+
+/**
+ * Subscribe to unread ticket count updates
+ */
+export function subscribeToUnreadTicketCount(
+  userId: string,
+  onCountUpdate: (count: number) => void,
+): Unsubscribe {
+  try {
+    const q = query(
+      collection(db, TICKETS_COLLECTION),
+      where("userId", "==", userId),
+    );
+
+    return onSnapshot(q, (snapshot) => {
+      let unreadCount = 0;
+
+      snapshot.docs.forEach((doc) => {
+        const messages = doc.data().messages || [];
+        messages.forEach((msg: any) => {
+          // Count messages from support staff that are unread
+          if (msg.senderRole !== "user" && !msg.isRead) {
+            unreadCount++;
+          }
+        });
+      });
+
+      onCountUpdate(unreadCount);
+    });
+  } catch (error) {
+    console.error("Error subscribing to unread ticket count:", error);
+    return () => {};
   }
 }

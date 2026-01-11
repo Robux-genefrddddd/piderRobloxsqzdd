@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useGroupInvites } from "@/hooks/useGroups";
 import GroupInviteMessage from "@/components/groups/GroupInviteMessage";
-import { Loader, Mail } from "lucide-react";
+import { Mail } from "lucide-react";
+import { Loader } from "@/components/ui/loader";
 
 export default function Messages() {
   const navigate = useNavigate();
@@ -34,11 +35,7 @@ export default function Messages() {
   };
 
   if (authLoading || loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader size={32} className="animate-spin text-primary" />
-      </div>
-    );
+    return <Loader text="Loading messages..." />;
   }
 
   return (

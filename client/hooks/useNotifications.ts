@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Notification } from "@shared/api";
 import * as notificationService from "@/lib/notificationService";
+import * as ticketService from "@/lib/ticketService";
 
 /**
  * Hook to get user notifications with real-time updates
@@ -109,4 +110,33 @@ export function useDeleteNotification() {
   };
 
   return { deleteNotification, loading, error };
+}
+
+/**
+ * Hook to get unread ticket count with real-time updates
+ */
+export function useUnreadTicketCount(userId: string | undefined) {
+  const [count, setCount] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!userId) {
+      setCount(0);
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    const unsubscribe = ticketService.subscribeToUnreadTicketCount(
+      userId,
+      (count) => {
+        setCount(count);
+        setLoading(false);
+      },
+    );
+
+    return unsubscribe;
+  }, [userId]);
+
+  return { count, loading };
 }

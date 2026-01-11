@@ -20,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Loader } from "@/components/ui/loader";
 
 const CATEGORIES = [
   { name: "3D Models", icon: Box },
@@ -83,6 +84,10 @@ export default function Marketplace() {
           );
       }
     });
+
+  if (loading) {
+    return <Loader text="Loading assets..." />;
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -208,16 +213,7 @@ export default function Marketplace() {
               Filters & Sort
             </button>
 
-            {loading ? (
-              <div className="flex items-center justify-center py-16">
-                <div className="text-center space-y-4">
-                  <div className="w-10 h-10 border-3 border-primary/20 border-t-primary rounded-full animate-spin mx-auto"></div>
-                  <p className="text-sm text-muted-foreground">
-                    Loading assets...
-                  </p>
-                </div>
-              </div>
-            ) : filteredAssets.length === 0 ? (
+            {filteredAssets.length === 0 ? (
               <div className="border border-white/5 rounded-lg p-16 text-center space-y-3 bg-white/2">
                 <p className="text-base font-medium text-foreground/80">
                   No assets found
