@@ -32,11 +32,12 @@ import { db } from "@/lib/firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { UserDetailModal } from "@/components/UserDetailModal";
 import { BroadcastMessageModal } from "@/components/BroadcastMessageModal";
+import { TicketDetailModal } from "@/components/TicketDetailModal";
 import {
   getAllBroadcastMessages,
   deleteBroadcastMessage,
 } from "@/lib/broadcastService";
-import { getAllTickets, Ticket } from "@/lib/ticketService";
+import { getAllTickets, Ticket, getTicket } from "@/lib/ticketService";
 import { Loader } from "@/components/ui/loader";
 
 interface User {
