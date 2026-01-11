@@ -18,14 +18,14 @@ export function Loader({ text, minDisplay = 1500 }: LoaderProps) {
           />
         </div>
 
-        <div className="flex justify-center items-center gap-1 h-8">
-          <span className="text-2xl text-muted-foreground font-light leading-none animate-dot-1">
+        <div className="flex justify-center items-center gap-2">
+          <span className="text-6xl text-foreground font-light leading-none animate-dot-1">
             .
           </span>
-          <span className="text-2xl text-muted-foreground font-light leading-none animate-dot-2">
+          <span className="text-6xl text-foreground font-light leading-none animate-dot-2">
             .
           </span>
-          <span className="text-2xl text-muted-foreground font-light leading-none animate-dot-3">
+          <span className="text-6xl text-foreground font-light leading-none animate-dot-3">
             .
           </span>
         </div>
