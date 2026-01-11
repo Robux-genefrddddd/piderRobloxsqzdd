@@ -27,72 +27,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-
-function RoleBadge({ role }: { role?: string }) {
-  if (!role || role === "member") return null;
-
-  if (role === "founder") {
-    return (
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <div className="p-1 hover:scale-110 transition-transform cursor-help">
-            <img
-              src="https://cdn.builder.io/api/v1/image/assets%2F6efe5c975de742218614020f75c6e644%2Fb430cdb925bf47f09a9d7c95a02f3bd0?format=webp&width=800"
-              alt="Founder"
-              className="w-4 h-4"
-            />
-          </div>
-        </TooltipTrigger>
-        <TooltipContent side="bottom" className="text-xs">
-          Founder
-        </TooltipContent>
-      </Tooltip>
-    );
-  }
-
-  if (role === "admin") {
-    return (
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <div className="p-1 hover:scale-110 transition-transform cursor-help">
-            <img
-              src="https://cdn.builder.io/api/v1/image/assets%2F6efe5c975de742218614020f75c6e644%2Fb5f004c16bc84ddd977be6eea56f8f20?format=webp&width=800"
-              alt="Admin"
-              className="w-4 h-4"
-            />
-          </div>
-        </TooltipTrigger>
-        <TooltipContent side="bottom" className="text-xs">
-          Admin
-        </TooltipContent>
-      </Tooltip>
-    );
-  }
-
-  if (role === "partner") {
-    return (
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <img
-            src="https://cdn3.emoji.gg/emojis/42747-roblox-verified.png"
-            alt="Partner"
-            className="w-4 h-4 hover:scale-110 transition-transform cursor-help"
-          />
-        </TooltipTrigger>
-        <TooltipContent side="bottom" className="text-xs">
-          Partner
-        </TooltipContent>
-      </Tooltip>
-    );
-  }
-
-  return null;
-}
+import { RoleBadge } from "@/components/RoleBadge";
 
 const menuItemVariants = {
   hidden: { opacity: 0, x: -20 },
