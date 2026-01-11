@@ -346,7 +346,8 @@ export default function AdminPanel() {
             </button>
           )}
 
-          {(userProfile?.role === "founder" || userProfile?.role === "admin") && (
+          {(userProfile?.role === "founder" ||
+            userProfile?.role === "admin") && (
             <button
               onClick={() => setActiveTab("logs")}
               className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
@@ -588,7 +589,9 @@ export default function AdminPanel() {
                     size={32}
                     className="mx-auto text-muted-foreground mb-2"
                   />
-                  <p className="text-sm text-muted-foreground">No tickets yet</p>
+                  <p className="text-sm text-muted-foreground">
+                    No tickets yet
+                  </p>
                 </div>
               ) : (
                 tickets
