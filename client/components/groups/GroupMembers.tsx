@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { useSendGroupInvite } from "@/hooks/useGroups";
 import { Plus, Loader, X } from "lucide-react";
 import { toast } from "sonner";
+import { findUserByEmailOrUsername } from "@/lib/auth";
 import {
   Dialog,
   DialogContent,
