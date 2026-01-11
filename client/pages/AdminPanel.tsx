@@ -329,32 +329,57 @@ export default function AdminPanel() {
 
         {/* Tabs - Reduced Height */}
         <div className="flex gap-0 mb-4 border-b border-border/20 overflow-x-auto">
-          <button
-            onClick={() => setActiveTab("users")}
-            className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
-              activeTab === "users"
-                ? "border-primary text-primary"
-                : "border-transparent text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            Users{" "}
-            {users.length > 0 && (
-              <span className="text-xs ml-1">({users.length})</span>
-            )}
-          </button>
-          <button
-            onClick={() => setActiveTab("logs")}
-            className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
-              activeTab === "logs"
-                ? "border-primary text-primary"
-                : "border-transparent text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            Audit Logs{" "}
-            {auditLogs.length > 0 && (
-              <span className="text-xs ml-1">({auditLogs.length})</span>
-            )}
-          </button>
+          {userProfile?.role !== "support" && (
+            <button
+              onClick={() => setActiveTab("users")}
+              className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
+                activeTab === "users"
+                  ? "border-primary text-primary"
+                  : "border-transparent text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              Users{" "}
+              {users.length > 0 && (
+                <span className="text-xs ml-1">({users.length})</span>
+              )}
+            </button>
+          )}
+
+          {(userProfile?.role === "founder" || userProfile?.role === "admin") && (
+            <button
+              onClick={() => setActiveTab("logs")}
+              className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
+                activeTab === "logs"
+                  ? "border-primary text-primary"
+                  : "border-transparent text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              Audit Logs{" "}
+              {auditLogs.length > 0 && (
+                <span className="text-xs ml-1">({auditLogs.length})</span>
+              )}
+            </button>
+          )}
+
+          {(userProfile?.role === "founder" ||
+            userProfile?.role === "admin" ||
+            userProfile?.role === "support") && (
+            <button
+              onClick={() => setActiveTab("tickets")}
+              className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors whitespace-nowrap flex items-center gap-1 ${
+                activeTab === "tickets"
+                  ? "border-primary text-primary"
+                  : "border-transparent text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <MessageSquare size={14} />
+              Tickets{" "}
+              {tickets.length > 0 && (
+                <span className="text-xs ml-1">({tickets.length})</span>
+              )}
+            </button>
+          )}
+
           {userProfile?.role === "founder" && (
             <>
               <button
