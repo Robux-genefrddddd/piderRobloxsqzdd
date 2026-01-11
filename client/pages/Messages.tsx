@@ -127,10 +127,7 @@ export default function Messages() {
                   {/* Icon Container */}
                   <div className="flex justify-center">
                     <div className="p-4 bg-primary/10 rounded-xl">
-                      <Mail
-                        size={40}
-                        className="text-primary"
-                      />
+                      <Mail size={40} className="text-primary" />
                     </div>
                   </div>
 
@@ -140,7 +137,8 @@ export default function Messages() {
                       Your inbox is empty
                     </h2>
                     <p className="text-sm text-muted-foreground leading-relaxed">
-                      Group invitations, system messages, and announcements will appear here. Stay connected with the community.
+                      Group invitations, system messages, and announcements will
+                      appear here. Stay connected with the community.
                     </p>
                   </div>
 
@@ -160,11 +158,7 @@ export default function Messages() {
                       </Button>
                     </Link>
                     <Link to="/groups" className="flex-1">
-                      <Button
-                        variant="ghost"
-                        size="default"
-                        className="w-full"
-                      >
+                      <Button variant="ghost" size="default" className="w-full">
                         Create Group
                         <ArrowRight size={16} />
                       </Button>
@@ -173,7 +167,8 @@ export default function Messages() {
 
                   {/* Help Text */}
                   <p className="text-xs text-muted-foreground/70">
-                    💡 Tip: Join groups to receive invitations and updates from members.
+                    💡 Tip: Join groups to receive invitations and updates from
+                    members.
                   </p>
                 </div>
               </div>
@@ -196,7 +191,7 @@ export default function Messages() {
                   {/* Messages */}
                   {broadcastMessages.map((message) => {
                     const isRead = message.readBy?.includes(
-                      userProfile?.uid || ""
+                      userProfile?.uid || "",
                     );
                     return (
                       <div
@@ -242,9 +237,7 @@ export default function Messages() {
                                 {message.senderName}
                               </span>{" "}
                               •{" "}
-                              {new Date(
-                                message.createdAt
-                              ).toLocaleDateString()}
+                              {new Date(message.createdAt).toLocaleDateString()}
                             </p>
                           </div>
                         </div>

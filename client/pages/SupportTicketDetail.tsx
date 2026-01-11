@@ -4,10 +4,18 @@ import { ArrowLeft, Send, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/contexts/AuthContext";
-import { getTicket, addMessageToTicket, Ticket, markTicketMessagesAsRead } from "@/lib/ticketService";
+import {
+  getTicket,
+  addMessageToTicket,
+  Ticket,
+  markTicketMessagesAsRead,
+} from "@/lib/ticketService";
 import { getMemberRankLabel, DEFAULT_PROFILE_IMAGE } from "@/lib/auth";
 import { RoleBadge } from "@/components/RoleBadge";
-import { markNotificationAsRead, getUserNotifications } from "@/lib/notificationService";
+import {
+  markNotificationAsRead,
+  getUserNotifications,
+} from "@/lib/notificationService";
 import { toast } from "sonner";
 import { Loader } from "@/components/ui/loader";
 
@@ -78,7 +86,7 @@ export default function SupportTicketDetail() {
               (notif) =>
                 notif.type === "ticket_response" &&
                 notif.data?.ticketId === ticketId &&
-                !notif.read
+                !notif.read,
             );
 
             for (const notif of ticketNotifications) {
@@ -274,7 +282,10 @@ export default function SupportTicketDetail() {
                           {msg.senderName}
                         </span>
                       )}
-                      <RoleBadge role={msg.userRole || msg.senderRole} size="sm" />
+                      <RoleBadge
+                        role={msg.userRole || msg.senderRole}
+                        size="sm"
+                      />
                       {isCurrentUser && (
                         <span className="text-xs font-medium text-foreground">
                           {msg.senderName}

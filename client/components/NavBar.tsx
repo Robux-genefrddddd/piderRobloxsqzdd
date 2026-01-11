@@ -45,7 +45,8 @@ const menuItemVariants = {
 
 export function NavBar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { isAuthenticated, userProfile, loading, unreadCount, user } = useAuth();
+  const { isAuthenticated, userProfile, loading, unreadCount, user } =
+    useAuth();
   const { count: unreadTickets } = useUnreadTicketCount(user?.uid);
 
   const handleLogout = async () => {

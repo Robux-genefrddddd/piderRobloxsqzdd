@@ -79,8 +79,8 @@ export default function GroupInviteMessage({
           {/* Invite Details */}
           <div className="flex-1 min-w-0">
             <h4 className="font-semibold text-sm text-foreground">
-              <span className="text-primary">{invite.inviterName}</span> invited you to{" "}
-              <span className="text-primary">{invite.groupName}</span>
+              <span className="text-primary">{invite.inviterName}</span> invited
+              you to <span className="text-primary">{invite.groupName}</span>
             </h4>
 
             {invite.message && (
