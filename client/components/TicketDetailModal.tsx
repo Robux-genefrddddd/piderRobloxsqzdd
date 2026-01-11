@@ -250,20 +250,23 @@ export function TicketDetailModal({
                     return (
                       <div key={msg.id} className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
                         <div className={`flex gap-2 max-w-xs ${isUser ? "flex-row-reverse" : ""}`}>
-                          {/* Role Badge */}
-                          {isStaff && (
-                            <div className="flex-shrink-0 flex items-end">
-                              <div
-                                className={`w-8 h-8 rounded-full flex items-center justify-center text-sm ${badge.color}`}
-                                title={badge.label}
-                              >
-                                {badge.icon}
-                              </div>
-                            </div>
-                          )}
-
                           {/* Message Bubble */}
-                          <div className="flex flex-col gap-1">
+                          <div className="flex flex-col gap-1 flex-1">
+                            {/* Sender Name with Role Logo */}
+                            {isStaff && !isUser && (
+                              <div className="flex items-center gap-1.5 px-1">
+                                <div className={`w-5 h-5 flex items-center justify-center ${badge.color}`}>
+                                  {badge.svg}
+                                </div>
+                                <span className="text-xs font-semibold text-foreground">
+                                  {msg.senderName}
+                                </span>
+                                <span className="text-xs text-muted-foreground">
+                                  {badge.label}
+                                </span>
+                              </div>
+                            )}
+
                             <div
                               className={`rounded-lg px-3 py-2 ${
                                 isUser
@@ -273,11 +276,6 @@ export function TicketDetailModal({
                                     : "bg-secondary/30 text-foreground/90 rounded-bl-none"
                               }`}
                             >
-                              {isStaff && !isUser && (
-                                <p className="text-xs font-semibold mb-1 opacity-75">
-                                  {badge.icon} {msg.senderName}
-                                </p>
-                              )}
                               <p className="text-sm break-words whitespace-pre-wrap">
                                 {msg.message}
                               </p>
@@ -285,7 +283,7 @@ export function TicketDetailModal({
 
                             {/* Timestamp and Read Status */}
                             <div
-                              className={`flex items-center gap-1 text-xs text-muted-foreground ${
+                              className={`flex items-center gap-1 text-xs text-muted-foreground px-1 ${
                                 isUser ? "justify-end" : "justify-start"
                               }`}
                             >
