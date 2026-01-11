@@ -282,8 +282,11 @@ export default function SupportTicketDetail() {
             className="bg-secondary/30 border border-border rounded-lg p-4 space-y-4 h-96 overflow-y-auto flex flex-col"
           >
             {ticket.messages.map((msg) => {
-              const roleBadge = getRoleBadge(msg.senderRole);
+              const roleBadge = getRoleBadge(msg.senderRole, msg.senderId);
               const isCurrentUser = msg.senderId === user?.uid;
+              const senderProfile = userProfiles[msg.senderId];
+              const profileImage =
+                senderProfile?.profileImage || DEFAULT_PROFILE_IMAGE;
 
               return (
                 <div
@@ -292,24 +295,32 @@ export default function SupportTicketDetail() {
                     isCurrentUser ? "justify-end" : "justify-start"
                   }`}
                 >
+                  {!isCurrentUser && (
+                    <img
+                      src={profileImage}
+                      alt={msg.senderName}
+                      className="w-8 h-8 rounded-full object-cover flex-shrink-0"
+                      onError={(e) => {
+                        e.currentTarget.src = DEFAULT_PROFILE_IMAGE;
+                      }}
+                    />
+                  )}
                   <div
                     className={`max-w-xs space-y-1 ${
                       isCurrentUser ? "text-right" : ""
                     }`}
                   >
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
                       {!isCurrentUser && (
                         <span className="text-xs font-medium text-foreground">
                           {msg.senderName}
                         </span>
                       )}
-                      {msg.senderRole !== "user" && (
-                        <span
-                          className={`px-2 py-0.5 rounded text-xs font-medium ${roleBadge.color}`}
-                        >
-                          {roleBadge.icon} {roleBadge.label}
-                        </span>
-                      )}
+                      <span
+                        className={`px-2 py-0.5 rounded text-xs font-medium ${roleBadge.color}`}
+                      >
+                        {roleBadge.icon} {roleBadge.label}
+                      </span>
                       {isCurrentUser && (
                         <span className="text-xs font-medium text-foreground">
                           {msg.senderName}
