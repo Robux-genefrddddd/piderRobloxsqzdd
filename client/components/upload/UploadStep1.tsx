@@ -166,38 +166,54 @@ export function UploadStep1({
             bannerDragActive
               ? "border-primary/40 bg-primary/5"
               : "border-border/30 hover:border-border/40 hover:bg-secondary/10"
-          }`}
+          } ${bannerValidating ? "opacity-60 cursor-wait" : ""}`}
         >
           <input
             type="file"
             accept="image/*"
             onChange={handleBannerFileChange}
+            disabled={bannerValidating}
             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
           />
           {bannerUrl ? (
             <div className="space-y-2">
-              <img
-                src={bannerUrl}
-                alt="Banner preview"
-                className="w-full h-32 object-cover rounded-lg"
-              />
+              <div className="relative">
+                <img
+                  src={bannerUrl}
+                  alt="Banner preview"
+                  className="w-full h-32 object-cover rounded-lg"
+                />
+                <div className="absolute top-2 right-2">
+                  <CheckCircle size={18} className="text-green-500" />
+                </div>
+              </div>
               <p className="text-xs text-muted-foreground/60">
-                Click to change
+                {bannerValidating ? "Validating..." : "Click to change"}
               </p>
             </div>
           ) : (
             <div className="space-y-2">
               <div className="flex justify-center">
                 <div className="w-10 h-10 rounded-lg bg-muted/20 flex items-center justify-center">
-                  <ImageIcon size={20} className="text-muted-foreground/50" />
+                  {bannerValidating ? (
+                    <div className="animate-spin">
+                      <UploadIcon size={20} className="text-muted-foreground/50" />
+                    </div>
+                  ) : (
+                    <ImageIcon size={20} className="text-muted-foreground/50" />
+                  )}
                 </div>
               </div>
               <div>
                 <p className="text-xs font-medium text-foreground">
-                  Drag and drop your banner
+                  {bannerValidating
+                    ? "Validating banner..."
+                    : "Drag and drop your banner"}
                 </p>
                 <p className="text-xs text-muted-foreground/60">
-                  or click to select (PNG, JPG, WebP)
+                  {bannerValidating
+                    ? "Please wait..."
+                    : "or click to select (PNG, JPG, WebP)"}
                 </p>
               </div>
             </div>
