@@ -16,6 +16,7 @@ interface UploadStep1Props {
   onBannerChange: (url: string) => void;
   onFilesAdd: (files: File[]) => void;
   onFileRemove: (id: string) => void;
+  isValidatingFiles?: boolean;
 }
 
 export function UploadStep1({
