@@ -253,7 +253,7 @@ const auditHandler: Handler = async (event, context): Promise<any> => {
 /**
  * Main handler that routes to appropriate function
  */
-const mainHandler: Handler = async (event, context) => {
+const mainHandler: Handler = async (event, context): Promise<any> => {
   const action = event.queryStringParameters?.action;
 
   if (action === "stats") {
