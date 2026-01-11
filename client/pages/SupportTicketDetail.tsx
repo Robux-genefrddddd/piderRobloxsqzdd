@@ -147,6 +147,35 @@ export default function SupportTicketDetail() {
     }
   };
 
+  const getRoleBadge = (senderRole: string) => {
+    switch (senderRole) {
+      case "support":
+        return {
+          icon: "🛠️",
+          label: "Support",
+          color: "bg-blue-500/20 text-blue-400",
+        };
+      case "admin":
+        return {
+          icon: "👨‍💼",
+          label: "Admin",
+          color: "bg-purple-500/20 text-purple-400",
+        };
+      case "founder":
+        return {
+          icon: "👑",
+          label: "Founder",
+          color: "bg-yellow-500/20 text-yellow-400",
+        };
+      default:
+        return {
+          icon: "👤",
+          label: "User",
+          color: "bg-gray-500/20 text-gray-400",
+        };
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
