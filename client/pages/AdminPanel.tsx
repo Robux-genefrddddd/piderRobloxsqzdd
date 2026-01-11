@@ -215,6 +215,24 @@ export default function AdminPanel() {
       u.email.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
+  // Get category color for tickets
+  const getCategoryColor = (category: string) => {
+    switch (category) {
+      case "bug-report":
+        return "bg-red-500/20 text-red-400 border-red-500/30";
+      case "account-issue":
+        return "bg-orange-500/20 text-orange-400 border-orange-500/30";
+      case "payment":
+        return "bg-green-500/20 text-green-400 border-green-500/30";
+      case "content-removal":
+        return "bg-purple-500/20 text-purple-400 border-purple-500/30";
+      case "abuse-report":
+        return "bg-red-600/20 text-red-500 border-red-600/30";
+      default:
+        return "bg-blue-500/20 text-blue-400 border-blue-500/30";
+    }
+  };
+
   if (
     !userProfile ||
     (userProfile.role !== "founder" &&
