@@ -38,6 +38,9 @@ export interface TicketMessage {
   message: string;
   timestamp: Date;
   isRead?: boolean;
+  senderProfileImage?: string;
+  senderMemberRank?: "starter" | "creator" | "pro" | "studio";
+  userRole?: "member" | "partner" | "admin" | "founder" | "support";
 }
 
 export interface Ticket {
@@ -189,6 +192,9 @@ export async function addMessageToTicket(
   senderName: string,
   senderRole: "user" | "support" | "admin" | "founder",
   message: string,
+  senderProfileImage?: string,
+  senderMemberRank?: "starter" | "creator" | "pro" | "studio",
+  userRole?: "member" | "partner" | "admin" | "founder" | "support",
 ): Promise<void> {
   try {
     const ticketRef = doc(db, TICKETS_COLLECTION, ticketId);
@@ -205,6 +211,9 @@ export async function addMessageToTicket(
         message,
         timestamp: new Date(),
         isRead: false,
+        senderProfileImage,
+        senderMemberRank,
+        userRole,
       };
 
       await updateDoc(ticketRef, {

@@ -45,7 +45,9 @@ const menuItemVariants = {
 
 export function NavBar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { isAuthenticated, userProfile, loading, unreadCount } = useAuth();
+  const { isAuthenticated, userProfile, loading, unreadCount, user } =
+    useAuth();
+  const { count: unreadTickets } = useUnreadTicketCount(user?.uid);
 
   const handleLogout = async () => {
     try {
@@ -163,6 +165,22 @@ export function NavBar() {
                       {unreadCount > 0 && (
                         <span className="ml-auto bg-destructive text-destructive-foreground text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center">
                           {unreadCount > 9 ? "9+" : unreadCount}
+                        </span>
+                      )}
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link
+                      to="/support"
+                      className="cursor-pointer flex items-center justify-between"
+                    >
+                      <div className="flex items-center">
+                        <MessageSquare size={16} className="mr-2" />
+                        Support Tickets
+                      </div>
+                      {unreadTickets > 0 && (
+                        <span className="ml-auto bg-destructive text-destructive-foreground text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center">
+                          {unreadTickets > 9 ? "9+" : unreadTickets}
                         </span>
                       )}
                     </Link>
@@ -288,7 +306,12 @@ export function NavBar() {
                               size={16}
                               className="text-muted-foreground group-hover:text-primary flex-shrink-0"
                             />
-                            <span className="font-medium">Support</span>
+                            <span className="font-medium flex-1">Support</span>
+                            {unreadTickets > 0 && (
+                              <span className="bg-destructive text-destructive-foreground text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center flex-shrink-0">
+                                {unreadTickets > 9 ? "9+" : unreadTickets}
+                              </span>
+                            )}
                           </Link>
                         </motion.div>
                         <motion.div

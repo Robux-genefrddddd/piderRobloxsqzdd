@@ -4,7 +4,18 @@ import { ArrowLeft, Send, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/contexts/AuthContext";
-import { getTicket, addMessageToTicket, Ticket } from "@/lib/ticketService";
+import {
+  getTicket,
+  addMessageToTicket,
+  Ticket,
+  markTicketMessagesAsRead,
+} from "@/lib/ticketService";
+import { getMemberRankLabel, DEFAULT_PROFILE_IMAGE } from "@/lib/auth";
+import { RoleBadge } from "@/components/RoleBadge";
+import {
+  markNotificationAsRead,
+  getUserNotifications,
+} from "@/lib/notificationService";
 import { toast } from "sonner";
 import { Loader } from "@/components/ui/loader";
 
@@ -63,6 +74,28 @@ export default function SupportTicketDetail() {
       const ticketData = await getTicket(ticketId);
       if (ticketData) {
         setTicket(ticketData);
+
+        // Mark all messages as read
+        await markTicketMessagesAsRead(ticketId);
+
+        // Mark ticket-related notifications as read
+        if (user?.uid) {
+          try {
+            const notifications = await getUserNotifications(user.uid);
+            const ticketNotifications = notifications.filter(
+              (notif) =>
+                notif.type === "ticket_response" &&
+                notif.data?.ticketId === ticketId &&
+                !notif.read,
+            );
+
+            for (const notif of ticketNotifications) {
+              await markNotificationAsRead(notif.id);
+            }
+          } catch (notifError) {
+            console.error("Error marking notifications as read:", notifError);
+          }
+        }
       }
     } catch (error) {
       console.error("Error loading ticket:", error);
@@ -89,6 +122,9 @@ export default function SupportTicketDetail() {
         userProfile.displayName,
         "user",
         message,
+        userProfile.profileImage || DEFAULT_PROFILE_IMAGE,
+        userProfile.memberRank,
+        userProfile.role,
       );
 
       setMessage("");
@@ -149,35 +185,6 @@ export default function SupportTicketDetail() {
         return "text-red-400";
       default:
         return "text-gray-400";
-    }
-  };
-
-  const getRoleBadge = (senderRole: string) => {
-    switch (senderRole) {
-      case "support":
-        return {
-          icon: "🛠️",
-          label: "Support",
-          color: "bg-blue-500/20 text-blue-400",
-        };
-      case "admin":
-        return {
-          icon: "👨‍💼",
-          label: "Admin",
-          color: "bg-purple-500/20 text-purple-400",
-        };
-      case "founder":
-        return {
-          icon: "👑",
-          label: "Founder",
-          color: "bg-yellow-500/20 text-yellow-400",
-        };
-      default:
-        return {
-          icon: "👤",
-          label: "User",
-          color: "bg-gray-500/20 text-gray-400",
-        };
     }
   };
 
@@ -243,8 +250,9 @@ export default function SupportTicketDetail() {
             className="bg-secondary/30 border border-border rounded-lg p-4 space-y-4 h-96 overflow-y-auto flex flex-col"
           >
             {ticket.messages.map((msg) => {
-              const roleBadge = getRoleBadge(msg.senderRole);
               const isCurrentUser = msg.senderId === user?.uid;
+              const profileImage =
+                msg.senderProfileImage || DEFAULT_PROFILE_IMAGE;
 
               return (
                 <div
@@ -253,24 +261,31 @@ export default function SupportTicketDetail() {
                     isCurrentUser ? "justify-end" : "justify-start"
                   }`}
                 >
+                  {!isCurrentUser && (
+                    <img
+                      src={profileImage}
+                      alt={msg.senderName}
+                      className="w-8 h-8 rounded-full object-cover flex-shrink-0"
+                      onError={(e) => {
+                        e.currentTarget.src = DEFAULT_PROFILE_IMAGE;
+                      }}
+                    />
+                  )}
                   <div
                     className={`max-w-xs space-y-1 ${
                       isCurrentUser ? "text-right" : ""
                     }`}
                   >
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1 flex-wrap">
                       {!isCurrentUser && (
                         <span className="text-xs font-medium text-foreground">
                           {msg.senderName}
                         </span>
                       )}
-                      {msg.senderRole !== "user" && (
-                        <span
-                          className={`px-2 py-0.5 rounded text-xs font-medium ${roleBadge.color}`}
-                        >
-                          {roleBadge.icon} {roleBadge.label}
-                        </span>
-                      )}
+                      <RoleBadge
+                        role={msg.userRole || msg.senderRole}
+                        size="sm"
+                      />
                       {isCurrentUser && (
                         <span className="text-xs font-medium text-foreground">
                           {msg.senderName}
@@ -281,9 +296,13 @@ export default function SupportTicketDetail() {
                       className={`px-4 py-2 rounded-lg ${
                         isCurrentUser
                           ? "bg-primary text-primary-foreground rounded-br-none"
-                          : msg.senderRole !== "user"
-                            ? "bg-blue-500/15 border border-blue-500/30 rounded-bl-none"
-                            : "bg-secondary/50 border border-border rounded-bl-none"
+                          : msg.senderRole === "support"
+                            ? "bg-blue-500/25 border border-blue-400/40 text-foreground rounded-bl-none"
+                            : msg.senderRole === "admin"
+                              ? "bg-purple-500/25 border border-purple-400/40 text-foreground rounded-bl-none"
+                              : msg.senderRole === "founder"
+                                ? "bg-yellow-500/25 border border-yellow-400/40 text-foreground rounded-bl-none"
+                                : "bg-secondary/40 border border-border rounded-bl-none text-foreground"
                       }`}
                     >
                       <p className="text-sm break-words">{msg.message}</p>
