@@ -284,6 +284,30 @@ export async function assignTicket(
   }
 }
 
+export async function markTicketMessagesAsRead(
+  ticketId: string,
+): Promise<void> {
+  try {
+    const ticketRef = doc(db, TICKETS_COLLECTION, ticketId);
+    const ticketDoc = await getDoc(ticketRef);
+
+    if (ticketDoc.exists()) {
+      const ticketData = ticketDoc.data();
+      const messages = (ticketData.messages || []).map((msg: any) => ({
+        ...msg,
+        isRead: true,
+      }));
+
+      await updateDoc(ticketRef, {
+        messages,
+        updatedAt: Timestamp.now(),
+      });
+    }
+  } catch (error) {
+    console.error("Error marking messages as read:", error);
+  }
+}
+
 /**
  * Get count of unread support ticket messages for a user
  */
