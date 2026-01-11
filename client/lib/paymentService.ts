@@ -137,9 +137,7 @@ export async function getSellerOrders(
 /**
  * Get seller's total earnings
  */
-export async function getSellerEarnings(
-  sellerId: string,
-): Promise<{
+export async function getSellerEarnings(sellerId: string): Promise<{
   totalEarnings: number;
   completedOrders: number;
   pendingPayouts: number;
@@ -162,9 +160,7 @@ export async function getSellerEarnings(
     const payoutDocs = await getDocs(payoutsQ);
     const payouts = payoutDocs.docs.map((doc) => doc.data());
 
-    const pendingPayouts = payouts.filter(
-      (p) => p.status === "pending",
-    ).length;
+    const pendingPayouts = payouts.filter((p) => p.status === "pending").length;
     const completedPayouts = payouts.filter(
       (p) => p.status === "completed",
     ).length;
@@ -274,9 +270,7 @@ export async function getOrderStatistics(): Promise<{
       platformFees,
       sellerPayouts,
       averageOrderValue:
-        completedOrders.length > 0
-          ? totalRevenue / completedOrders.length
-          : 0,
+        completedOrders.length > 0 ? totalRevenue / completedOrders.length : 0,
     };
   } catch (error) {
     console.error("Error getting order statistics:", error);
@@ -321,7 +315,10 @@ export async function cancelOrder(orderId: string): Promise<void> {
 /**
  * Refund an order (creates reverse transaction)
  */
-export async function refundOrder(orderId: string, reason: string): Promise<void> {
+export async function refundOrder(
+  orderId: string,
+  reason: string,
+): Promise<void> {
   try {
     const orderRef = doc(db, ORDERS_COLLECTION, orderId);
     const orderSnap = await getDoc(orderRef);

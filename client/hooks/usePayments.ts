@@ -151,7 +151,10 @@ export function useSellerPayouts(sellerId: string | undefined) {
 /**
  * Hook to check if user has purchased a product
  */
-export function usePurchaseHistory(userId: string | undefined, productId: string) {
+export function usePurchaseHistory(
+  userId: string | undefined,
+  productId: string,
+) {
   const [purchased, setPurchased] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

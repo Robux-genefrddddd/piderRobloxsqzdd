@@ -167,7 +167,8 @@ const handler: Handler = async (event, context) => {
     // Step 6: Update product sales count (optional)
     const productsCollection = db.collection("products");
     await productsCollection.doc(productId).update({
-      sales: (await productsCollection.doc(productId).get()).data()?.sales || 0 + 1,
+      sales:
+        (await productsCollection.doc(productId).get()).data()?.sales || 0 + 1,
       totalRevenue:
         ((await productsCollection.doc(productId).get()).data()?.totalRevenue ||
           0) + sellerAmount,

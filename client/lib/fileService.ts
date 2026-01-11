@@ -53,9 +53,7 @@ export async function downloadAssetFile(
       fileName: fileName || filePath.split("/").pop() || "file",
     });
 
-    const response = await fetch(
-      `/api/download?${params.toString()}`,
-    );
+    const response = await fetch(`/api/download?${params.toString()}`);
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));

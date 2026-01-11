@@ -3,18 +3,20 @@
 ## 🎯 Executive Summary
 
 This document explains the complete PayPal payment integration for your marketplace, where:
+
 - **Buyers** purchase products from **Sellers**
 - **PayPal** handles payment processing
 - **Platform** takes 30% fee, **Sellers** get 70%
 - No manual PayPal setup needed for sellers
 
 ### Key Features:
+
 ✅ Secure backend payment handling  
 ✅ Automatic revenue split (30% / 70%)  
 ✅ Seller payout automation  
 ✅ Order tracking in Firestore  
 ✅ Production-ready code  
-✅ Compliant with PayPal policies  
+✅ Compliant with PayPal policies
 
 ---
 
@@ -87,6 +89,7 @@ BUYER PAYS $100
 ## 🔄 Detailed Payment Flow
 
 ### Phase 1: Order Creation
+
 ```
 1. Buyer clicks "Buy Now" on product
 2. Frontend loads PayPal SDK
@@ -103,6 +106,7 @@ BUYER PAYS $100
 **Code Location**: `client/components/PayPalCheckout.tsx` (createOrder)
 
 ### Phase 2: Payment Approval
+
 ```
 1. Buyer logs into PayPal
 2. Reviews order (product name, price, currency)
@@ -115,6 +119,7 @@ BUYER PAYS $100
 **Handled by**: PayPal Checkout SDK (no backend needed)
 
 ### Phase 3: Payment Capture
+
 ```
 1. Frontend calls: POST /.netlify/functions/paypal-capture-order
 2. Sends: paypalOrderId, productId, buyerId, creatorId, prices
@@ -136,6 +141,7 @@ BUYER PAYS $100
 **Code Location**: `netlify/functions/paypal-capture-order.ts`
 
 ### Phase 4: Payout Processing (Daily/Weekly)
+
 ```
 1. Cron job triggers (or admin manually calls)
 2. Call: POST /.netlify/functions/paypal-payout
@@ -161,6 +167,7 @@ BUYER PAYS $100
 ### Firestore Collections
 
 #### `products`
+
 ```javascript
 {
   id: "p123",
@@ -180,6 +187,7 @@ BUYER PAYS $100
 ```
 
 #### `paymentOrders`
+
 ```javascript
 {
   id: "order123",
@@ -192,16 +200,16 @@ BUYER PAYS $100
   currency: "USD",
   creatorId: "seller_user_id",
   creatorName: "Creator Name",
-  
+
   // Revenue split
   totalAmount: 49.99,
   platformFee: 15.00,  // 30%
   sellerAmount: 34.99,  // 70%
-  
+
   // Status
   status: "completed",  // pending, approved, completed, failed
   paypalStatus: "COMPLETED",
-  
+
   // Timestamps
   createdAt: Timestamp,
   capturedAt: Timestamp,
@@ -210,6 +218,7 @@ BUYER PAYS $100
 ```
 
 #### `payouts`
+
 ```javascript
 {
   id: "payout123",
@@ -218,14 +227,14 @@ BUYER PAYS $100
   sellerEmail: "seller@example.com",
   amount: 34.99,  // 70% of sale
   currency: "USD",
-  
+
   // PayPal info
   paypalPayoutId: "BATCH-123456789",  // Set after payout
   status: "completed",  // pending, processing, completed, failed
-  
+
   // Error tracking
   errorMessage: null,
-  
+
   // Timestamps
   createdAt: Timestamp,
   completedAt: Timestamp
@@ -249,7 +258,7 @@ Backend (Netlify Functions):
   - PAYPAL_CLIENT_ID (from env variables)
   - PAYPAL_CLIENT_SECRET (from env variables)
   - Used to authenticate with PayPal API
-  
+
 Environment Variables:
   - Set in Netlify project settings
   - NOT in .env files
@@ -310,15 +319,20 @@ Prevent duplicate charges:
 
 ```typescript
 // Use unique sender_item_id to prevent duplicate payouts
-const payoutResponse = await fetch('https://api.paypal.com/v1/payments/payouts', {
-  body: JSON.stringify({
-    items: [{
-      sender_item_id: `item-${sellerId}-${Date.now()}`,  // Unique!
-      receiver: sellerEmail,
-      amount: { value: '34.99', currency: 'USD' }
-    }]
-  })
-});
+const payoutResponse = await fetch(
+  "https://api.paypal.com/v1/payments/payouts",
+  {
+    body: JSON.stringify({
+      items: [
+        {
+          sender_item_id: `item-${sellerId}-${Date.now()}`, // Unique!
+          receiver: sellerEmail,
+          amount: { value: "34.99", currency: "USD" },
+        },
+      ],
+    }),
+  },
+);
 ```
 
 ### 5. HTTPS Only
@@ -341,21 +355,21 @@ PayPal redirects only to HTTPS URLs. Set `SITE_URL` to your HTTPS domain.
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    
+
     // Only authenticated users can read/write payments
     match /paymentOrders/{document=**} {
       allow read: if request.auth != null;
-      allow write: if request.auth != null && 
+      allow write: if request.auth != null &&
                       request.auth.uid == request.resource.data.buyerId;
     }
-    
+
     // Only authenticated users can read their payouts
     match /payouts/{document=**} {
       allow read: if request.auth != null &&
                      request.auth.uid == resource.data.sellerId;
       allow write: if false;  // Backend only
     }
-    
+
     // Products are publicly readable
     match /products/{document=**} {
       allow read: if true;
@@ -371,12 +385,14 @@ service cloud.firestore {
 ## ⚙️ Implementation Checklist
 
 ### Phase 1: Setup (Day 1)
+
 - [ ] Create PayPal Business Account
 - [ ] Get PayPal Developer credentials
 - [ ] Set environment variables in Netlify
 - [ ] Test credentials with PayPal Sandbox
 
 ### Phase 2: Backend Implementation (Day 2-3)
+
 - [ ] Deploy `paypal-create-order.ts`
 - [ ] Deploy `paypal-capture-order.ts`
 - [ ] Deploy `paypal-payout.ts`
@@ -384,12 +400,14 @@ service cloud.firestore {
 - [ ] Update Firestore database schema
 
 ### Phase 3: Frontend Implementation (Day 3-4)
+
 - [ ] Add PayPal button to product pages
 - [ ] Implement `PayPalCheckout.tsx` component
 - [ ] Create order history pages
 - [ ] Create seller dashboard with earnings
 
 ### Phase 4: Testing (Day 5)
+
 - [ ] Test with PayPal Sandbox accounts
 - [ ] Verify orders stored in Firestore
 - [ ] Verify payouts process correctly
@@ -397,6 +415,7 @@ service cloud.firestore {
 - [ ] Test error scenarios
 
 ### Phase 5: Launch (Day 6)
+
 - [ ] Switch to PayPal Production credentials
 - [ ] Update Netlify environment variables
 - [ ] Test with real payments (small amounts)
@@ -412,6 +431,7 @@ service cloud.firestore {
 Go to https://www.sandbox.paypal.com/signin
 
 Create two accounts:
+
 - **Buyer Account** (for testing purchases)
 - **Seller Account** (for receiving payouts)
 
@@ -495,13 +515,13 @@ curl -X POST http://localhost:9000/.netlify/functions/paypal-create-order \
 
 ### Common Issues:
 
-| Error | Cause | Solution |
-|-------|-------|----------|
-| "Missing PayPal credentials" | Env vars not set | Check Netlify settings |
-| "Failed to authenticate with PayPal" | Wrong credentials | Verify Client ID & Secret |
-| "Order not found" | Order ID mismatch | Check if order created |
-| "Failed to capture payment" | Order already captured | Check PayPal order status |
-| "Minimum payout amount" | Amount < $0.10 | Accumulate more sales |
+| Error                                | Cause                  | Solution                  |
+| ------------------------------------ | ---------------------- | ------------------------- |
+| "Missing PayPal credentials"         | Env vars not set       | Check Netlify settings    |
+| "Failed to authenticate with PayPal" | Wrong credentials      | Verify Client ID & Secret |
+| "Order not found"                    | Order ID mismatch      | Check if order created    |
+| "Failed to capture payment"          | Order already captured | Check PayPal order status |
+| "Minimum payout amount"              | Amount < $0.10         | Accumulate more sales     |
 
 ### Debug Commands:
 
@@ -544,9 +564,10 @@ This implementation provides:
 ✅ **Scalable** - Supports unlimited products/sellers  
 ✅ **Transparent** - Clear 30/70 revenue split  
 ✅ **Automated** - Payouts processed automatically  
-✅ **Production-Ready** - Used in real marketplaces  
+✅ **Production-Ready** - Used in real marketplaces
 
 **Next Steps:**
+
 1. Get PayPal credentials
 2. Set environment variables
 3. Deploy Netlify Functions

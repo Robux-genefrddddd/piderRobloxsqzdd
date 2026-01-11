@@ -29,42 +29,44 @@ VITE_PAYPAL_CLIENT_ID=your_client_id_here  # Public client ID for frontend
 ### Collections in Firestore:
 
 #### 1. `products`
+
 ```typescript
 {
-  id: string;                    // Auto-generated
+  id: string; // Auto-generated
   name: string;
   description: string;
-  price: number;                 // Price in USD/EUR
+  price: number; // Price in USD/EUR
   currency: "USD" | "EUR";
-  authorId: string;              // Creator's user ID
+  authorId: string; // Creator's user ID
   authorName: string;
   imageUrl: string;
   status: "draft" | "published" | "archived";
-  sales: number;                 // Number of sales
-  totalRevenue: number;          // Total seller earnings
+  sales: number; // Number of sales
+  totalRevenue: number; // Total seller earnings
   createdAt: Timestamp;
   updatedAt: Timestamp;
 }
 ```
 
 #### 2. `paymentOrders`
+
 ```typescript
 {
-  id: string;                    // Firestore doc ID
-  paypalOrderId: string;         // PayPal's order ID
-  buyerId: string;               // Buyer's user ID
+  id: string; // Firestore doc ID
+  paypalOrderId: string; // PayPal's order ID
+  buyerId: string; // Buyer's user ID
   buyerEmail: string;
   productId: string;
   productName: string;
   productPrice: number;
   currency: "USD" | "EUR";
-  creatorId: string;             // Seller's user ID
+  creatorId: string; // Seller's user ID
   creatorName: string;
-  totalAmount: number;           // 100%
-  platformFee: number;           // 30%
-  sellerAmount: number;          // 70%
+  totalAmount: number; // 100%
+  platformFee: number; // 30%
+  sellerAmount: number; // 70%
   status: "pending" | "approved" | "completed" | "failed";
-  paypalStatus: string;          // PayPal status
+  paypalStatus: string; // PayPal status
   createdAt: Timestamp;
   capturedAt: Timestamp;
   updatedAt: Timestamp;
@@ -72,6 +74,7 @@ VITE_PAYPAL_CLIENT_ID=your_client_id_here  # Public client ID for frontend
 ```
 
 #### 3. `payouts`
+
 ```typescript
 {
   id: string;                    // Firestore doc ID
@@ -167,36 +170,43 @@ curl -X POST http://localhost:9000/.netlify/functions/paypal-create-order \
 ## 🔒 SECURITY BEST PRACTICES
 
 ### 1. **Never Expose Secrets**
+
 - ❌ NEVER put `PAYPAL_CLIENT_SECRET` in frontend code
 - ✅ Always use environment variables
 - ✅ Backend only handles sensitive operations
 
 ### 2. **Validate All Inputs**
+
 - Validate product prices on backend (don't trust frontend)
 - Verify buyer and seller IDs exist in database
 - Check product still exists and is available
 
 ### 3. **Idempotency**
+
 - Use unique `sender_item_id` for payouts (prevents duplicate payments)
 - Check order status before processing
 - Handle webhook/retry scenarios
 
 ### 4. **Authentication & Authorization**
+
 - Verify user is logged in before payment
 - Ensure buyer ≠ seller
 - Validate seller email before payout
 
 ### 5. **Transaction Logging**
+
 - Log all payment attempts (success and failure)
 - Store full PayPal responses for audit
 - Enable Firestore audit logs
 
 ### 6. **Rate Limiting**
+
 - Implement rate limiting on payment endpoints
 - Prevent duplicate orders
 - Throttle payout requests
 
 ### 7. **HTTPS Only**
+
 - All payment endpoints must use HTTPS
 - PayPal returns to HTTPS URLs only
 - Use `SITE_URL` for production domain
@@ -269,18 +279,21 @@ curl -X POST http://localhost:9000/.netlify/functions/paypal-create-order \
 ## 📊 MONITORING & DEBUGGING
 
 ### Check PayPal Activity:
+
 1. Go to PayPal Developer Dashboard
 2. Sandbox or Live mode
 3. View all transactions
 4. Download reports
 
 ### Debug Failed Payments:
+
 1. Check Netlify function logs
 2. Verify Firestore documents exist
 3. Confirm PayPal credentials are correct
 4. Check payment order status in PayPal
 
 ### Common Errors:
+
 - `"error": "Missing PayPal credentials"` → Set env vars
 - `"error": "Failed to create PayPal order"` → Check credentials, amount
 - `"error": "Failed to capture payment"` → Order may have expired (20 min limit)

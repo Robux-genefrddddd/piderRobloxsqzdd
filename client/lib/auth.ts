@@ -186,9 +186,8 @@ export async function findUserByEmailOrUsername(
     }
 
     // Query users by email (Firestore query)
-    const { query, where, getDocs, collection } = await import(
-      "firebase/firestore"
-    );
+    const { query, where, getDocs, collection } =
+      await import("firebase/firestore");
     const usersRef = collection(db, "users");
 
     // Try to find by email first
@@ -198,7 +197,8 @@ export async function findUserByEmailOrUsername(
       const userData = emailSnapshot.docs[0].data() as UserProfile;
       return {
         ...userData,
-        createdAt: userData.createdAt instanceof Date ? userData.createdAt : new Date(),
+        createdAt:
+          userData.createdAt instanceof Date ? userData.createdAt : new Date(),
       };
     }
 
@@ -212,7 +212,8 @@ export async function findUserByEmailOrUsername(
       const userData = usernameSnapshot.docs[0].data() as UserProfile;
       return {
         ...userData,
-        createdAt: userData.createdAt instanceof Date ? userData.createdAt : new Date(),
+        createdAt:
+          userData.createdAt instanceof Date ? userData.createdAt : new Date(),
       };
     }
 

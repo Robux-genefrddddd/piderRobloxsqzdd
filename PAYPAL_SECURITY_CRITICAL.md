@@ -3,6 +3,7 @@
 ## ⚠️ URGENT: Your PayPal Credentials Were Exposed
 
 In your previous message, you shared:
+
 - Client ID: `AaeWJZJUYLejSSpt4Ex9i_olpLAP7ecWblaLMnt5nnf9RXdY6HcJeTfn6x3hJnnnENfqnSI4D18grBQO`
 - Secret Key: `EHpjNJlY1tcfCF1-tjsSBa4t5qX6uAHBec2BwpY5GRbsM6XiVcVbSrotXkPD9coWrk9xGGRGi5lGM7eg`
 
@@ -78,6 +79,7 @@ VITE_PAYPAL_CLIENT_ID=your_sandbox_client_id
 ```
 
 **Protect it:**
+
 ```bash
 # In .gitignore
 .env.local
@@ -131,10 +133,10 @@ Every 3 months:
 
 **Credential Rotation Log:**
 
-| Date | Environment | Status |
-|------|-------------|--------|
-| 2024-01-15 | Sandbox | ✅ Rotated |
-| 2024-01-15 | Production | ✅ Rotated |
+| Date       | Environment | Status     |
+| ---------- | ----------- | ---------- |
+| 2024-01-15 | Sandbox     | ✅ Rotated |
+| 2024-01-15 | Production  | ✅ Rotated |
 
 ---
 
@@ -143,18 +145,21 @@ Every 3 months:
 ### Immediate Actions (Minutes):
 
 1. **Revoke Credentials Immediately**
+
    ```
    - PayPal Dashboard → Apps & Credentials
    - Delete the exposed secret
    ```
 
 2. **Create New Credentials**
+
    ```
    - Generate new Client ID
    - Generate new Secret
    ```
 
 3. **Update Environment Variables**
+
    ```
    - Netlify Settings → Environment
    - Update PAYPAL_CLIENT_ID
@@ -188,18 +193,21 @@ Every 3 months:
 ## 🔍 How to Check if Credentials Were Abused
 
 ### PayPal Dashboard
+
 1. Check **Activity** → **All Transactions**
 2. Look for unauthorized orders
 3. Check **Account Settings** → **Connected Apps**
 4. Review **Security** → **Login Activity**
 
 ### Netlify
+
 1. Check **Functions** → **Logs**
 2. Look for unusual function calls
 3. Check invocation patterns
 4. Monitor for failed authentication
 
 ### Your Application
+
 1. Check Firestore `paymentOrders` for unknown entries
 2. Review `payouts` collection for unexpected payouts
 3. Check user complaints/chargebacks
@@ -210,6 +218,7 @@ Every 3 months:
 ## 🔒 Vault Options for Team
 
 ### Option 1: Netlify (Easiest for Netlify Projects)
+
 ```
 - Built-in environment variables
 - Encrypted at rest
@@ -219,6 +228,7 @@ Every 3 months:
 ```
 
 ### Option 2: 1Password (Team-Friendly)
+
 ```
 - Shared vaults with team
 - Audit logs
@@ -228,6 +238,7 @@ Every 3 months:
 ```
 
 ### Option 3: AWS Secrets Manager
+
 ```
 - Enterprise-grade encryption
 - Rotation automation
@@ -237,6 +248,7 @@ Every 3 months:
 ```
 
 ### Option 4: HashiCorp Vault
+
 ```
 - Self-hosted
 - Complex setup
@@ -296,6 +308,7 @@ Every 3 months:
 ### ✅ Correct Way
 
 **Team member requests access:**
+
 ```
 Team Lead: "I need PayPal sandbox credentials for development"
 
@@ -351,6 +364,7 @@ Before deploying payment functions:
 ## 🚨 Summary
 
 ### You Must:
+
 1. ✅ Immediately revoke the exposed credentials
 2. ✅ Create new PayPal credentials
 3. ✅ Use environment variables ONLY
@@ -358,6 +372,7 @@ Before deploying payment functions:
 5. ✅ Implement credential rotation schedule
 
 ### Going Forward:
+
 - ✅ Use Netlify environment variables
 - ✅ Use 1Password for team sharing
 - ✅ Rotate credentials quarterly
@@ -369,6 +384,7 @@ Before deploying payment functions:
 ## 📞 Questions?
 
 Read:
+
 - OWASP Secrets Management Guide
 - Netlify Environment Variables Docs
 - PayPal Security Best Practices

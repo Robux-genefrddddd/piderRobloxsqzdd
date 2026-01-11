@@ -71,9 +71,7 @@ export default function GroupMembers({
         inviteMessage,
       );
 
-      toast.success(
-        `Invite sent to ${inviteeProfile.username}`,
-      );
+      toast.success(`Invite sent to ${inviteeProfile.username}`);
       setInviteeEmail("");
       setInviteMessage("");
       setInviteOpen(false);
