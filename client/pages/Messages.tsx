@@ -35,11 +35,7 @@ export default function Messages() {
   };
 
   if (authLoading || loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader size={32} className="animate-spin text-primary" />
-      </div>
-    );
+    return <Loader text="Loading messages..." />;
   }
 
   return (
